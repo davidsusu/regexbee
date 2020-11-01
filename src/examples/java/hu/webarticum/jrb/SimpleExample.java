@@ -7,17 +7,23 @@ public class SimpleExample {
 
     public static void main(String[] args) {
         Fragment fragment = Fragments.concat(
-            Fragments.simple("g1", "xx"),
+            Fragments.optional("g1", Fragments.fixed("xxx"), QuantifierType.POSSESSIVE),
             Fragments.alter(
-                Fragments.simple("alma"),
-                Fragments.simple("korte")
+                Fragments.simple("ggg"),
+                Fragments.simple("hello")
+            ),
+            Fragments.optional(
+                Fragments.concat(
+                    Fragments.simple("."),
+                    Fragments.WORD
+                )
             )
         );
         
         System.out.println(fragment.get());
         System.out.println();
 
-        String text = "xxxalmakorteyyy";
+        String text = "xxxggghello-yyy";
 
         Pattern pattern = fragment.toPattern();
         Matcher matcher = pattern.matcher(text);

@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 public class Lazy<T> implements Supplier<T> {
     
-    private final Supplier<T> supplier;
+    private Supplier<T> supplier;
     
     private boolean computed = false;
     
@@ -22,6 +22,7 @@ public class Lazy<T> implements Supplier<T> {
             synchronized (this) {
                 if (!computed) {
                     value = supplier.get();
+                    supplier = null;
                     computed = true;
                 }
             }

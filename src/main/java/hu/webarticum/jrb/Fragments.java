@@ -6,27 +6,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.regex.Pattern;
 
-// TODO:
-//
-// EMAIL
-// DATE ([??], format?)
-// URL ([??], http[s] only? -> UrlFragmentBuilder)
-// etc.
-//
-// literal (-> escape)
-// optional (...?, optionally use QuantifierType)
-// anyOccur ([??], ...*, optionally use QuantifierType)
-// positiveOccur ([??], ...+, optionally use QuantifierType)
-// boundedOccur
-// intBetween
-// etc.
-
 public class Fragments {
-    
-    public enum QuantifierType {
-        GREEDY, RELUCTANT, POSSESSIVE
-    }
-    
     
     private static final Pattern GROUP_NAME_PATTERN = Pattern.compile("[a-zA-Z][a-zA-Z0-9]*");
     
@@ -163,4 +143,53 @@ public class Fragments {
         return resultBuilder.toString();
     }
     
+    
+    public static Fragment fixed(String content) {
+        return simple(Pattern.quote(content));
+    }
+
+    
+    public static Fragment optional(Fragment fragment) {
+        return optional(fragment, QuantifierType.GREEDY);
+    }
+
+    public static Fragment optional(String name, Fragment fragment) {
+        return optional(name, fragment, QuantifierType.GREEDY);
+    }
+
+    public static Fragment optional(Fragment fragment, QuantifierType type) {
+        return new LazyFragment(() -> Fragments.generateOptional(null, fragment, type));
+    }
+
+    public static Fragment optional(String name, Fragment fragment, QuantifierType type) {
+        checkName(name);
+        return new LazyFragment(() -> Fragments.generateOptional(name, fragment, type));
+    }
+
+    private static String generateOptional(String name, Fragment fragment, QuantifierType type) {
+        StringBuilder resultBuilder = new StringBuilder();
+        
+        if (name != null) {
+            resultBuilder.append("(?<");
+            resultBuilder.append(name);
+            resultBuilder.append(">");
+        } else {
+            resultBuilder.append("(?:");
+        }
+        
+        resultBuilder.append(fragment.get());
+        resultBuilder.append(")?");
+        resultBuilder.append(type.modifier());
+        
+        return resultBuilder.toString();
+    }
+    
+    // TODO:
+    
+    // anyOccur ([??], ...*, optionally use QuantifierType)
+    // positiveOccur ([??], ...+, optionally use QuantifierType)
+    // boundedOccur
+    // intBetween
+    // etc.
+
 }
