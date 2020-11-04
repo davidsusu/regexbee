@@ -1,11 +1,19 @@
 package hu.webarticum.jrb;
 
+import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SimpleExample {
 
     public static void main(String[] args) {
+        
+        // XXX
+        //System.out.println(Fragments.unsignedIntBetween(265, 32405, true).get());
+        System.out.println(Fragments.unsignedIntBetween(2264, 2298, true).get());
+        System.exit(0);
+        
+        
         Fragment fragment = Fragments.concat(
             Fragments.optional("g1", Fragments.fixed("xxx"), QuantifierType.POSSESSIVE),
             Fragments.alter(

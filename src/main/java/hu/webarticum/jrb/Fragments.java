@@ -1,10 +1,26 @@
 package hu.webarticum.jrb;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.regex.Pattern;
+
+import hu.webarticum.jrb.number.NumberUtil;
+
+
+// TODO:
+//
+// anyOccur ([??], ...*, optionally use QuantifierType)
+// positiveOccur ([??], ...+, optionally use QuantifierType)
+// boundedOccur
+// lookBehind
+// lookAhead
+// atomic
+// backReference ([??])
+// recursion ([??])
+// etc.
 
 public class Fragments {
     
@@ -20,6 +36,10 @@ public class Fragments {
     public static final Fragment UNSIGNED_INT = simple("(?:0|[1-9]\\d*)");
     
     public static final Fragment WORD = simple("\\b\\w+\\b");
+
+    public static final Fragment FAIL = simple("(?!)");
+    
+    public static final Fragment JUST_FAIL = concat(BEGIN, FAIL);
     
     
     private Fragments() {
@@ -184,12 +204,27 @@ public class Fragments {
         return resultBuilder.toString();
     }
     
-    // TODO:
-    
-    // anyOccur ([??], ...*, optionally use QuantifierType)
-    // positiveOccur ([??], ...+, optionally use QuantifierType)
-    // boundedOccur
-    // intBetween
-    // etc.
 
+    public static Fragment unsignedIntUntil(long high) {
+        return unsignedIntBetween(0L, true, high, false);
+    }
+    
+    public static Fragment unsignedIntBetween(long low, long high) {
+        return unsignedIntBetween(low, true, high, false);
+    }
+    
+    public static Fragment unsignedIntBetween(long low, long high, boolean highInclusive) {
+        return unsignedIntBetween(low, true, high, highInclusive);
+    }
+    
+    public static Fragment unsignedIntBetween(long low, boolean lowInclusive, long high, boolean highInclusive) {
+        return unsignedIntBetween(BigInteger.valueOf(low), lowInclusive, BigInteger.valueOf(high), highInclusive);
+    }
+
+    public static Fragment unsignedIntBetween(
+            BigInteger low, boolean lowInclusive, BigInteger high, boolean highInclusive) {
+
+        return NumberUtil.unsignedIntBetween(low, lowInclusive, high, highInclusive);
+    }
+    
 }
