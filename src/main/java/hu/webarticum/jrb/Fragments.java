@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.regex.Pattern;
 
-import hu.webarticum.jrb.number.NumberUtil;
+import hu.webarticum.jrb.number.IntBetweenBuilder;
 
 
 // TODO:
@@ -224,7 +224,10 @@ public class Fragments {
     public static Fragment unsignedIntBetween(
             BigInteger low, boolean lowInclusive, BigInteger high, boolean highInclusive) {
 
-        return NumberUtil.unsignedIntBetween(low, lowInclusive, high, highInclusive);
+        return new IntBetweenBuilder()
+                .low(low, lowInclusive)
+                .high(high, highInclusive)
+                .build();
     }
     
 }
