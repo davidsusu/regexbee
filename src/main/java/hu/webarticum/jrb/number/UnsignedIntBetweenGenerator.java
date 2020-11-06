@@ -3,6 +3,8 @@ package hu.webarticum.jrb.number;
 import java.math.BigInteger;
 import java.util.regex.Pattern;
 
+// TODO: develop a non-backtracking version
+
 class UnsignedIntBetweenGenerator {
     
     private static final String DIGIT = "\\d";
@@ -100,53 +102,41 @@ class UnsignedIntBetweenGenerator {
         int toFirstDigit = to.charAt(0) - '0';
         int toMaxFullDigit = toNines ? toFirstDigit : toFirstDigit - 1;
         
+        boolean branched = false;
+
         if (toMaxFullDigit > 0) {
+            resultBuilder.append("(?:");
             resultBuilder.append(digitBetween(1, toMaxFullDigit));
             resultBuilder.append(anyDigitNMTimes(fromLength, toLength - 1));
+            branched = true;
         }
-
-        // TODO
-        
-        // XXX
-        resultBuilder.append("|||");
 
         if (toMaxFullDigit < 9 && toLength > fromLength + 1) {
+            resultBuilder.append(branched ? "|" : "(?:");
             resultBuilder.append(digitBetween(toMaxFullDigit + 1, 9));
             resultBuilder.append(anyDigitNMTimes(fromLength, toLength - 2));
+            branched = true;
         }
 
-        // TODO
-        
-        // XXX
-        resultBuilder.append("|||");
-
         if (!toNines) {
+            resultBuilder.append(branched ? "|" : "(?:");
             resultBuilder.append(toFirstDigit);
             anyUpToWithLeadingZeros(toAfterPart, resultBuilder);
-            // TODO
+            branched = true;
         }
 
-        // TODO
-        
-        // XXX
-        resultBuilder.append("|||");
-
-        if (!toNines) {
-            anyFromToNines(from, resultBuilder);
+        if (branched) {
+            resultBuilder.append('|');
         }
-        
-        // TODO: zero
+        anyFromToNines(from, resultBuilder);
+
+        if (branched) {
+            resultBuilder.append(")");
+        }
         
         return resultBuilder.toString();
     }
     
-    
-    
-    
-    
-    
-    
-
     private void anyUpToWithLeadingZeros(String to, StringBuilder resultBuilder) {
         int length = to.length();
         int firstDigit = to.charAt(0) - '0';
