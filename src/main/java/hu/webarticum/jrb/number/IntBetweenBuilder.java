@@ -15,9 +15,17 @@ public class IntBetweenBuilder {
     
     private boolean highInclusive;
     
+
+    public SetHighBuilder low(long low) {
+        return low(BigInteger.valueOf(low), true);
+    }
     
     public SetHighBuilder low(BigInteger low) {
         return low(low, true);
+    }
+
+    public SetHighBuilder low(long low, boolean inclusive) {
+        return low(BigInteger.valueOf(low), inclusive);
     }
     
     public SetHighBuilder low(BigInteger low, boolean inclusive) {
@@ -34,8 +42,16 @@ public class IntBetweenBuilder {
         }
         
 
+        public TerminalBuilder high(long high) {
+            return high(BigInteger.valueOf(high), true);
+        }
+        
         public TerminalBuilder high(BigInteger high) {
             return high(high, false);
+        }
+
+        public TerminalBuilder high(long high, boolean inclusive) {
+            return high(BigInteger.valueOf(high), inclusive);
         }
         
         public TerminalBuilder high(BigInteger high, boolean inclusive) {

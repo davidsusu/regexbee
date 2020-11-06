@@ -8,7 +8,9 @@ class UnsignedIntBetweenGenerator {
     
     private static final String DIGIT = "\\d";
 
-    private static final String DIGITS = "\\d{%d}";
+    private static final String DIGITS_N = "\\d{%d}";
+
+    private static final String DIGITS_N_M = "\\d{%d,%d}";
 
     private static final String DIGIT_RANGE = "[%d-%d]";
 
@@ -30,61 +32,176 @@ class UnsignedIntBetweenGenerator {
         }
     }
 
-    private String generateSameLength(String fromStr, String toStr) {
-        int length = fromStr.length();
+    private String generateSameLength(String from, String to) {
+        int length = from.length();
         
-        String commonPrefix = longestCommonPrefixOf(fromStr, toStr);
+        String commonPrefix = longestCommonPrefixOf(from, to);
         int commonLength = commonPrefix.length();
         
         if (commonLength == length) {
-            return fromStr;
+            return from;
         }
+        
         
         StringBuilder resultBuilder = new StringBuilder(commonPrefix);
         
-        int fromNextDigit = fromStr.charAt(commonLength) - '0';
-        int toNextDigit = toStr.charAt(commonLength) - '0';
+        int fromNextDigit = from.charAt(commonLength) - '0';
+        int toNextDigit = to.charAt(commonLength) - '0';
 
-        // TODO: handle 0s and 9s
-        if (toNextDigit - fromNextDigit > 2) {
-            int minBetween = fromNextDigit + 1;
-            int maxBetween = toNextDigit - 1;
+        String fromAfterPart = from.substring(commonLength + 1);
+        boolean fromZeros = ZEROS_PATTERN.matcher(fromAfterPart).matches();
+
+        String toAfterPart = to.substring(commonLength + 1);
+        boolean toNines = NINES_PATTERN.matcher(toAfterPart).matches();
+
+        int minBetween = fromZeros ? fromNextDigit : fromNextDigit + 1;
+        int maxBetween = toNines ? toNextDigit : toNextDigit - 1;
+
+        if (!fromZeros || !toNines) {
+            resultBuilder.append("(?:");
+        }
+        
+        if (maxBetween >= minBetween) {
             resultBuilder.append(digitBetween(minBetween, maxBetween));
             resultBuilder.append(anyDigitNTimes(length - commonLength - 1));
+            if (!fromZeros || !toNines) {
+                resultBuilder.append('|');
+            }
         }
-        System.out.println("fromNextDigit: " + fromNextDigit);
-        System.out.println("toNextDigit: " + toNextDigit);
-        
-        // TODO
+
+        if (!fromZeros) {
+            resultBuilder.append(fromNextDigit);
+            anyFromToNines(fromAfterPart, resultBuilder);
+            if (!toNines) {
+                resultBuilder.append('|');
+            }
+        }
+
+        if (!toNines) {
+            resultBuilder.append(toNextDigit);
+            anyUpToWithLeadingZeros(toAfterPart, resultBuilder);
+        }
+
+        if (!fromZeros || !toNines) {
+            resultBuilder.append(')');
+        }
         
         return resultBuilder.toString();
+    }
+    
+    private String generateDifferentLength(String from, String to) {
+        StringBuilder resultBuilder = new StringBuilder();
+
+        int fromLength = from.length();
+        int toLength = to.length();
+
+        String toAfterPart = to.substring(1);
+        boolean toNines = NINES_PATTERN.matcher(toAfterPart).matches();
+        
+        int toFirstDigit = to.charAt(0) - '0';
+        int toMaxFullDigit = toNines ? toFirstDigit : toFirstDigit - 1;
+        
+        if (toMaxFullDigit > 0) {
+            resultBuilder.append(digitBetween(1, toMaxFullDigit));
+            resultBuilder.append(anyDigitNMTimes(fromLength, toLength - 1));
+        }
+
+        // TODO
+        
+        // XXX
+        resultBuilder.append("|||");
+
+        if (toMaxFullDigit < 9 && toLength > fromLength + 1) {
+            resultBuilder.append(digitBetween(toMaxFullDigit + 1, 9));
+            resultBuilder.append(anyDigitNMTimes(fromLength, toLength - 2));
+        }
+
+        // TODO
+        
+        // XXX
+        resultBuilder.append("|||");
+
+        if (!toNines) {
+            resultBuilder.append(toFirstDigit);
+            anyUpToWithLeadingZeros(toAfterPart, resultBuilder);
+            // TODO
+        }
+
+        // TODO
+        
+        // XXX
+        resultBuilder.append("|||");
+
+        if (!toNines) {
+            anyFromToNines(from, resultBuilder);
+        }
+        
+        // TODO: zero
+        
+        return resultBuilder.toString();
+    }
+    
+    
+    
+    
+    
+    
+    
+
+    private void anyUpToWithLeadingZeros(String to, StringBuilder resultBuilder) {
+        int length = to.length();
+        int firstDigit = to.charAt(0) - '0';
+        
+        if (length == 1) {
+            resultBuilder.append(digitBetween(0, firstDigit));
+            return;
+        }
+        
+        if (firstDigit > 0) {
+            resultBuilder.append("(?:");
+            resultBuilder.append(digitBetween(0, firstDigit - 1));
+            resultBuilder.append(anyDigitNTimes(length - 1));
+            resultBuilder.append('|');
+        }
+        resultBuilder.append(firstDigit);
+        anyUpToWithLeadingZeros(to.substring(1), resultBuilder);
+        if (firstDigit > 0) {
+            resultBuilder.append(')');
+        }
+    }
+    
+    private void anyFromToNines(String from, StringBuilder resultBuilder) {
+        int length = from.length();
+        int firstDigit = from.charAt(0) - '0';
+
+        if (length == 1) {
+            resultBuilder.append(digitBetween(firstDigit, 9));
+            return;
+        }
+
+        if (firstDigit < 9) {
+            resultBuilder.append("(?:");
+            resultBuilder.append(digitBetween(firstDigit + 1, 9));
+            resultBuilder.append(anyDigitNTimes(length - 1));
+            resultBuilder.append('|');
+        }
+        resultBuilder.append(firstDigit);
+        anyFromToNines(from.substring(1), resultBuilder);
+        if (firstDigit < 9) {
+            resultBuilder.append(')');
+        }
     }
     
     private String digitBetween(int min, int max) {
         if (min == max) {
             return Integer.toString(min);
+        } else if (min == 0 && max == 9) {
+            return DIGIT;
         } else if (max - min == 1) {
             return String.format(DIGIT_RANGE_TWO, min, max);
         } else {
             return String.format(DIGIT_RANGE, min, max);
         }
-    }
-    
-    private String anyDigitNTimes(int n) {
-        if (n == 0) {
-            return "";
-        } else if (n == 1) {
-            return DIGIT;
-        } else {
-            return String.format(DIGITS, n);
-        }
-    }
-    
-    private String generateDifferentLength(String fromStr, String toStr) {
-        
-        // TODO
-
-        return "ddd";
     }
     
     private String longestCommonPrefixOf(String str1, String str2) {
@@ -95,6 +212,24 @@ class UnsignedIntBetweenGenerator {
             }
         }
         return str1.substring(0, commonLength);
+    }
+
+    private String anyDigitNMTimes(int n, int m) {
+        if (n == m) {
+            return anyDigitNTimes(n);
+        } else {
+            return String.format(DIGITS_N_M, n, m);
+        }
+    }
+
+    private String anyDigitNTimes(int n) {
+        if (n == 0) {
+            return "";
+        } else if (n == 1) {
+            return DIGIT;
+        } else {
+            return String.format(DIGITS_N, n);
+        }
     }
     
 }
