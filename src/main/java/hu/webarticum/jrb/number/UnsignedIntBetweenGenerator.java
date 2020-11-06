@@ -3,7 +3,6 @@ package hu.webarticum.jrb.number;
 import java.math.BigInteger;
 import java.util.regex.Pattern;
 
-// TODO: make package-private -> numeric things to separate package
 class UnsignedIntBetweenGenerator {
     
     private static final String DIGIT = "\\d";
