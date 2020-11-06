@@ -2,8 +2,8 @@ package hu.webarticum.jrb.number;
 
 import java.math.BigInteger;
 
-import hu.webarticum.jrb.Fragment;
-import hu.webarticum.jrb.LazyFragment;
+import hu.webarticum.jrb.core.Fragment;
+import hu.webarticum.jrb.core.LazyFragment;
 
 public class IntBetweenBuilder {
     

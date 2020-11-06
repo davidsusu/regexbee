@@ -1,4 +1,4 @@
-package hu.webarticum.jrb;
+package hu.webarticum.jrb.core;
 
 import java.math.BigInteger;
 import java.util.Arrays;

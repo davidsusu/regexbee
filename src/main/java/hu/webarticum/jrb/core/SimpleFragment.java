@@ -1,4 +1,4 @@
-package hu.webarticum.jrb;
+package hu.webarticum.jrb.core;
 
 public class SimpleFragment implements Fragment {
     

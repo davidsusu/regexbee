@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 
-import hu.webarticum.jrb.Fragment;
+import hu.webarticum.jrb.core.Fragment;
 
 class IntBetweenBuilderTest {
 

@@ -3,6 +3,10 @@ package hu.webarticum.jrb;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import hu.webarticum.jrb.core.Fragment;
+import hu.webarticum.jrb.core.Fragments;
+import hu.webarticum.jrb.core.QuantifierType;
+
 public class SimpleExample {
 
     public static void main(String[] args) {
