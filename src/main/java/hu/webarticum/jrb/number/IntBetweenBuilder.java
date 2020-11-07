@@ -7,6 +7,11 @@ import hu.webarticum.jrb.core.LazyFragment;
 
 public class IntBetweenBuilder {
     
+    public enum PlusSignPolicy { DENY, ALLOW, REQUIRE }
+    
+    public enum BoundPolicy { NONE, DIGIT_ONLY, DIGIT_SIGN, DIGIT_SIGN_NOFRACTION }
+    
+    
     private BigInteger low;
     
     private boolean lowInclusive;
@@ -14,6 +19,89 @@ public class IntBetweenBuilder {
     private BigInteger high;
     
     private boolean highInclusive;
+    
+
+    private PlusSignPolicy plusSignPolicy = PlusSignPolicy.DENY;
+    
+    private boolean allowNegativeZero = false;
+    
+    private boolean allowLeadingZeros = false;
+
+    private BoundPolicy boundPolicy = BoundPolicy.DIGIT_SIGN;
+    
+    
+    private String generate(BigInteger from, BigInteger to) {
+        UnsignedIntBetweenGenerator generator = new UnsignedIntBetweenGenerator();
+        
+        StringBuilder resultBuilder = new StringBuilder();
+        
+        boolean hasNegative = from.signum() == -1;
+        boolean hasNonNegative = to.signum() != -1;
+        
+        if (hasNegative && hasNonNegative) {
+            resultBuilder.append("(?:");
+        }
+
+        if (hasNegative) {
+            resultBuilder.append("\\-");
+            if (allowLeadingZeros) {
+                resultBuilder.append("0*");
+            }
+            
+            BigInteger subFrom;
+            if (hasNonNegative) {
+                subFrom = allowNegativeZero ? BigInteger.ZERO : BigInteger.ONE;
+            } else {
+                subFrom = to.abs();
+            }
+            
+            BigInteger subTo = from.abs();
+            
+            resultBuilder.append(generator.generate(subFrom, subTo));
+        }
+        
+        if (hasNonNegative) {
+            if (hasNegative) {
+                resultBuilder.append('|');
+            }
+            
+            boolean allowPlus = (plusSignPolicy == PlusSignPolicy.ALLOW);
+            if (plusSignPolicy == PlusSignPolicy.REQUIRE) {
+                resultBuilder.append("\\+");
+            } else if (boundPolicy == BoundPolicy.DIGIT_ONLY) {
+                String basePart = "(?<!\\d)";
+                resultBuilder.append(allowPlus ? String.format("\\+?%s", basePart) : basePart);
+            } else if (boundPolicy == BoundPolicy.DIGIT_SIGN) {
+                String basePart = "(?<![0-9\\+\\-])";
+                resultBuilder.append(allowPlus ? String.format("(?:\\+|%s)", basePart) : basePart); 
+            } else if (boundPolicy == BoundPolicy.DIGIT_SIGN_NOFRACTION) {
+                String basePart = "(?<!\\d\\.?|[\\+\\-])";
+                resultBuilder.append(allowPlus ? String.format("(?:\\+|%s)", basePart) : basePart); 
+            } else if (plusSignPolicy == PlusSignPolicy.ALLOW) {
+                resultBuilder.append("\\+?");
+            }
+
+            if (allowLeadingZeros) {
+                resultBuilder.append("0*");
+            }
+            
+            BigInteger subFrom = hasNegative ? BigInteger.ZERO : from;
+            
+            resultBuilder.append(generator.generate(subFrom, to));
+        }
+        
+        if (hasNegative && hasNonNegative) {
+            resultBuilder.append(')');
+        }
+        
+        if (boundPolicy == BoundPolicy.DIGIT_SIGN_NOFRACTION) {
+            resultBuilder.append("(?!\\.?\\d)");
+        } else if (boundPolicy != BoundPolicy.NONE) {
+            resultBuilder.append("(?!\\d)");
+        }
+        
+        return resultBuilder.toString();
+    }
     
 
     public SetHighBuilder low(long low) {
@@ -70,20 +158,49 @@ public class IntBetweenBuilder {
         }
         
         
-        // TODO: more options
-        // add boundaries
-        // advanced boundaries? e.g. (?!\.\d)
-        // allow leading zeros
-        // signed/unsigned, allow plus sign
-        // etc.
+        public TerminalBuilder allowPlus() {
+            return plusSignPolicy(PlusSignPolicy.ALLOW);
+        }
+
+        public TerminalBuilder requirePlus() {
+            return plusSignPolicy(PlusSignPolicy.REQUIRE);
+        }
+
+        public TerminalBuilder denyPlus() {
+            return plusSignPolicy(PlusSignPolicy.DENY);
+        }
+
+        public TerminalBuilder plusSignPolicy(PlusSignPolicy plusSignPolicy) {
+            IntBetweenBuilder.this.plusSignPolicy = plusSignPolicy;
+            return this;
+        }
+
+        public TerminalBuilder allowNegativeZero() {
+            return allowNegativeZero(true);
+        }
+        
+        public TerminalBuilder allowNegativeZero(boolean allowNegativeZero) {
+            IntBetweenBuilder.this.allowNegativeZero = allowNegativeZero;
+            return this;
+        }
+
+        public TerminalBuilder allowLeadingZeros() {
+            return allowLeadingZeros(true);
+        }
+        
+        public TerminalBuilder allowLeadingZeros(boolean allowLeadingZeros) {
+            IntBetweenBuilder.this.allowLeadingZeros = allowLeadingZeros;
+            return this;
+        }
+
+        public TerminalBuilder boundPolicy(BoundPolicy boundPolicy) {
+            IntBetweenBuilder.this.boundPolicy = boundPolicy;
+            return this;
+        }
         
 
         public Fragment build() {
             BigInteger from = lowInclusive ? low : low.add(BigInteger.ONE);
-            if (from.signum() == -1) {
-                throw new IllegalArgumentException(String.format("Minimum value must not be negative: %s", from));
-            }
-            
             BigInteger to = highInclusive ? high : high.subtract(BigInteger.ONE);
             
             if (from.compareTo(to) > 0) {
@@ -91,9 +208,9 @@ public class IntBetweenBuilder {
                         low, lowInclusive, high, highInclusive));
             }
             
-            return new LazyFragment(() -> new UnsignedIntBetweenGenerator().generate(from, to));
+            return new LazyFragment(() -> IntBetweenBuilder.this.generate(from, to));
         }
         
     }
-    
+
 }
