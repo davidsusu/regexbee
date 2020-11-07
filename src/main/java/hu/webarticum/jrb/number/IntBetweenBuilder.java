@@ -158,15 +158,15 @@ public class IntBetweenBuilder {
         }
         
         
-        public TerminalBuilder allowPlus() {
+        public TerminalBuilder allowPlusSign() {
             return plusSignPolicy(PlusSignPolicy.ALLOW);
         }
 
-        public TerminalBuilder requirePlus() {
+        public TerminalBuilder requirePlusSign() {
             return plusSignPolicy(PlusSignPolicy.REQUIRE);
         }
 
-        public TerminalBuilder denyPlus() {
+        public TerminalBuilder denyPlusSign() {
             return plusSignPolicy(PlusSignPolicy.DENY);
         }
 
