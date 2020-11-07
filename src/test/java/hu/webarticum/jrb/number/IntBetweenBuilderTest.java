@@ -12,9 +12,6 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
-import hu.webarticum.jrb.number.IntBetweenBuilder.BoundPolicy;
-import hu.webarticum.jrb.number.IntBetweenBuilder.PlusSignPolicy;
-
 class IntBetweenBuilderTest {
     
     private static final String DEFAULT_TEXT =
