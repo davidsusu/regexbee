@@ -205,12 +205,12 @@ public class Fragments {
     }
     
 
-    public static Fragment intBetween(long low, long high) {
-        return intBetweenClosed(low, high + 1);
+    public static Fragment intBetween(long min, long until) {
+        return intBetweenClosed(min, until + 1);
     }
     
-    public static Fragment intBetweenClosed(long low, long high) {
-        return intBetween(BigInteger.valueOf(low), true, BigInteger.valueOf(high), true);
+    public static Fragment intBetweenClosed(long min, long max) {
+        return intBetween(BigInteger.valueOf(min), true, BigInteger.valueOf(max), true);
     }
     
     public static Fragment intBetween(
