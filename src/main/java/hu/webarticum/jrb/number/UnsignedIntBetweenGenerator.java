@@ -1,6 +1,8 @@
 package hu.webarticum.jrb.number;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 // TODO: develop a non-backtracking version
@@ -102,37 +104,34 @@ class UnsignedIntBetweenGenerator {
         int toFirstDigit = to.charAt(0) - '0';
         int toMaxFullDigit = toNines ? toFirstDigit : toFirstDigit - 1;
         
-        boolean branched = false;
+        List<String> branches = new ArrayList<>();
+
+        if (!toNines) {
+            StringBuilder mainBranchBuilder = new StringBuilder();
+            mainBranchBuilder.append(toFirstDigit);
+            anyUpToWithLeadingZeros(toAfterPart, mainBranchBuilder);
+            branches.add(mainBranchBuilder.toString());
+        }
 
         if (toMaxFullDigit > 0) {
-            resultBuilder.append("(?:");
-            resultBuilder.append(digitBetween(1, toMaxFullDigit));
-            resultBuilder.append(anyDigitNMTimes(fromLength, toLength - 1));
-            branched = true;
+            StringBuilder trickyVariableLengthBranchBuilder = new StringBuilder();
+            trickyVariableLengthBranchBuilder.append(digitBetween(1, toMaxFullDigit));
+            trickyVariableLengthBranchBuilder.append(anyDigitNMTimes(fromLength, toLength - 1));
+            branches.add(trickyVariableLengthBranchBuilder.toString());
         }
 
         if (toMaxFullDigit < 9 && toLength > fromLength + 1) {
-            resultBuilder.append(branched ? "|" : "(?:");
-            resultBuilder.append(digitBetween(toMaxFullDigit + 1, 9));
-            resultBuilder.append(anyDigitNMTimes(fromLength, toLength - 2));
-            branched = true;
+            StringBuilder normalVariableLengthBranchBuilder = new StringBuilder();
+            normalVariableLengthBranchBuilder.append(digitBetween(toMaxFullDigit + 1, 9));
+            normalVariableLengthBranchBuilder.append(anyDigitNMTimes(fromLength, toLength - 2));
+            branches.add(normalVariableLengthBranchBuilder.toString());
         }
 
-        if (!toNines) {
-            resultBuilder.append(branched ? "|" : "(?:");
-            resultBuilder.append(toFirstDigit);
-            anyUpToWithLeadingZeros(toAfterPart, resultBuilder);
-            branched = true;
-        }
+        StringBuilder smallNumberBranchBuilder = new StringBuilder();
+        anyFromToNines(from, smallNumberBranchBuilder);
+        branches.add(smallNumberBranchBuilder.toString());
 
-        if (branched) {
-            resultBuilder.append('|');
-        }
-        anyFromToNines(from, resultBuilder);
-
-        if (branched) {
-            resultBuilder.append(")");
-        }
+        resultBuilder.append(branches.size() > 1 ? String.format("(?:%s)", String.join("|", branches)) : branches.get(0));
         
         return resultBuilder.toString();
     }

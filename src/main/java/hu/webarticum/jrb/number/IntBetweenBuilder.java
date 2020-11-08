@@ -178,6 +178,10 @@ public class IntBetweenBuilder {
         public TerminalBuilder allowNegativeZero() {
             return allowNegativeZero(true);
         }
+
+        public TerminalBuilder denyNegativeZero() {
+            return allowNegativeZero(false);
+        }
         
         public TerminalBuilder allowNegativeZero(boolean allowNegativeZero) {
             IntBetweenBuilder.this.allowNegativeZero = allowNegativeZero;
@@ -186,6 +190,10 @@ public class IntBetweenBuilder {
 
         public TerminalBuilder allowLeadingZeros() {
             return allowLeadingZeros(true);
+        }
+
+        public TerminalBuilder denyLeadingZeros() {
+            return allowLeadingZeros(false);
         }
         
         public TerminalBuilder allowLeadingZeros(boolean allowLeadingZeros) {

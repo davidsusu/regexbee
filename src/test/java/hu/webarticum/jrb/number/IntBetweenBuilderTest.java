@@ -182,8 +182,8 @@ class IntBetweenBuilderTest {
     void testDenyFalseFalseDigitSign() {
         Pattern pattern = new IntBetweenBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
                 .denyPlusSign()
-                .allowNegativeZero(false)
-                .allowLeadingZeros(false)
+                .denyNegativeZero()
+                .denyLeadingZeros()
                 .boundPolicy(IntBetweenBuilder.BoundPolicy.DIGIT_SIGN)
                 .build().toPattern();
 
@@ -192,32 +192,69 @@ class IntBetweenBuilderTest {
         
         assertThat(matchAll(pattern, DEFAULT_TEXT)).isEqualTo(expected);
     }
+
+    @Test
+    void testAllowFalseFalseDigitSignNoFraction() {
+        Pattern pattern = new IntBetweenBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
+                .allowPlusSign()
+                .denyNegativeZero()
+                .denyLeadingZeros()
+                .boundPolicy(IntBetweenBuilder.BoundPolicy.DIGIT_SIGN_NOFRACTION)
+                .build().toPattern();
+
+        List<String> expected = Arrays.asList(
+                "-10", "0", "+0", "3", "5", "+6", "+11", "45", "255");
+        
+        assertThat(matchAll(pattern, DEFAULT_TEXT)).isEqualTo(expected);
+    }
     
-    /*
+    @Test
+    void testRequireTrueFalseDigitSign() {
+        Pattern pattern = new IntBetweenBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
+                .requirePlusSign()
+                .allowNegativeZero()
+                .denyLeadingZeros()
+                .boundPolicy(IntBetweenBuilder.BoundPolicy.DIGIT_SIGN)
+                .build().toPattern();
+
+        List<String> expected = Arrays.asList(
+                "-10", "-7", "-0", "+0", "+6", "+11", "+36");
+        
+        assertThat(matchAll(pattern, DEFAULT_TEXT)).isEqualTo(expected);
+    }
     
-    // TODO
+    @Test
+    void testAllowFalseTrueDigitOnly() {
+        Pattern pattern = new IntBetweenBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
+                .allowPlusSign()
+                .denyNegativeZero()
+                .allowLeadingZeros()
+                .boundPolicy(IntBetweenBuilder.BoundPolicy.DIGIT_SIGN)
+                .build().toPattern();
+
+        List<String> expected = Arrays.asList(
+                "-10", "-7", "3", "00", "0", "+0", "0", "1", "3", "5","+6",
+                "+11", "15", "3", "017", "+0020", "+36", "2", "45", "255");
+        
+        assertThat(matchAll(pattern, DEFAULT_TEXT)).isEqualTo(expected);
+    }
     
-    plusSignPolicy
-        [*]  DENY
-        [ ]  ALLOW
-        [ ]  REQUIRE
-    allowNegativeZero
-        [*]  false
-        [ ]  true
-    allowLeadingZeros
-        [*]  false
-        [ ]  true
-    boundPolicy
-        [ ]  NONE
-        [ ]  DIGIT_ONLY
-        [*]  DIGIT_SIGN
-        [ ]  DIGIT_SIGN_NOFRACTION
-    
-    cases:
-        DENY, false, false, DIGIT_SIGN
-        . . .
-    
-    */
+    @Test
+    void testAllowFalseFalseNone() {
+        Pattern pattern = new IntBetweenBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
+                .allowPlusSign()
+                .denyNegativeZero()
+                .denyLeadingZeros()
+                .boundPolicy(IntBetweenBuilder.BoundPolicy.NONE)
+                .build().toPattern();
+
+        List<String> expected = Arrays.asList(
+                "-5", "5", "-10", "-7", "3", "0", "0", "0", "0", "+0", "0",
+                "1", "3", "5", "+6", "+11", "15", "3", "0", "17", "+0", "0",
+                "20", "+36", "2", "45", "255", "241", "0");
+        
+        assertThat(matchAll(pattern, DEFAULT_TEXT)).isEqualTo(expected);
+    }
     
 
     private Iterable<Integer> range(int low, int high) {
