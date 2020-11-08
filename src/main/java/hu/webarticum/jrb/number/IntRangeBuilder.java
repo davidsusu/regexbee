@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import hu.webarticum.jrb.core.Fragment;
 import hu.webarticum.jrb.core.LazyFragment;
 
-public class IntBetweenBuilder {
+public class IntRangeBuilder {
     
     public enum PlusSignPolicy { DENY, ALLOW, REQUIRE }
     
@@ -31,7 +31,7 @@ public class IntBetweenBuilder {
     
     
     private String generate(BigInteger from, BigInteger to) {
-        UnsignedIntBetweenGenerator generator = new UnsignedIntBetweenGenerator();
+        UnsignedIntRangeGenerator generator = new UnsignedIntRangeGenerator();
         
         StringBuilder resultBuilder = new StringBuilder();
         
@@ -143,8 +143,8 @@ public class IntBetweenBuilder {
         }
         
         public TerminalBuilder high(BigInteger high, boolean inclusive) {
-            IntBetweenBuilder.this.high = high;
-            IntBetweenBuilder.this.highInclusive = inclusive;
+            IntRangeBuilder.this.high = high;
+            IntRangeBuilder.this.highInclusive = inclusive;
             return new TerminalBuilder();
         }
         
@@ -171,7 +171,7 @@ public class IntBetweenBuilder {
         }
 
         public TerminalBuilder plusSignPolicy(PlusSignPolicy plusSignPolicy) {
-            IntBetweenBuilder.this.plusSignPolicy = plusSignPolicy;
+            IntRangeBuilder.this.plusSignPolicy = plusSignPolicy;
             return this;
         }
 
@@ -184,7 +184,7 @@ public class IntBetweenBuilder {
         }
         
         public TerminalBuilder allowNegativeZero(boolean allowNegativeZero) {
-            IntBetweenBuilder.this.allowNegativeZero = allowNegativeZero;
+            IntRangeBuilder.this.allowNegativeZero = allowNegativeZero;
             return this;
         }
 
@@ -197,12 +197,12 @@ public class IntBetweenBuilder {
         }
         
         public TerminalBuilder allowLeadingZeros(boolean allowLeadingZeros) {
-            IntBetweenBuilder.this.allowLeadingZeros = allowLeadingZeros;
+            IntRangeBuilder.this.allowLeadingZeros = allowLeadingZeros;
             return this;
         }
 
         public TerminalBuilder boundPolicy(BoundPolicy boundPolicy) {
-            IntBetweenBuilder.this.boundPolicy = boundPolicy;
+            IntRangeBuilder.this.boundPolicy = boundPolicy;
             return this;
         }
         
@@ -216,7 +216,7 @@ public class IntBetweenBuilder {
                         low, lowInclusive, high, highInclusive));
             }
             
-            return new LazyFragment(() -> IntBetweenBuilder.this.generate(from, to));
+            return new LazyFragment(() -> IntRangeBuilder.this.generate(from, to));
         }
         
     }

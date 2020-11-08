@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 // TODO: allowNegativeZero -> +0 is valid??
 // TODO: develop a non-backtracking version
 
-class UnsignedIntBetweenGenerator {
+class UnsignedIntRangeGenerator {
     
     private static final String DIGIT = "\\d";
 

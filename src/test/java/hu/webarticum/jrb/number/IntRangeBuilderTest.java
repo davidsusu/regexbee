@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
-class IntBetweenBuilderTest {
+class IntRangeBuilderTest {
     
     private static final String DEFAULT_TEXT =
             "-55 xxx x-10 -7.3 -0 00 p0 o+0 0.1 3 5+6 +11a 15.3 017 +0020 +36.2 45b 255 2410";
@@ -27,7 +27,7 @@ class IntBetweenBuilderTest {
         List<String> data = Arrays.asList(
                 "-150", "-3", "0", "7", "24", "+52", "135", "984", "+1500");
         
-        Pattern pattern = new IntBetweenBuilder().low(12, true).high(342, true)
+        Pattern pattern = new IntRangeBuilder().low(12, true).high(342, true)
                 .denyPlusSign().build().toPattern();
 
         List<String> expected = Arrays.asList("24", "135");
@@ -41,7 +41,7 @@ class IntBetweenBuilderTest {
                 "-423543", "-243", "0", "32", "45", "132", "+541",
                 "632", "1432", "23654", "111111", "567890", "1252407");
         
-        Pattern pattern = new IntBetweenBuilder().low(45, true).high(235413, true)
+        Pattern pattern = new IntRangeBuilder().low(45, true).high(235413, true)
                 .denyPlusSign().build().toPattern();
 
         List<String> expected = Arrays.asList("45", "132", "632", "1432", "23654", "111111");
@@ -54,7 +54,7 @@ class IntBetweenBuilderTest {
         List<String> data = Arrays.asList(
                 "-3214", "-24", "0", "24", "135", "+245", "370", "592", "+456", "893", "+1234");
         
-        Pattern pattern = new IntBetweenBuilder().low(350, true).high(763, true)
+        Pattern pattern = new IntRangeBuilder().low(350, true).high(763, true)
                 .denyPlusSign().build().toPattern();
 
         List<String> expected = Arrays.asList("370", "592");
@@ -67,7 +67,7 @@ class IntBetweenBuilderTest {
         List<String> data = Arrays.asList(
                 "-229000", "-234", "0", "345", "+1432", "22350", "223450", "+223450", "228933", "2360728");
         
-        Pattern pattern = new IntBetweenBuilder().low(223450, true).high(229499, true)
+        Pattern pattern = new IntRangeBuilder().low(223450, true).high(229499, true)
                 .denyPlusSign().build().toPattern();
 
         List<String> expected = Arrays.asList("223450", "228933");
@@ -80,7 +80,7 @@ class IntBetweenBuilderTest {
         List<String> data = Arrays.asList(
                 "-523", "-245", "0", "32", "245", "+245", "2450", "3986");
         
-        Pattern pattern = new IntBetweenBuilder().low(245, true).high(245, true)
+        Pattern pattern = new IntRangeBuilder().low(245, true).high(245, true)
                 .denyPlusSign().build().toPattern();
 
         List<String> expected = Arrays.asList("245");
@@ -93,7 +93,7 @@ class IntBetweenBuilderTest {
         List<String> data = Arrays.asList(
                 "-523", "-193", "23", "-0", "0", "12", "+32", "4255", "+12012", "78523");
         
-        Pattern pattern = new IntBetweenBuilder().low(-234, true).high(35673, true)
+        Pattern pattern = new IntRangeBuilder().low(-234, true).high(35673, true)
                 .allowPlusSign().allowNegativeZero(false).build().toPattern();
 
         List<String> expected = Arrays.asList("-193", "23", "0", "12", "+32", "4255", "+12012");
@@ -106,7 +106,7 @@ class IntBetweenBuilderTest {
         List<String> data = Arrays.asList(
                 "-1243", "-342", "-75", "-1", "-0", "0", "132", "532");
         
-        Pattern pattern = new IntBetweenBuilder().low(-794, true).high(-45, true)
+        Pattern pattern = new IntRangeBuilder().low(-794, true).high(-45, true)
                 .allowPlusSign().allowNegativeZero(false).build().toPattern();
 
         List<String> expected = Arrays.asList("-342", "-75");
@@ -121,7 +121,7 @@ class IntBetweenBuilderTest {
         int low = -135;
         int high = 2410;
         
-        Pattern pattern = new IntBetweenBuilder().low(low, true).high(high, true)
+        Pattern pattern = new IntRangeBuilder().low(low, true).high(high, true)
                 .build().toPattern();
         
         Iterable<Integer> expected = range(low, high);
@@ -137,7 +137,7 @@ class IntBetweenBuilderTest {
         int low = 12;
         int high = 25;
         
-        Pattern pattern = new IntBetweenBuilder().low(low, false).high(high, true)
+        Pattern pattern = new IntRangeBuilder().low(low, false).high(high, true)
                 .build().toPattern();
         
         Iterable<Integer> expected = range(low + 1, high);
@@ -153,7 +153,7 @@ class IntBetweenBuilderTest {
         int low = 9;
         int high = 59;
         
-        Pattern pattern = new IntBetweenBuilder().low(low, true).high(high, false)
+        Pattern pattern = new IntRangeBuilder().low(low, true).high(high, false)
                 .build().toPattern();
         
         Iterable<Integer> expected = range(low, high - 1);
@@ -169,7 +169,7 @@ class IntBetweenBuilderTest {
         int low = 23;
         int high = 72;
         
-        Pattern pattern = new IntBetweenBuilder().low(low, false).high(high, false)
+        Pattern pattern = new IntRangeBuilder().low(low, false).high(high, false)
                 .build().toPattern();
         
         Iterable<Integer> expected = range(low + 1, high - 1);
@@ -180,11 +180,11 @@ class IntBetweenBuilderTest {
 
     @Test
     void testDenyFalseFalseDigitSign() {
-        Pattern pattern = new IntBetweenBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
+        Pattern pattern = new IntRangeBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
                 .denyPlusSign()
                 .denyNegativeZero()
                 .denyLeadingZeros()
-                .boundPolicy(IntBetweenBuilder.BoundPolicy.DIGIT_SIGN)
+                .boundPolicy(IntRangeBuilder.BoundPolicy.DIGIT_SIGN)
                 .build().toPattern();
 
         List<String> expected = Arrays.asList(
@@ -195,11 +195,11 @@ class IntBetweenBuilderTest {
 
     @Test
     void testAllowFalseFalseDigitSignNoFraction() {
-        Pattern pattern = new IntBetweenBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
+        Pattern pattern = new IntRangeBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
                 .allowPlusSign()
                 .denyNegativeZero()
                 .denyLeadingZeros()
-                .boundPolicy(IntBetweenBuilder.BoundPolicy.DIGIT_SIGN_NOFRACTION)
+                .boundPolicy(IntRangeBuilder.BoundPolicy.DIGIT_SIGN_NOFRACTION)
                 .build().toPattern();
 
         List<String> expected = Arrays.asList(
@@ -210,11 +210,11 @@ class IntBetweenBuilderTest {
     
     @Test
     void testRequireTrueFalseDigitSign() {
-        Pattern pattern = new IntBetweenBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
+        Pattern pattern = new IntRangeBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
                 .requirePlusSign()
                 .allowNegativeZero()
                 .denyLeadingZeros()
-                .boundPolicy(IntBetweenBuilder.BoundPolicy.DIGIT_SIGN)
+                .boundPolicy(IntRangeBuilder.BoundPolicy.DIGIT_SIGN)
                 .build().toPattern();
 
         List<String> expected = Arrays.asList(
@@ -225,11 +225,11 @@ class IntBetweenBuilderTest {
     
     @Test
     void testAllowFalseTrueDigitOnly() {
-        Pattern pattern = new IntBetweenBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
+        Pattern pattern = new IntRangeBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
                 .allowPlusSign()
                 .denyNegativeZero()
                 .allowLeadingZeros()
-                .boundPolicy(IntBetweenBuilder.BoundPolicy.DIGIT_SIGN)
+                .boundPolicy(IntRangeBuilder.BoundPolicy.DIGIT_SIGN)
                 .build().toPattern();
 
         List<String> expected = Arrays.asList(
@@ -241,11 +241,11 @@ class IntBetweenBuilderTest {
     
     @Test
     void testAllowFalseFalseNone() {
-        Pattern pattern = new IntBetweenBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
+        Pattern pattern = new IntRangeBuilder().low(DEFAULT_LOW, true).high(DEFAULT_HIGH, true)
                 .allowPlusSign()
                 .denyNegativeZero()
                 .denyLeadingZeros()
-                .boundPolicy(IntBetweenBuilder.BoundPolicy.NONE)
+                .boundPolicy(IntRangeBuilder.BoundPolicy.NONE)
                 .build().toPattern();
 
         List<String> expected = Arrays.asList(

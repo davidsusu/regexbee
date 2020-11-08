@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.regex.Pattern;
 
-import hu.webarticum.jrb.number.IntBetweenBuilder;
+import hu.webarticum.jrb.number.IntRangeBuilder;
 
 
 // TODO:
@@ -205,18 +205,18 @@ public class Fragments {
     }
     
 
-    public static Fragment intBetween(long min, long until) {
-        return intBetweenClosed(min, until + 1);
+    public static Fragment intRange(long min, long until) {
+        return intRangeClosed(min, until + 1);
     }
     
-    public static Fragment intBetweenClosed(long min, long max) {
-        return intBetween(BigInteger.valueOf(min), true, BigInteger.valueOf(max), true);
+    public static Fragment intRangeClosed(long min, long max) {
+        return intRange(BigInteger.valueOf(min), true, BigInteger.valueOf(max), true);
     }
     
-    public static Fragment intBetween(
+    public static Fragment intRange(
             BigInteger low, boolean lowInclusive, BigInteger high, boolean highInclusive) {
 
-        return new IntBetweenBuilder()
+        return new IntRangeBuilder()
                 .low(low, lowInclusive)
                 .high(high, highInclusive)
                 .build();
