@@ -205,23 +205,15 @@ public class Fragments {
     }
     
 
-    public static Fragment unsignedIntUntil(long high) {
-        return unsignedIntBetween(0L, true, high, false);
+    public static Fragment intBetween(long low, long high) {
+        return intBetweenClosed(low, high + 1);
     }
     
-    public static Fragment unsignedIntBetween(long low, long high) {
-        return unsignedIntBetween(low, true, high, false);
+    public static Fragment intBetweenClosed(long low, long high) {
+        return intBetween(BigInteger.valueOf(low), true, BigInteger.valueOf(high), true);
     }
     
-    public static Fragment unsignedIntBetween(long low, long high, boolean highInclusive) {
-        return unsignedIntBetween(low, true, high, highInclusive);
-    }
-    
-    public static Fragment unsignedIntBetween(long low, boolean lowInclusive, long high, boolean highInclusive) {
-        return unsignedIntBetween(BigInteger.valueOf(low), lowInclusive, BigInteger.valueOf(high), highInclusive);
-    }
-
-    public static Fragment unsignedIntBetween(
+    public static Fragment intBetween(
             BigInteger low, boolean lowInclusive, BigInteger high, boolean highInclusive) {
 
         return new IntBetweenBuilder()
