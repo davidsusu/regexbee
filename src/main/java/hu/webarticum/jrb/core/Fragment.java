@@ -10,4 +10,6 @@ public interface Fragment extends Supplier<String> {
         return Pattern.compile(get());
     }
     
+    // TODO: .then(Fragment)
+    
 }
