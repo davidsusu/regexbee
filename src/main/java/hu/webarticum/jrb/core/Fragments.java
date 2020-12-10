@@ -22,7 +22,7 @@ import hu.webarticum.jrb.number.IntRangeBuilder;
 // recursion ([??])
 // etc.
 
-public class Fragments {
+public final class Fragments {
     
     private static final Pattern GROUP_NAME_PATTERN = Pattern.compile("[a-zA-Z][a-zA-Z0-9]*");
     
