@@ -1,4 +1,4 @@
-package hu.webarticum.jrb.number;
+package hu.webarticum.regexbee.number;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

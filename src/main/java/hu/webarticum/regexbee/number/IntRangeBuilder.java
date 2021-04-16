@@ -1,9 +1,9 @@
-package hu.webarticum.jrb.number;
+package hu.webarticum.regexbee.number;
 
 import java.math.BigInteger;
 
-import hu.webarticum.jrb.core.Fragment;
-import hu.webarticum.jrb.core.LazyFragment;
+import hu.webarticum.regexbee.core.Fragment;
+import hu.webarticum.regexbee.core.LazyFragment;
 
 public class IntRangeBuilder {
     

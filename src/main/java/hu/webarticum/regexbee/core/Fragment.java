@@ -1,4 +1,4 @@
-package hu.webarticum.jrb.core;
+package hu.webarticum.regexbee.core;
 
 import java.util.function.Supplier;
 import java.util.regex.Pattern;

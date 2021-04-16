@@ -1,4 +1,4 @@
-package hu.webarticum.jrb.core;
+package hu.webarticum.regexbee.core;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.regex.Pattern;
 
-import hu.webarticum.jrb.number.IntRangeBuilder;
+import hu.webarticum.regexbee.number.IntRangeBuilder;
 
 
 // TODO:

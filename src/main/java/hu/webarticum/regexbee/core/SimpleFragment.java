@@ -1,4 +1,4 @@
-package hu.webarticum.jrb.core;
+package hu.webarticum.regexbee.core;
 
 public class SimpleFragment implements Fragment {
     

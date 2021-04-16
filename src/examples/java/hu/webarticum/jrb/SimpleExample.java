@@ -3,9 +3,9 @@ package hu.webarticum.jrb;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import hu.webarticum.jrb.core.Fragment;
-import hu.webarticum.jrb.core.Fragments;
-import hu.webarticum.jrb.core.QuantifierType;
+import hu.webarticum.regexbee.core.Fragment;
+import hu.webarticum.regexbee.core.Fragments;
+import hu.webarticum.regexbee.core.QuantifierType;
 
 public class SimpleExample {
 

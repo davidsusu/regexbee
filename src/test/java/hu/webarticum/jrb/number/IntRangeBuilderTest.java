@@ -12,6 +12,8 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
+import hu.webarticum.regexbee.number.IntRangeBuilder;
+
 class IntRangeBuilderTest {
     
     private static final String DEFAULT_TEXT =
