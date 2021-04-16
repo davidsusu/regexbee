@@ -12,6 +12,8 @@ import hu.webarticum.jrb.number.IntRangeBuilder;
 
 // TODO:
 //
+// helper classes by categories (common, number, text, format etc.)
+//
 // anyOccur ([??], ...*, optionally use QuantifierType)
 // positiveOccur ([??], ...+, optionally use QuantifierType)
 // boundedOccur
@@ -23,30 +25,30 @@ import hu.webarticum.jrb.number.IntRangeBuilder;
 // etc.
 
 public final class Fragments {
-    
+
     private static final Pattern GROUP_NAME_PATTERN = Pattern.compile("[a-zA-Z][a-zA-Z0-9]*");
-    
+
 
     public static final Fragment BEGIN = simple("^");
 
     public static final Fragment END = simple("$");
-    
+
     public static final Fragment SIGNED_INT = simple("[\\+\\-]?(?:0|[1-9]\\d*)");
-    
+
     public static final Fragment UNSIGNED_INT = simple("(?:0|[1-9]\\d*)");
-    
+
     public static final Fragment WORD = simple("\\b\\w+\\b");
 
     public static final Fragment FAIL = simple("(?!)");
-    
+
     public static final Fragment JUST_FAIL = concat(BEGIN, FAIL);
-    
-    
+
+
     private Fragments() {
         // utility class
     }
 
-    
+
     public static Fragment checked(String pattern) {
         Pattern.compile(pattern);
         return simple(pattern);
@@ -65,12 +67,12 @@ public final class Fragments {
         return new SimpleFragment(pattern);
     }
 
-    
+
     public static Fragment named(String name, Fragment fragment) {
         checkName(name);
         return new LazyFragment(() -> Fragments.generateNamed(name, fragment));
     }
-    
+
     private static void checkName(String name) {
         Objects.requireNonNull(name, "Group name can not be null");
         if (!GROUP_NAME_PATTERN.matcher(name).matches()) {
@@ -100,11 +102,11 @@ public final class Fragments {
         checkName(name);
         return new LazyFragment(() -> Fragments.generateConcat(name, fragments));
     }
-    
+
     public static Fragment concat(Collection<Fragment> fragments) {
         return new LazyFragment(() -> Fragments.generateConcat(null, fragments));
     }
-    
+
     private static String generateConcat(String name, Collection<Fragment> fragments) {
         StringBuilder resultBuilder = new StringBuilder();
 
@@ -113,7 +115,7 @@ public final class Fragments {
             resultBuilder.append(name);
             resultBuilder.append(">");
         }
-        
+
         for (Fragment fragment : fragments) {
             resultBuilder.append(fragment.get());
         }
@@ -121,7 +123,7 @@ public final class Fragments {
         if (name != null) {
             resultBuilder.append(")");
         }
-        
+
         return resultBuilder.toString();
     }
 
@@ -142,7 +144,7 @@ public final class Fragments {
     public static Fragment alter(Collection<Fragment> fragments) {
         return new LazyFragment(() -> Fragments.generateAlter(null, fragments));
     }
-    
+
     private static String generateAlter(String name, Collection<Fragment> fragments) {
         StringJoiner joiner = new StringJoiner("|");
         for (Fragment fragment : fragments) {
@@ -159,16 +161,16 @@ public final class Fragments {
         }
         resultBuilder.append(joiner);
         resultBuilder.append(")");
-        
+
         return resultBuilder.toString();
     }
-    
-    
+
+
     public static Fragment fixed(String content) {
         return simple(Pattern.quote(content));
     }
 
-    
+
     public static Fragment optional(Fragment fragment) {
         return optional(fragment, QuantifierType.GREEDY);
     }
@@ -188,7 +190,7 @@ public final class Fragments {
 
     private static String generateOptional(String name, Fragment fragment, QuantifierType type) {
         StringBuilder resultBuilder = new StringBuilder();
-        
+
         if (name != null) {
             resultBuilder.append("(?<");
             resultBuilder.append(name);
@@ -196,23 +198,23 @@ public final class Fragments {
         } else {
             resultBuilder.append("(?:");
         }
-        
+
         resultBuilder.append(fragment.get());
         resultBuilder.append(")?");
         resultBuilder.append(type.modifier());
-        
+
         return resultBuilder.toString();
     }
-    
+
 
     public static Fragment intRange(long min, long until) {
         return intRangeClosed(min, until + 1);
     }
-    
+
     public static Fragment intRangeClosed(long min, long max) {
         return intRange(BigInteger.valueOf(min), true, BigInteger.valueOf(max), true);
     }
-    
+
     public static Fragment intRange(
             BigInteger low, boolean lowInclusive, BigInteger high, boolean highInclusive) {
 
@@ -221,5 +223,5 @@ public final class Fragments {
                 .high(high, highInclusive)
                 .build();
     }
-    
+
 }
