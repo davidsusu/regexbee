@@ -12,6 +12,7 @@ import hu.webarticum.jrb.number.IntRangeBuilder;
 
 // TODO:
 //
+// rename project to RegexBee
 // helper classes by categories (common, number, text, format etc.)
 //
 // anyOccur ([??], ...*, optionally use QuantifierType)
