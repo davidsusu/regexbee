@@ -1,4 +1,4 @@
-package hu.webarticum.jrb.number;
+package hu.webarticum.regexbee.number;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
-
-import hu.webarticum.regexbee.number.IntRangeBuilder;
 
 class IntRangeBuilderTest {
     
