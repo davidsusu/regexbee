@@ -2,8 +2,8 @@ package hu.webarticum.regexbee.number;
 
 import java.math.BigInteger;
 
-import hu.webarticum.regexbee.core.Fragment;
-import hu.webarticum.regexbee.core.LazyFragment;
+import hu.webarticum.regexbee.Fragment;
+import hu.webarticum.regexbee.common.LazyFragment;
 
 public class IntRangeBuilder {
     

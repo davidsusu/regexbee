@@ -1,6 +1,6 @@
 package hu.webarticum.regexbee.template;
 
-import hu.webarticum.regexbee.core.Fragment;
+import hu.webarticum.regexbee.Fragment;
 
 // TODO: multiple parameters?
 public interface FragmentTemplate {

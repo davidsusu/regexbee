@@ -3,26 +3,18 @@ package hu.webarticum.regexbee;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import hu.webarticum.regexbee.core.Fragment;
-import hu.webarticum.regexbee.core.Fragments;
-import hu.webarticum.regexbee.core.QuantifierType;
-
 public class SimpleExample {
 
     public static void main(String[] args) {
-        Fragment fragment = Fragments.concat(
-            Fragments.optional("g1", Fragments.fixed("xxx"), QuantifierType.POSSESSIVE),
-            Fragments.alter(
-                Fragments.simple("ggg"),
-                Fragments.simple("hello")
-            ),
-            Fragments.optional(
-                Fragments.concat(
-                    Fragments.simple("."),
-                    Fragments.WORD
-                )
-            )
-        );
+        Fragment fragment =
+                Fragments.optional("g1", Fragments.fixed("xxx"), QuantifierType.POSSESSIVE)
+                .then(Fragments.alter(
+                        Fragments.simple("ggg"),
+                        Fragments.simple("hello")))
+                .then(Fragments.optional(
+                        Fragments.concat(
+                                Fragments.simple("."),
+                                Fragments.WORD)));
         
         System.out.println(fragment.get());
         System.out.println();

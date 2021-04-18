@@ -1,4 +1,4 @@
-package hu.webarticum.regexbee.core;
+package hu.webarticum.regexbee;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.regex.Pattern;
 
+import hu.webarticum.regexbee.common.LazyFragment;
 import hu.webarticum.regexbee.number.IntRangeBuilder;
 
 
@@ -25,6 +26,7 @@ import hu.webarticum.regexbee.number.IntRangeBuilder;
 // recursion ([??])
 // etc.
 
+@Deprecated
 public final class Fragments {
 
     private static final Pattern GROUP_NAME_PATTERN = Pattern.compile("[a-zA-Z][a-zA-Z0-9]*");
