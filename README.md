@@ -30,7 +30,7 @@ Matcher myMatcher = myPattern.matcher(someString);
 
 if (myMatcher.matches()) {
     System.out.println(String.format(
-            "I have a nice day, %s.",
+            "We have a nice day, %s!",
             myMatcher.group("nameX")));
 }
 ```
