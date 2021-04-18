@@ -5,19 +5,19 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import hu.webarticum.regexbee.Fragment;
+import hu.webarticum.regexbee.BeeFragment;
 import hu.webarticum.regexbee.util.PatternUtil;
 
 public class AlternationFragment extends AbstractGeneratingFragment {
     
-    private final List<Fragment> fragments;
+    private final List<BeeFragment> fragments;
     
 
-    public AlternationFragment(Fragment... fragments) {
+    public AlternationFragment(BeeFragment... fragments) {
         this(Arrays.asList(fragments));
     }
 
-    public AlternationFragment(Collection<Fragment> fragments) {
+    public AlternationFragment(Collection<BeeFragment> fragments) {
         this.fragments = new ArrayList<>(fragments);
     }
 
@@ -38,7 +38,7 @@ public class AlternationFragment extends AbstractGeneratingFragment {
         
         StringBuilder resultBuilder = new StringBuilder("(?:");
         boolean first = true;
-        for (Fragment fragment : fragments) {
+        for (BeeFragment fragment : fragments) {
             if (first) {
                 first = false;
             } else {
@@ -58,7 +58,7 @@ public class AlternationFragment extends AbstractGeneratingFragment {
 
     
     @Override
-    public Fragment or(Fragment nextFragment) {
+    public BeeFragment or(BeeFragment nextFragment) {
         AlternationFragment result = new AlternationFragment(fragments.size() + 1);
         result.fragments.addAll(this.fragments);
         result.fragments.add(nextFragment);

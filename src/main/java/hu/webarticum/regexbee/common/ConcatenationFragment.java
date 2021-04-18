@@ -5,19 +5,19 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import hu.webarticum.regexbee.Fragment;
+import hu.webarticum.regexbee.BeeFragment;
 import hu.webarticum.regexbee.util.PatternUtil;
 
 public class ConcatenationFragment extends AbstractGeneratingFragment {
     
-    private final List<Fragment> fragments;
+    private final List<BeeFragment> fragments;
     
 
-    public ConcatenationFragment(Fragment... fragments) {
+    public ConcatenationFragment(BeeFragment... fragments) {
         this(Arrays.asList(fragments));
     }
 
-    public ConcatenationFragment(Collection<Fragment> fragments) {
+    public ConcatenationFragment(Collection<BeeFragment> fragments) {
         this.fragments = new ArrayList<>(fragments);
     }
 
@@ -26,7 +26,7 @@ public class ConcatenationFragment extends AbstractGeneratingFragment {
     }
     
     
-    public List<Fragment> fragments() {
+    public List<BeeFragment> fragments() {
         return new ArrayList<>();
     }
     
@@ -41,7 +41,7 @@ public class ConcatenationFragment extends AbstractGeneratingFragment {
         }
         
         StringBuilder resultBuilder = new StringBuilder();
-        for (Fragment fragment : fragments) {
+        for (BeeFragment fragment : fragments) {
             String subPattern = fragment.get();
             if (PatternUtil.isSafePattern(subPattern)) {
                 resultBuilder.append(subPattern);
@@ -54,7 +54,7 @@ public class ConcatenationFragment extends AbstractGeneratingFragment {
     }
     
     @Override
-    public Fragment then(Fragment nextFragment) {
+    public BeeFragment then(BeeFragment nextFragment) {
         ConcatenationFragment result = new ConcatenationFragment(fragments.size() + 1);
         result.fragments.addAll(this.fragments);
         result.fragments.add(nextFragment);

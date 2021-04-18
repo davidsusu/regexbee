@@ -10,21 +10,21 @@ import hu.webarticum.regexbee.common.NamedGroupFragment;
 // TODO: rename to BeeFragment or similar?
 // TODO: add hashCode() and equals() to subtypes
 @FunctionalInterface
-public interface Fragment extends Supplier<String> {
+public interface BeeFragment extends Supplier<String> {
     
     public default Pattern toPattern() {
         return Pattern.compile(get());
     }
     
-    public default Fragment then(Fragment nextFragment) {
+    public default BeeFragment then(BeeFragment nextFragment) {
         return new ConcatenationFragment(this, nextFragment);
     }
 
-    public default Fragment or(Fragment nextFragment) {
+    public default BeeFragment or(BeeFragment nextFragment) {
         return new AlternationFragment(this, nextFragment);
     }
     
-    public default Fragment captureAs(String groupName) {
+    public default BeeFragment captureAs(String groupName) {
         return new NamedGroupFragment(this, groupName);
     }
     

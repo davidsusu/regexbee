@@ -9,20 +9,20 @@ Do not use it in production.
 
 Issues, recommendations and pull request are welcome.
 
-Regex `Fragment`s are immutable and lazily computed and cached.
+`BeeFragment`s are immutable and lazily computed and cached.
 You can build complex patterns in a fluent (quasi-declarative) way.
 
 Simple example:
 
 ```java
-Fragment myFragment = Fragments.BEGIN
-        .then(Fragments.word())
-        .then(Fragments.SPACE.any())
-        .then(Fragments.intBetween(-4, 1359)
-                .or(Fragments.fixed("-"))
-        .then(Fragments.fixed("??)fixed?text. ").optional());
-        .then(Fragments.word().optional(QuantifierType.POSSESSIVE))
-        .then(Fragments.END);
+BeeFragment myFragment = Bee.BEGIN
+        .then(Bee.WORD)
+        .then(Bee.SPACE.any())
+        .then(Bee.intBetween(-4, 1359)
+                .or(Bee.fixed("-"))
+        .then(Bee.fixed("??)fixed?text. ").optional());
+        .then(Bee.word().optional(QuantifierType.POSSESSIVE))
+        .then(Bee.END);
 
 Pattern myPattern = myFragment.toPattern();
 

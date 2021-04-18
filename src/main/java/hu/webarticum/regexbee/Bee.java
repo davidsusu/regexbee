@@ -27,54 +27,53 @@ import hu.webarticum.regexbee.number.IntRangeBuilder;
 // dates
 // etc.
 
-@Deprecated
-public final class Fragments {
+public final class Bee {
 
     private static final Pattern GROUP_NAME_PATTERN = Pattern.compile("[a-zA-Z][a-zA-Z0-9]*");
 
 
-    public static final Fragment BEGIN = simple("^");
+    public static final BeeFragment BEGIN = simple("^");
 
-    public static final Fragment END = simple("$");
+    public static final BeeFragment END = simple("$");
 
-    public static final Fragment SIGNED_INT = simple("[\\+\\-]?(?:0|[1-9]\\d*)");
+    public static final BeeFragment SIGNED_INT = simple("[\\+\\-]?(?:0|[1-9]\\d*)");
 
-    public static final Fragment UNSIGNED_INT = simple("(?:0|[1-9]\\d*)");
+    public static final BeeFragment UNSIGNED_INT = simple("(?:0|[1-9]\\d*)");
 
-    public static final Fragment WORD = simple("\\b\\w+\\b");
+    public static final BeeFragment WORD = simple("\\b\\w+\\b");
 
-    public static final Fragment FAIL = simple("(?!)");
+    public static final BeeFragment FAIL = simple("(?!)");
 
-    public static final Fragment JUST_FAIL = concat(BEGIN, FAIL);
+    public static final BeeFragment JUST_FAIL = concat(BEGIN, FAIL);
 
 
-    private Fragments() {
+    private Bee() {
         // utility class
     }
 
 
-    public static Fragment checked(String pattern) {
+    public static BeeFragment checked(String pattern) {
         Pattern.compile(pattern);
         return simple(pattern);
     }
 
-    public static Fragment checked(String name, String pattern) {
+    public static BeeFragment checked(String name, String pattern) {
         Pattern.compile(pattern);
         return simple(name, pattern);
     }
 
-    public static Fragment simple(String name, String pattern) {
+    public static BeeFragment simple(String name, String pattern) {
         return named(name, simple(pattern));
     }
 
-    public static Fragment simple(String pattern) {
+    public static BeeFragment simple(String pattern) {
         return new SimpleFragment(pattern);
     }
 
 
-    public static Fragment named(String name, Fragment fragment) {
+    public static BeeFragment named(String name, BeeFragment fragment) {
         checkName(name);
-        return new LazyFragment(() -> Fragments.generateNamed(name, fragment));
+        return new LazyFragment(() -> Bee.generateNamed(name, fragment));
     }
 
     private static void checkName(String name) {
@@ -84,7 +83,7 @@ public final class Fragments {
         }
     }
 
-    private static String generateNamed(String name, Fragment fragment) {
+    private static String generateNamed(String name, BeeFragment fragment) {
         StringBuilder resultBuilder = new StringBuilder("(?<");
         resultBuilder.append(name);
         resultBuilder.append(">");
@@ -94,24 +93,24 @@ public final class Fragments {
     }
 
 
-    public static Fragment concat(Fragment... fragments) {
+    public static BeeFragment concat(BeeFragment... fragments) {
         return concat(Arrays.asList(fragments));
     }
 
-    public static Fragment concat(String name, Fragment... fragments) {
+    public static BeeFragment concat(String name, BeeFragment... fragments) {
         return concat(name, Arrays.asList(fragments));
     }
 
-    public static Fragment concat(String name, Collection<Fragment> fragments) {
+    public static BeeFragment concat(String name, Collection<BeeFragment> fragments) {
         checkName(name);
-        return new LazyFragment(() -> Fragments.generateConcat(name, fragments));
+        return new LazyFragment(() -> Bee.generateConcat(name, fragments));
     }
 
-    public static Fragment concat(Collection<Fragment> fragments) {
-        return new LazyFragment(() -> Fragments.generateConcat(null, fragments));
+    public static BeeFragment concat(Collection<BeeFragment> fragments) {
+        return new LazyFragment(() -> Bee.generateConcat(null, fragments));
     }
 
-    private static String generateConcat(String name, Collection<Fragment> fragments) {
+    private static String generateConcat(String name, Collection<BeeFragment> fragments) {
         StringBuilder resultBuilder = new StringBuilder();
 
         if (name != null) {
@@ -120,7 +119,7 @@ public final class Fragments {
             resultBuilder.append(">");
         }
 
-        for (Fragment fragment : fragments) {
+        for (BeeFragment fragment : fragments) {
             resultBuilder.append(fragment.get());
         }
 
@@ -132,26 +131,26 @@ public final class Fragments {
     }
 
 
-    public static Fragment alter(String name, Fragment... fragments) {
+    public static BeeFragment alter(String name, BeeFragment... fragments) {
         return alter(name, Arrays.asList(fragments));
     }
 
-    public static Fragment alter(Fragment... fragments) {
+    public static BeeFragment alter(BeeFragment... fragments) {
         return alter(Arrays.asList(fragments));
     }
 
-    public static Fragment alter(String name, Collection<Fragment> fragments) {
+    public static BeeFragment alter(String name, Collection<BeeFragment> fragments) {
         checkName(name);
-        return new LazyFragment(() -> Fragments.generateAlter(name, fragments));
+        return new LazyFragment(() -> Bee.generateAlter(name, fragments));
     }
 
-    public static Fragment alter(Collection<Fragment> fragments) {
-        return new LazyFragment(() -> Fragments.generateAlter(null, fragments));
+    public static BeeFragment alter(Collection<BeeFragment> fragments) {
+        return new LazyFragment(() -> Bee.generateAlter(null, fragments));
     }
 
-    private static String generateAlter(String name, Collection<Fragment> fragments) {
+    private static String generateAlter(String name, Collection<BeeFragment> fragments) {
         StringJoiner joiner = new StringJoiner("|");
-        for (Fragment fragment : fragments) {
+        for (BeeFragment fragment : fragments) {
             joiner.add(fragment.get());
         }
 
@@ -170,29 +169,29 @@ public final class Fragments {
     }
 
 
-    public static Fragment fixed(String content) {
+    public static BeeFragment fixed(String content) {
         return simple(Pattern.quote(content));
     }
 
 
-    public static Fragment optional(Fragment fragment) {
+    public static BeeFragment optional(BeeFragment fragment) {
         return optional(fragment, QuantifierType.GREEDY);
     }
 
-    public static Fragment optional(String name, Fragment fragment) {
+    public static BeeFragment optional(String name, BeeFragment fragment) {
         return optional(name, fragment, QuantifierType.GREEDY);
     }
 
-    public static Fragment optional(Fragment fragment, QuantifierType type) {
-        return new LazyFragment(() -> Fragments.generateOptional(null, fragment, type));
+    public static BeeFragment optional(BeeFragment fragment, QuantifierType type) {
+        return new LazyFragment(() -> Bee.generateOptional(null, fragment, type));
     }
 
-    public static Fragment optional(String name, Fragment fragment, QuantifierType type) {
+    public static BeeFragment optional(String name, BeeFragment fragment, QuantifierType type) {
         checkName(name);
-        return new LazyFragment(() -> Fragments.generateOptional(name, fragment, type));
+        return new LazyFragment(() -> Bee.generateOptional(name, fragment, type));
     }
 
-    private static String generateOptional(String name, Fragment fragment, QuantifierType type) {
+    private static String generateOptional(String name, BeeFragment fragment, QuantifierType type) {
         StringBuilder resultBuilder = new StringBuilder();
 
         if (name != null) {
@@ -211,15 +210,15 @@ public final class Fragments {
     }
 
 
-    public static Fragment intRange(long min, long until) {
+    public static BeeFragment intRange(long min, long until) {
         return intRangeClosed(min, until + 1);
     }
 
-    public static Fragment intRangeClosed(long min, long max) {
+    public static BeeFragment intRangeClosed(long min, long max) {
         return intRange(BigInteger.valueOf(min), true, BigInteger.valueOf(max), true);
     }
 
-    public static Fragment intRange(
+    public static BeeFragment intRange(
             BigInteger low, boolean lowInclusive, BigInteger high, boolean highInclusive) {
 
         return new IntRangeBuilder()

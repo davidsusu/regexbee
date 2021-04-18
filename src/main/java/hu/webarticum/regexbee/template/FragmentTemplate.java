@@ -1,10 +1,10 @@
 package hu.webarticum.regexbee.template;
 
-import hu.webarticum.regexbee.Fragment;
+import hu.webarticum.regexbee.BeeFragment;
 
 // TODO: multiple parameters?
 public interface FragmentTemplate {
     
-    public Fragment substitute(Fragment parameter);
+    public BeeFragment substitute(BeeFragment parameter);
     
 }

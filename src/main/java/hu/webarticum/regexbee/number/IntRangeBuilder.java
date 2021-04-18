@@ -2,7 +2,7 @@ package hu.webarticum.regexbee.number;
 
 import java.math.BigInteger;
 
-import hu.webarticum.regexbee.Fragment;
+import hu.webarticum.regexbee.BeeFragment;
 import hu.webarticum.regexbee.common.LazyFragment;
 
 public class IntRangeBuilder {
@@ -207,7 +207,7 @@ public class IntRangeBuilder {
         }
         
 
-        public Fragment build() {
+        public BeeFragment build() {
             BigInteger from = lowInclusive ? low : low.add(BigInteger.ONE);
             BigInteger to = highInclusive ? high : high.subtract(BigInteger.ONE);
             

@@ -1,8 +1,8 @@
 package hu.webarticum.regexbee.common;
 
-import hu.webarticum.regexbee.Fragment;
+import hu.webarticum.regexbee.BeeFragment;
 
-public abstract class AbstractGeneratingFragment implements Fragment {
+public abstract class AbstractGeneratingFragment implements BeeFragment {
 
     private final Lazy<String> supplier;
     

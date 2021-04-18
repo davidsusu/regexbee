@@ -1,16 +1,16 @@
 package hu.webarticum.regexbee.common;
 
-import hu.webarticum.regexbee.Fragment;
+import hu.webarticum.regexbee.BeeFragment;
 import hu.webarticum.regexbee.util.PatternUtil;
 
 public class NamedGroupFragment extends AbstractGeneratingFragment {
     
-    private final Fragment baseFragment;
+    private final BeeFragment baseFragment;
     
     private final String groupName;
     
 
-    public NamedGroupFragment(Fragment baseFragment, String groupName) {
+    public NamedGroupFragment(BeeFragment baseFragment, String groupName) {
         this.baseFragment = baseFragment;
         this.groupName = PatternUtil.requireValidGroupName(groupName);
     }

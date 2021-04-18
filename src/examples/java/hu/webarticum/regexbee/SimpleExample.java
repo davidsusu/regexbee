@@ -6,15 +6,15 @@ import java.util.regex.Pattern;
 public class SimpleExample {
 
     public static void main(String[] args) {
-        Fragment fragment =
-                Fragments.optional("g1", Fragments.fixed("xxx"), QuantifierType.POSSESSIVE)
-                .then(Fragments.alter(
-                        Fragments.simple("ggg"),
-                        Fragments.simple("hello")))
-                .then(Fragments.optional(
-                        Fragments.concat(
-                                Fragments.simple("."),
-                                Fragments.WORD)));
+        BeeFragment fragment =
+                Bee.optional("g1", Bee.fixed("xxx"), QuantifierType.POSSESSIVE)
+                .then(Bee.alter(
+                        Bee.simple("ggg"),
+                        Bee.simple("hello")))
+                .then(Bee.optional(
+                        Bee.concat(
+                                Bee.simple("."),
+                                Bee.WORD)));
         
         System.out.println(fragment.get());
         System.out.println();

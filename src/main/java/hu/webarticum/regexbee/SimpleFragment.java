@@ -2,7 +2,7 @@ package hu.webarticum.regexbee;
 
 import java.util.regex.Pattern;
 
-public class SimpleFragment implements Fragment {
+public class SimpleFragment implements BeeFragment {
     
     private final String pattern;
 
