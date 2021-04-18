@@ -17,6 +17,10 @@ public interface Fragment extends Supplier<String> {
     public default Fragment then(Fragment nextFragment) {
         return new ConcatenationFragment(this, nextFragment);
     }
+
+    public default Fragment or(Fragment nextFragment) {
+        return new AlternationFragment(this, nextFragment);
+    }
     
     // TODO .optional([quantifierType]) .any([qT]) .more([qT])
     
