@@ -18,15 +18,19 @@ Simple example:
 BeeFragment myFragment = Bee.BEGIN
         .then(Bee.WORD)
         .then(Bee.SPACE.any())
+        .then(Bee.WORD.captureAs("nameX"))
         .then(Bee.intBetween(-4, 1359)
                 .or(Bee.fixed("-"))
         .then(Bee.fixed("??)fixed?text. ").optional());
-        .then(Bee.word().optional(QuantifierType.POSSESSIVE))
+        .then(Bee.WORD.optional(QuantifierType.POSSESSIVE))
         .then(Bee.END);
 
 Pattern myPattern = myFragment.toPattern();
+Matcher myMatcher = myPattern.matcher(someString);
 
-if (myPattern.matcher(someString).matches()) {
-    System.out.println("I have a nice day.");
+if (myMatcher.matches()) {
+    System.out.println(String.format(
+            "I have a nice day, %s.",
+            myMatcher.group("nameX")));
 }
 ```
