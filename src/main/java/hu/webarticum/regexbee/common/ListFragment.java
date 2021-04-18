@@ -40,7 +40,7 @@ public class ListFragment extends AbstractGeneratingFragment {
             return fragments.get(0).get();
         }
         
-        StringBuilder resultBuilder = new StringBuilder("(?:");
+        StringBuilder resultBuilder = new StringBuilder();
         for (Fragment fragment : fragments) {
             String subPattern = fragment.get();
             if (PatternUtil.isSafe(subPattern)) {
@@ -49,7 +49,6 @@ public class ListFragment extends AbstractGeneratingFragment {
                 resultBuilder.append(PatternUtil.wrap(subPattern));
             }
         }
-        resultBuilder.append(")");
         
         return resultBuilder.toString();
     }

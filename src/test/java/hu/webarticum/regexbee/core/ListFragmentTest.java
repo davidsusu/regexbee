@@ -36,7 +36,7 @@ class ListFragmentTest {
                 new SimpleFragment("\\w.?"),
                 new SimpleFragment("xx|yy"),
                 new SimpleFragment("(?:abc|def)"));
-        String expected = "(?:ab(?:ab|)(abc)(?:|)\\w.?(?:xx|yy)(?:abc|def))";
+        String expected = "ab(?:ab|)(abc)(?:|)\\w.?(?:xx|yy)(?:abc|def)";
         
         assertThat(listFragment.get()).isEqualTo(expected);
     }
