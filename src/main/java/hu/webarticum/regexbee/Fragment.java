@@ -3,7 +3,7 @@ package hu.webarticum.regexbee;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
-import hu.webarticum.regexbee.common.ListFragment;
+import hu.webarticum.regexbee.common.ConcatenationFragment;
 
 @FunctionalInterface
 public interface Fragment extends Supplier<String> {
@@ -13,7 +13,7 @@ public interface Fragment extends Supplier<String> {
     }
     
     public default Fragment then(Fragment nextFragment) {
-        return new ListFragment(this, nextFragment);
+        return new ConcatenationFragment(this, nextFragment);
     }
     
     // TODO .optional([quantifierType]) .any([qT]) .more([qT]) .or()

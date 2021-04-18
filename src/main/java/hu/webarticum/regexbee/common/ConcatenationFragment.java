@@ -8,20 +8,20 @@ import java.util.List;
 import hu.webarticum.regexbee.Fragment;
 import hu.webarticum.regexbee.util.PatternUtil;
 
-public class ListFragment extends AbstractGeneratingFragment {
+public class ConcatenationFragment extends AbstractGeneratingFragment {
     
     private final List<Fragment> fragments;
     
 
-    public ListFragment(Fragment... fragments) {
+    public ConcatenationFragment(Fragment... fragments) {
         this(Arrays.asList(fragments));
     }
 
-    public ListFragment(Collection<Fragment> fragments) {
+    public ConcatenationFragment(Collection<Fragment> fragments) {
         this.fragments = new ArrayList<>(fragments);
     }
 
-    private ListFragment(int size) {
+    private ConcatenationFragment(int size) {
         this.fragments = new ArrayList<>(size);
     }
     
@@ -55,7 +55,7 @@ public class ListFragment extends AbstractGeneratingFragment {
     
     @Override
     public Fragment then(Fragment nextFragment) {
-        ListFragment result = new ListFragment(fragments.size() + 1);
+        ConcatenationFragment result = new ConcatenationFragment(fragments.size() + 1);
         result.fragments.addAll(this.fragments);
         result.fragments.add(nextFragment);
         return result;
