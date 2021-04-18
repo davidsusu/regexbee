@@ -9,7 +9,7 @@ import hu.webarticum.regexbee.Fragment;
 import hu.webarticum.regexbee.util.PatternUtil;
 
 public class AlternationFragment extends AbstractGeneratingFragment {
-
+    
     private final List<Fragment> fragments;
     
 
@@ -45,10 +45,10 @@ public class AlternationFragment extends AbstractGeneratingFragment {
                 resultBuilder.append('|');
             }
             String subPattern = fragment.get();
-            if (PatternUtil.isSafe(subPattern)) {
+            if (PatternUtil.isSafePattern(subPattern)) {
                 resultBuilder.append(subPattern);
             } else {
-                resultBuilder.append(PatternUtil.wrap(subPattern));
+                resultBuilder.append(PatternUtil.wrapPattern(subPattern));
             }
         }
         resultBuilder.append(')');

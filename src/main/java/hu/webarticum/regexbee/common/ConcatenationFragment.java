@@ -43,10 +43,10 @@ public class ConcatenationFragment extends AbstractGeneratingFragment {
         StringBuilder resultBuilder = new StringBuilder();
         for (Fragment fragment : fragments) {
             String subPattern = fragment.get();
-            if (PatternUtil.isSafe(subPattern)) {
+            if (PatternUtil.isSafePattern(subPattern)) {
                 resultBuilder.append(subPattern);
             } else {
-                resultBuilder.append(PatternUtil.wrap(subPattern));
+                resultBuilder.append(PatternUtil.wrapPattern(subPattern));
             }
         }
         
