@@ -13,7 +13,7 @@ import hu.webarticum.regexbee.number.IntRangeBuilder;
 
 // TODO:
 //
-// rename project to RegexBee (-> BeeFragment or similar)
+// rename class to Bee?
 // helper classes by categories (common, number, text, format etc.)
 //
 // anyOccur ([??], ...*, optionally use QuantifierType)
@@ -24,6 +24,7 @@ import hu.webarticum.regexbee.number.IntRangeBuilder;
 // atomic
 // backReference ([??])
 // recursion ([??])
+// dates
 // etc.
 
 @Deprecated
