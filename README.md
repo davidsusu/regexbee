@@ -29,8 +29,7 @@ Pattern myPattern = myFragment.toPattern();
 Matcher myMatcher = myPattern.matcher(someString);
 
 if (myMatcher.matches()) {
-    System.out.println(String.format(
-            "We have a nice day, %s!",
-            myMatcher.group("nameX")));
+    String nameX = myMatcher.group("nameX");
+    System.out.println(String.format("We have a nice day, %s!", nameX));
 }
 ```
