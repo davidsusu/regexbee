@@ -2,6 +2,7 @@ package hu.webarticum.regexbee.common;
 
 import java.util.function.Supplier;
 
+// TODO: should we use a week reference for the value?
 public class Lazy<T> implements Supplier<T> {
     
     private Supplier<T> supplier;
