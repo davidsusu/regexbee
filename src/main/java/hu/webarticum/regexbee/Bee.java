@@ -13,7 +13,6 @@ import hu.webarticum.regexbee.number.IntRangeBuilder;
 
 // TODO:
 //
-// rename class to Bee?
 // helper classes by categories (common, number, text, format etc.)
 //
 // anyOccur ([??], ...*, optionally use QuantifierType)

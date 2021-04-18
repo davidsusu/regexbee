@@ -7,7 +7,6 @@ import hu.webarticum.regexbee.common.AlternationFragment;
 import hu.webarticum.regexbee.common.ConcatenationFragment;
 import hu.webarticum.regexbee.common.NamedGroupFragment;
 
-// TODO: rename to BeeFragment or similar?
 // TODO: add hashCode() and equals() to subtypes
 @FunctionalInterface
 public interface BeeFragment extends Supplier<String> {
