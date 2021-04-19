@@ -11,7 +11,7 @@ public class SimpleExample {
                 .then(Bee.simple("ggg")
                         .or(Bee.simple("hello")))
                 .then(Bee.simple(".")
-                        .then(Bee.WORD)
+                        .then(Bee.ASCII_WORD)
                         .optional());
         
         System.out.println(fragment.get());

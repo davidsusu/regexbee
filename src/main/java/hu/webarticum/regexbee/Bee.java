@@ -28,7 +28,11 @@ public final class Bee {
 
     public static final BeeFragment UNSIGNED_INT = simple("(?:0|[1-9]\\d*)");
 
-    public static final BeeFragment WORD = simple("\\b\\w+\\b");
+    public static final BeeFragment WHITESPACE = simple("\\w");
+
+    public static final BeeFragment ASCII_WORD = simple("\\b\\w+\\b");
+    
+    // TODO: WORD (with any letters)
 
     public static final BeeFragment FAIL = simple("(?!)");
 
