@@ -8,13 +8,11 @@ public class SimpleExample {
     public static void main(String[] args) {
         BeeFragment fragment = Bee
                 .then(Bee.fixed("xxx").optionalPossessive().captureAs("g1"))
-                .then(Bee.alter(
-                        Bee.simple("ggg"),
-                        Bee.simple("hello")))
-                .then(Bee.optional(
-                        Bee.concat(
-                                Bee.simple("."),
-                                Bee.WORD)));
+                .then(Bee.simple("ggg")
+                        .or(Bee.simple("hello")))
+                .then(Bee.simple(".")
+                        .then(Bee.WORD)
+                        .optional());
         
         System.out.println(fragment.get());
         System.out.println();
