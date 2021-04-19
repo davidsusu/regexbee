@@ -60,11 +60,7 @@ public final class Bee {
     }
     
 
-    public static BeeFragment intBetween(long min, long until) {
-        return intBetweenClosed(min, until + 1);
-    }
-
-    public static BeeFragment intBetweenClosed(long min, long max) {
+    public static BeeFragment intBetween(long min, long max) {
         return intBetween(BigInteger.valueOf(min), true, BigInteger.valueOf(max), true);
     }
 
