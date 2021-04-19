@@ -60,15 +60,15 @@ public final class Bee {
     }
     
 
-    public static BeeFragment intRange(long min, long until) {
-        return intRangeClosed(min, until + 1);
+    public static BeeFragment intBetween(long min, long until) {
+        return intBetweenClosed(min, until + 1);
     }
 
-    public static BeeFragment intRangeClosed(long min, long max) {
-        return intRange(BigInteger.valueOf(min), true, BigInteger.valueOf(max), true);
+    public static BeeFragment intBetweenClosed(long min, long max) {
+        return intBetween(BigInteger.valueOf(min), true, BigInteger.valueOf(max), true);
     }
 
-    public static BeeFragment intRange(
+    public static BeeFragment intBetween(
             BigInteger low, boolean lowInclusive, BigInteger high, boolean highInclusive) {
 
         return new IntRangeBuilder()
