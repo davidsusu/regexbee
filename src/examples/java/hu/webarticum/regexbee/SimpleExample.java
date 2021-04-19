@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 public class SimpleExample {
 
     public static void main(String[] args) {
-        BeeFragment fragment =
-                Bee.optional("g1", Bee.fixed("xxx"), QuantifierType.POSSESSIVE)
+        BeeFragment fragment = Bee
+                .then(Bee.fixed("xxx").captureAs("g1").optionalPossessive())
                 .then(Bee.alter(
                         Bee.simple("ggg"),
                         Bee.simple("hello")))

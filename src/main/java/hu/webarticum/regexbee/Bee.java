@@ -49,6 +49,12 @@ public final class Bee {
     private Bee() {
         // utility class
     }
+    
+    
+    // to be visually consistent
+    public static BeeFragment then(BeeFragment fragment) {
+        return fragment;
+    }
 
 
     public static BeeFragment checked(String pattern) {
@@ -174,23 +180,23 @@ public final class Bee {
 
 
     public static BeeFragment optional(BeeFragment fragment) {
-        return optional(fragment, QuantifierType.GREEDY);
+        return optional(fragment, Greediness.GREEDY);
     }
 
     public static BeeFragment optional(String name, BeeFragment fragment) {
-        return optional(name, fragment, QuantifierType.GREEDY);
+        return optional(name, fragment, Greediness.GREEDY);
     }
 
-    public static BeeFragment optional(BeeFragment fragment, QuantifierType type) {
+    public static BeeFragment optional(BeeFragment fragment, Greediness type) {
         return new LazyFragment(() -> Bee.generateOptional(null, fragment, type));
     }
 
-    public static BeeFragment optional(String name, BeeFragment fragment, QuantifierType type) {
+    public static BeeFragment optional(String name, BeeFragment fragment, Greediness type) {
         checkName(name);
         return new LazyFragment(() -> Bee.generateOptional(name, fragment, type));
     }
 
-    private static String generateOptional(String name, BeeFragment fragment, QuantifierType type) {
+    private static String generateOptional(String name, BeeFragment fragment, Greediness type) {
         StringBuilder resultBuilder = new StringBuilder();
 
         if (name != null) {

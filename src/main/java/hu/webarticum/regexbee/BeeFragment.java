@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import hu.webarticum.regexbee.common.AlternationFragment;
 import hu.webarticum.regexbee.common.ConcatenationFragment;
 import hu.webarticum.regexbee.common.NamedGroupFragment;
+import hu.webarticum.regexbee.common.QuantifierFragment;
 
 // TODO: add hashCode() and equals() to subtypes
 @FunctionalInterface
@@ -26,7 +27,61 @@ public interface BeeFragment extends Supplier<String> {
     public default BeeFragment captureAs(String groupName) {
         return new NamedGroupFragment(this, groupName);
     }
-    
-    // TODO .optional([quantifierType]) .any([qT]) .more([qT])
-    
+
+    public default BeeFragment optional() {
+        return new QuantifierFragment(this, 0, 1);
+    }
+
+    public default BeeFragment optionalLazy() {
+        return new QuantifierFragment(this, 0, 1, Greediness.LAZY);
+    }
+
+    public default BeeFragment optionalPossessive() {
+        return new QuantifierFragment(this, 0, 1, Greediness.POSSESSIVE);
+    }
+
+    public default BeeFragment any() {
+        return new QuantifierFragment(this, 0, QuantifierFragment.MAX_REPETITIONS);
+    }
+
+    public default BeeFragment anyLazy() {
+        return new QuantifierFragment(this, 0, QuantifierFragment.MAX_REPETITIONS, Greediness.LAZY);
+    }
+
+    public default BeeFragment anyPossessive() {
+        return new QuantifierFragment(this, 0, QuantifierFragment.MAX_REPETITIONS, Greediness.POSSESSIVE);
+    }
+
+    public default BeeFragment more() {
+        return new QuantifierFragment(this, 1, QuantifierFragment.MAX_REPETITIONS);
+    }
+
+    public default BeeFragment moreLazy() {
+        return new QuantifierFragment(this, 1, QuantifierFragment.MAX_REPETITIONS, Greediness.LAZY);
+    }
+
+    public default BeeFragment morePossessive() {
+        return new QuantifierFragment(this, 1, QuantifierFragment.MAX_REPETITIONS, Greediness.POSSESSIVE);
+    }
+
+    public default BeeFragment occur(int number) {
+        return new QuantifierFragment(this, number, number);
+    }
+
+    public default BeeFragment occurAtLeast(int minimum) {
+        return new QuantifierFragment(this, minimum, QuantifierFragment.MAX_REPETITIONS);
+    }
+
+    public default BeeFragment occurAtMost(int maximum) {
+        return new QuantifierFragment(this, 0, maximum);
+    }
+
+    public default BeeFragment occur(int minimum, int maximum) {
+        return new QuantifierFragment(this, minimum, maximum);
+    }
+
+    public default BeeFragment occur(int minimum, int maximum, Greediness greediness) {
+        return new QuantifierFragment(this, minimum, maximum, greediness);
+    }
+
 }

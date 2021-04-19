@@ -1,10 +1,10 @@
 package hu.webarticum.regexbee;
 
-public enum QuantifierType {
+public enum Greediness {
     
     GREEDY(""),
     
-    RELUCTANT("?"),
+    LAZY("?"),
     
     POSSESSIVE("+"),
     
@@ -14,7 +14,7 @@ public enum QuantifierType {
     private final String modifier;
     
     
-    private QuantifierType(String modifier) {
+    private Greediness(String modifier) {
         this.modifier = modifier;
     }
     

@@ -22,7 +22,7 @@ BeeFragment myFragment = Bee.BEGIN
         .then(Bee.intBetween(-4, 1359)
                 .or(Bee.fixed("-"))
         .then(Bee.fixed("??)fixed?text. ").optional());
-        .then(Bee.WORD.optional(QuantifierType.POSSESSIVE))
+        .then(Bee.WORD.optional(Greediness.POSSESSIVE))
         .then(Bee.END);
 
 Pattern myPattern = myFragment.toPattern();
