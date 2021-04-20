@@ -20,9 +20,9 @@ BeeFragment myFragment = Bee.BEGIN
         .then(Bee.WHITESPACE.any())
         .then(Bee.ASCII_WORD.captureAs("nameX"))
         .then(Bee.intBetween(-4, 1359)
-                .or(Bee.fixed("-")))
+                .or(Bee.fixed("-").more(Greediness.POSSESSIVE)))
         .then(Bee.fixed("??)fixed?text. ").optional())
-        .then(Bee.ASCII_WORD.optionalPossessive())
+        .then(Bee.ASCII_WORD.optional(Greediness.LAZY))
         .then(Bee.END);
 
 Pattern myPattern = myFragment.toPattern();

@@ -32,36 +32,24 @@ public interface BeeFragment extends Supplier<String> {
         return new QuantifierFragment(this, 0, 1);
     }
 
-    public default BeeFragment optionalLazy() {
-        return new QuantifierFragment(this, 0, 1, Greediness.LAZY);
-    }
-
-    public default BeeFragment optionalPossessive() {
-        return new QuantifierFragment(this, 0, 1, Greediness.POSSESSIVE);
+    public default BeeFragment optional(Greediness greediness) {
+        return new QuantifierFragment(this, 0, 1, greediness);
     }
 
     public default BeeFragment any() {
         return new QuantifierFragment(this, 0, QuantifierFragment.MAX_REPETITIONS);
     }
 
-    public default BeeFragment anyLazy() {
-        return new QuantifierFragment(this, 0, QuantifierFragment.MAX_REPETITIONS, Greediness.LAZY);
-    }
-
-    public default BeeFragment anyPossessive() {
-        return new QuantifierFragment(this, 0, QuantifierFragment.MAX_REPETITIONS, Greediness.POSSESSIVE);
+    public default BeeFragment any(Greediness greediness) {
+        return new QuantifierFragment(this, 0, QuantifierFragment.MAX_REPETITIONS, greediness);
     }
 
     public default BeeFragment more() {
         return new QuantifierFragment(this, 1, QuantifierFragment.MAX_REPETITIONS);
     }
 
-    public default BeeFragment moreLazy() {
-        return new QuantifierFragment(this, 1, QuantifierFragment.MAX_REPETITIONS, Greediness.LAZY);
-    }
-
-    public default BeeFragment morePossessive() {
-        return new QuantifierFragment(this, 1, QuantifierFragment.MAX_REPETITIONS, Greediness.POSSESSIVE);
+    public default BeeFragment more(Greediness greediness) {
+        return new QuantifierFragment(this, 1, QuantifierFragment.MAX_REPETITIONS, greediness);
     }
 
     public default BeeFragment occur(int number) {
