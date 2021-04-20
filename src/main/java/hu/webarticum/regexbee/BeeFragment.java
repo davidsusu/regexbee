@@ -15,6 +15,10 @@ public interface BeeFragment extends Supplier<String> {
     public default Pattern toPattern() {
         return Pattern.compile(get());
     }
+
+    public default Pattern toPattern(int flags) {
+        return Pattern.compile(get(), flags);
+    }
     
     public default BeeFragment then(BeeFragment nextFragment) {
         return new ConcatenationFragment(this, nextFragment);
