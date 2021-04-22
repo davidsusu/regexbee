@@ -11,7 +11,7 @@ Issues, recommendations and pull request are welcome.
 `BeeFragment`s are immutable, lazily computed and cached.
 You can build complex patterns in a fluent (quasi-declarative) way.
 
-Simple example:
+Example:
 
 ```java
 BeeFragment myFragment = Bee
@@ -34,3 +34,36 @@ if (myMatcher.matches()) {
     System.out.println(String.format("We have a nice day, %s!", nameX));
 }
 ```
+
+An other example with a simple log processor:
+
+```java
+// ...
+
+private static final Pattern LOG_ENTRY_PATTERN = Bee
+        .then(Bee.BEGIN)
+        .then(Bee.TIMESTAMP.as(TIMESTAMP_NAME))
+        .then(Bee.WHITESPACE.any())
+        .then(Bee.oneFixedOf("INFO", "WARN", "ERROR").as(SEVERITY_NAME))
+        .then(Bee.WHITESPACE.any())
+        .then(Bee.ANYTHING.as(MESSAGE_NAME))
+        .then(Bee.END)
+        .toPattern();
+
+// ...
+
+private void processLine(String line) {
+    System.out.println("--------------------");
+    
+    Matcher matcher = LOG_ENTRY_PATTERN.matcher(line);
+    if (!matcher.matches()) {
+        System.out.println(String.format("Unparseable line: %s", line));
+        return;
+    }
+
+    System.out.println(String.format("timestamp: %s", matcher.group(TIMESTAMP_NAME)));
+    System.out.println(String.format("severity: %s", matcher.group(SEVERITY_NAME)));
+    System.out.println(String.format("message: %s", matcher.group(MESSAGE_NAME)));
+}
+```
+

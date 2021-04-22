@@ -1,0 +1,6 @@
+2021-01-01T01:00:00Z   INFO  Application started
+2021-01-01T01:12:09Z   WARN  Suspect...
+2021-01-01T01:12:10Z  ERROR  Oops!
+oops oops
+2021-01-01T01:15:43Z   INFO  System recovered
+2021-01-01T20:23:07Z   INFO  Shutdown...

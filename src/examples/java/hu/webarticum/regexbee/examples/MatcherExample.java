@@ -1,9 +1,13 @@
-package hu.webarticum.regexbee;
+package hu.webarticum.regexbee.examples;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SimpleExample {
+import hu.webarticum.regexbee.Bee;
+import hu.webarticum.regexbee.BeeFragment;
+import hu.webarticum.regexbee.Greediness;
+
+public class MatcherExample {
 
     public static void main(String[] args) {
         BeeFragment fragment = Bee
