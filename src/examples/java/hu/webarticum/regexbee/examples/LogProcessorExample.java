@@ -20,9 +20,9 @@ public class LogProcessorExample {
     private static final Pattern LOG_ENTRY_PATTERN = Bee
             .then(Bee.BEGIN)
             .then(Bee.TIMESTAMP.as(TIMESTAMP_NAME))
-            .then(Bee.WHITESPACE.any())
+            .then(Bee.WHITESPACE.more())
             .then(Bee.oneFixedOf("INFO", "WARN", "ERROR").as(SEVERITY_NAME))
-            .then(Bee.WHITESPACE.any())
+            .then(Bee.WHITESPACE.more())
             .then(Bee.ANYTHING.as(MESSAGE_NAME))
             .then(Bee.END)
             .toPattern();
