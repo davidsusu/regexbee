@@ -21,6 +21,7 @@ BeeFragment myFragment = Bee
         .then(Bee.ASCII_WORD.as("nameX"))
         .then(Bee.intBetween(-4, 1359)
                 .or(Bee.fixed("-").more(Greediness.POSSESSIVE)))
+        .then(Bee.ref("nameX"))
         .then(Bee.fixed("??)fixed?text. ").optional())
         .then(Bee.ASCII_WORD.optional(Greediness.LAZY))
         .then(Bee.END);
