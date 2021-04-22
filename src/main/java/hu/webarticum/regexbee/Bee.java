@@ -3,6 +3,7 @@ package hu.webarticum.regexbee;
 import java.math.BigInteger;
 import java.util.regex.Pattern;
 
+import hu.webarticum.regexbee.common.NamedBackreferenceFragment;
 import hu.webarticum.regexbee.number.IntRangeBuilder;
 
 
@@ -61,6 +62,10 @@ public final class Bee {
     public static BeeFragment checked(String pattern) {
         Pattern.compile(pattern);
         return simple(pattern);
+    }
+    
+    public static BeeFragment ref(String groupName) {
+        return new NamedBackreferenceFragment(groupName);
     }
     
 
