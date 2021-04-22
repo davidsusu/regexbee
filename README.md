@@ -18,7 +18,7 @@ BeeFragment myFragment = Bee
         .then(Bee.BEGIN)
         .then(Bee.ASCII_WORD)
         .then(Bee.WHITESPACE.any())
-        .then(Bee.ASCII_WORD.captureAs("nameX"))
+        .then(Bee.ASCII_WORD.as("nameX"))
         .then(Bee.intBetween(-4, 1359)
                 .or(Bee.fixed("-").more(Greediness.POSSESSIVE)))
         .then(Bee.fixed("??)fixed?text. ").optional())

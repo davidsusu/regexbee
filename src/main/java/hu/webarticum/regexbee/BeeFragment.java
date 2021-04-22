@@ -27,7 +27,7 @@ public interface BeeFragment extends Supplier<String> {
         return new AlternationFragment(this, nextFragment);
     }
     
-    public default BeeFragment captureAs(String groupName) {
+    public default BeeFragment as(String groupName) {
         return new NamedGroupFragment(this, groupName);
     }
 

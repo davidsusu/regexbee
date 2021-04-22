@@ -9,7 +9,7 @@ public class SimpleExample {
         BeeFragment fragment = Bee
                 .then(Bee.fixed("xxx")
                         .optional(Greediness.POSSESSIVE)
-                        .captureAs("g1"))
+                        .as("g1"))
                 .then(Bee.simple("ggg")
                         .or(Bee.simple("hello")))
                 .then(Bee.simple(".")
