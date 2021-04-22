@@ -1,8 +1,12 @@
 package hu.webarticum.regexbee;
 
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import hu.webarticum.regexbee.common.AlternationFragment;
 import hu.webarticum.regexbee.common.NamedBackreferenceFragment;
 import hu.webarticum.regexbee.number.IntRangeBuilder;
 
@@ -21,23 +25,33 @@ import hu.webarticum.regexbee.number.IntRangeBuilder;
 
 public final class Bee {
 
+    public static final BeeFragment ANYTHING = simple(".*");
+
+    public static final BeeFragment FAIL = simple("(?!)");
+
+    public static final BeeFragment JUST_FAIL = simple("^(?!)");
+
     public static final BeeFragment BEGIN = simple("^");
 
     public static final BeeFragment END = simple("$");
+
+    public static final BeeFragment CHARACTER = simple(".");
+
+    public static final BeeFragment WHITESPACE = simple("\\w");
+    
+    public static final BeeFragment IDENTIFIER = simple("\\b[a-zA-Z_]\\w+\\b");
+
+    public static final BeeFragment ASCII_WORD = simple("\\b\\w+\\b");
+
+    public static final BeeFragment WORD =
+            simple("(?<=[^\\p{L}\\p{N}]|^)[\\p{L}\\p{N}]+(?=[^\\p{L}\\p{N}]|$)");
 
     public static final BeeFragment SIGNED_INT = simple("[\\+\\-]?(?:0|[1-9]\\d*)");
 
     public static final BeeFragment UNSIGNED_INT = simple("(?:0|[1-9]\\d*)");
 
-    public static final BeeFragment WHITESPACE = simple("\\w");
-
-    public static final BeeFragment ASCII_WORD = simple("\\b\\w+\\b");
-    
-    // TODO: WORD (with any letters)
-
-    public static final BeeFragment FAIL = simple("(?!)");
-
-    public static final BeeFragment JUST_FAIL = BEGIN.then(FAIL);
+    public static final BeeFragment TIMESTAMP =
+            simple("\\d{4}\\-\\d{2}\\-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z");
 
 
     private Bee() {
@@ -57,6 +71,15 @@ public final class Bee {
 
     public static BeeFragment fixed(String content) {
         return simple(Pattern.quote(content));
+    }
+
+    public static BeeFragment oneFixedOf(String... contents) {
+        return oneFixedOf(Arrays.asList(contents));
+    }
+
+    public static BeeFragment oneFixedOf(Collection<String> contents) {
+        return new AlternationFragment(
+                contents.stream().map(Bee::simple).collect(Collectors.toList()));
     }
     
     public static BeeFragment checked(String pattern) {
