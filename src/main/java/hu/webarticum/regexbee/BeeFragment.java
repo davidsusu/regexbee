@@ -8,8 +8,6 @@ import hu.webarticum.regexbee.common.ConcatenationFragment;
 import hu.webarticum.regexbee.common.NamedGroupFragment;
 import hu.webarticum.regexbee.common.QuantifierFragment;
 
-// TODO: add hashCode() and equals() to subtypes (is it really needed?)
-// TODO: Serializable?
 @FunctionalInterface
 public interface BeeFragment extends Supplier<String> {
     
