@@ -37,7 +37,7 @@ public final class Bee {
 
     public static final BeeFragment CHARACTER = simple(".");
 
-    public static final BeeFragment WHITESPACE = simple("\\w");
+    public static final BeeFragment WHITESPACE = simple("\\s");
     
     public static final BeeFragment IDENTIFIER = simple("\\b[a-zA-Z_]\\w+\\b");
 
@@ -79,7 +79,7 @@ public final class Bee {
 
     public static BeeFragment oneFixedOf(Collection<String> contents) {
         return new AlternationFragment(
-                contents.stream().map(Bee::simple).collect(Collectors.toList()));
+                contents.stream().map(Bee::fixed).collect(Collectors.toList()));
     }
     
     public static BeeFragment checked(String pattern) {
