@@ -292,26 +292,6 @@ class BeeTest {
     }
 
     @Test
-    void testIntBetween() {
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(4,  17))).containsExactly("12");
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(-5,  4))).containsExactly("-3");
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(-3,  50))).containsExactly("-3", "12");
-    }
-
-    @Test
-    void testIntBetweenWithBigInteger() {
-        BigInteger low = BigInteger.valueOf(-3);
-        BigInteger high = BigInteger.valueOf(12);
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, false, high, false))).isEmpty();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, false, high, true)))
-                .containsExactly("12");
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, true, high, false)))
-                .containsExactly("-3");
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, true, high, true)))
-                .containsExactly("-3", "12");
-    }
-    
-    @Test
     void testLookBehind() {
         assertThat(matchAll("", Bee.lookBehind(Bee.CHAR))).isEmpty();
         assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.lookBehind(Bee.simple("or")).then(Bee.CHAR)))
@@ -339,6 +319,34 @@ class BeeTest {
         assertThat(matchAll("", Bee.lookAheadNot(Bee.END))).isEmpty();
         assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.simple("... ").then(Bee.lookAheadNot(Bee.LETTER))))
                 .containsExactly("lor ", "et, ");
+    }
+
+    @Test
+    void testAtomic() {
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.atomic(Bee.simple("di?")).then(Bee.fixed("p"))))
+                .containsExactly("dip");
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.atomic(Bee.simple("dip?")).then(Bee.fixed("p"))))
+                .containsExactly();
+    }
+
+    @Test
+    void testIntBetween() {
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(4,  17))).containsExactly("12");
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(-5,  4))).containsExactly("-3");
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(-3,  50))).containsExactly("-3", "12");
+    }
+
+    @Test
+    void testIntBetweenWithBigInteger() {
+        BigInteger low = BigInteger.valueOf(-3);
+        BigInteger high = BigInteger.valueOf(12);
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, false, high, false))).isEmpty();
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, false, high, true)))
+                .containsExactly("12");
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, true, high, false)))
+                .containsExactly("-3");
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, true, high, true)))
+                .containsExactly("-3", "12");
     }
 
 
