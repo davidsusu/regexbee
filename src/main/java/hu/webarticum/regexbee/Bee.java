@@ -27,28 +27,52 @@ public final class Bee {
 
     public static final BeeFragment ANYTHING = simple(".*");
 
-    public static final BeeFragment FAIL = simple("(?!)");
+    public static final BeeFragment SOMETHING = simple(".+");
 
-    public static final BeeFragment JUST_FAIL = simple("^(?!)");
+    public static final BeeFragment NOTHING = simple("");
+
+    public static final BeeFragment FAIL = simple("(?!)");
 
     public static final BeeFragment BEGIN = simple("^");
 
     public static final BeeFragment END = simple("$");
 
-    public static final BeeFragment CHARACTER = simple(".");
+    public static final BeeFragment CHAR = simple(".");
+
+    public static final BeeFragment SPACE = simple(" ");
+
+    public static final BeeFragment TAB = simple("\\t");
 
     public static final BeeFragment WHITESPACE = simple("\\s");
     
+    public static final BeeFragment ASCII_LETTER = simple("[a-zA-Z]");
+
+    public static final BeeFragment ASCII_DIGIT = simple("\\d");
+
+    public static final BeeFragment ASCII_WORD_CHAR = simple("\\w");
+
+    public static final BeeFragment ASCII_WORD_START = simple("(?<!\\w)(?=\\w)");
+
+    public static final BeeFragment ASCII_WORD_END = simple("(?<=\\w)(?!\\w)");
+
+    public static final BeeFragment ASCII_WORD = simple("(?<!\\w)\\w+(?!\\w)");
+
+    public static final BeeFragment DEFAULT_WORD_BOUNDARY = simple("\\b");
+
     public static final BeeFragment IDENTIFIER = simple("\\b[a-zA-Z_]\\w+\\b");
 
-    public static final BeeFragment ASCII_WORD = simple("\\b\\w+\\b");
+    public static final BeeFragment LETTER = simple("\\p{L}");
+
+    public static final BeeFragment DIGIT = simple("\\p{N}");
 
     public static final BeeFragment WORD =
             simple("(?<=[^\\p{L}\\p{N}]|^)[\\p{L}\\p{N}]+(?=[^\\p{L}\\p{N}]|$)");
 
+    public static final BeeFragment UNSIGNED_INT = simple("(?:0|[1-9]\\d*)");
+
     public static final BeeFragment SIGNED_INT = simple("[\\+\\-]?(?:0|[1-9]\\d*)");
 
-    public static final BeeFragment UNSIGNED_INT = simple("(?:0|[1-9]\\d*)");
+    public static final BeeFragment STRICTLY_SIGNED_INT = simple("[\\+\\-](?:0|[1-9]\\d*)");
 
     public static final BeeFragment TIMESTAMP =
             simple("\\d{4}\\-\\d{2}\\-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z");
@@ -69,6 +93,10 @@ public final class Bee {
         return new SimpleFragment(pattern);
     }
 
+    public static BeeFragment checked(String pattern) {
+        return new SimpleFragment(pattern, true);
+    }
+    
     public static BeeFragment fixed(String content) {
         return simple(Pattern.quote(content));
     }
@@ -82,16 +110,10 @@ public final class Bee {
                 contents.stream().map(Bee::fixed).collect(Collectors.toList()));
     }
     
-    public static BeeFragment checked(String pattern) {
-        Pattern.compile(pattern);
-        return simple(pattern);
-    }
-    
     public static BeeFragment ref(String groupName) {
         return new NamedBackreferenceFragment(groupName);
     }
     
-
     public static BeeFragment intBetween(long min, long max) {
         return intBetween(BigInteger.valueOf(min), true, BigInteger.valueOf(max), true);
     }
