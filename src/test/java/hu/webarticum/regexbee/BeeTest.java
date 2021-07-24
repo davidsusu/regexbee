@@ -310,6 +310,36 @@ class BeeTest {
         assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, true, high, true)))
                 .containsExactly("-3", "12");
     }
+    
+    @Test
+    void testLookBehind() {
+        assertThat(matchAll("", Bee.lookBehind(Bee.CHAR))).isEmpty();
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.lookBehind(Bee.simple("or")).then(Bee.CHAR)))
+                .containsExactly("e", " ");
+    }
+    
+    @Test
+    void testLookBehindNot() {
+        assertThat(matchAll("", Bee.lookBehindNot(Bee.CHAR))).containsExactly("");
+        assertThat(matchAll("", Bee.lookBehindNot(Bee.BEGIN))).isEmpty();
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.lookBehindNot(Bee.fixed("l")).then(Bee.simple("or.."))))
+                .containsExactly("orem");
+    }
+
+    @Test
+    void testLookAhead() {
+        assertThat(matchAll("", Bee.lookAhead(Bee.CHAR))).isEmpty();
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.simple(".o").then(Bee.lookAhead(Bee.simple("n")))))
+                .containsExactly("co");
+    }
+
+    @Test
+    void testLookAheadNot() {
+        assertThat(matchAll("", Bee.lookAheadNot(Bee.CHAR))).containsExactly("");
+        assertThat(matchAll("", Bee.lookAheadNot(Bee.END))).isEmpty();
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.simple("... ").then(Bee.lookAheadNot(Bee.LETTER))))
+                .containsExactly("lor ", "et, ");
+    }
 
 
     private static Matcher matcher(String input, BeeFragment fragment) {

@@ -7,21 +7,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import hu.webarticum.regexbee.common.AlternationFragment;
+import hu.webarticum.regexbee.common.LookAroundFragment;
 import hu.webarticum.regexbee.common.NamedBackreferenceFragment;
 import hu.webarticum.regexbee.number.IntRangeBuilder;
 
-
-// TODO:
-//
-// helper classes by categories (common, number, text, format etc.)
-//
-// lookBehind
-// lookAhead
-// atomic
-// backReference ([??])
-// recursion ([??])
-// dates
-// etc.
 
 public final class Bee {
 
@@ -116,6 +105,22 @@ public final class Bee {
     
     public static BeeFragment intBetween(long min, long max) {
         return intBetween(BigInteger.valueOf(min), true, BigInteger.valueOf(max), true);
+    }
+    
+    public static BeeFragment lookBehind(BeeFragment fragment) {
+        return new LookAroundFragment(fragment, LookAroundFragment.Type.BEHIND_POSITIVE);
+    }
+
+    public static BeeFragment lookBehindNot(BeeFragment fragment) {
+        return new LookAroundFragment(fragment, LookAroundFragment.Type.BEHIND_NEGATIVE);
+    }
+
+    public static BeeFragment lookAhead(BeeFragment fragment) {
+        return new LookAroundFragment(fragment, LookAroundFragment.Type.AHEAD_POSITIVE);
+    }
+
+    public static BeeFragment lookAheadNot(BeeFragment fragment) {
+        return new LookAroundFragment(fragment, LookAroundFragment.Type.AHEAD_NEGATIVE);
     }
 
     public static BeeFragment intBetween(
