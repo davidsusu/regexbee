@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import hu.webarticum.regexbee.common.AlternationFragment;
 import hu.webarticum.regexbee.common.AtomicGroupFragment;
 import hu.webarticum.regexbee.common.LookAroundFragment;
+import hu.webarticum.regexbee.common.ModifierGroupFragment;
 import hu.webarticum.regexbee.common.NamedBackreferenceFragment;
 import hu.webarticum.regexbee.number.IntRangeBuilder;
 
@@ -122,6 +123,18 @@ public final class Bee {
     
     public static BeeFragment atomic(BeeFragment fragment) {
         return new AtomicGroupFragment(fragment);
+    }
+
+    public static BeeFragment with(int switchOn, BeeFragment fragment) {
+        return with(switchOn, 0, fragment);
+    }
+
+    public static BeeFragment without(int switchOff, BeeFragment fragment) {
+        return new ModifierGroupFragment(fragment, 0, switchOff);
+    }
+
+    public static BeeFragment with(int switchOn, int switchOff, BeeFragment fragment) {
+        return new ModifierGroupFragment(fragment, switchOn, switchOff);
     }
 
     public static BeeFragment intBetween(long min, long max) {

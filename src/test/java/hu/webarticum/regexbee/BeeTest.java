@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 
@@ -349,6 +350,35 @@ class BeeTest {
                 .containsExactly("-3", "12");
     }
 
+    @Test
+    void testWith() {
+        assertThat(matchAll(
+                LOREM_IPSUM_TEXT,
+                Bee.with(Pattern.CASE_INSENSITIVE, Bee.simple("L")).then(Bee.simple("or."))))
+                .containsExactly("Lore", "lor ");
+    }
+
+    @Test
+    void testWithout() {
+        BeeFragment fragment = Bee.with(
+                Pattern.CASE_INSENSITIVE,
+                Bee.simple("l")
+                        .then(Bee.without(Pattern.CASE_INSENSITIVE, Bee.simple("or"))));
+        assertThat(matchAll(LOREM_IPSUM_TEXT, fragment)).containsExactly("Lor", "lor");
+    }
+
+    @Test
+    void testWithWithout() {
+        BeeFragment fragment = Bee.with(
+                Pattern.DOTALL | Pattern.UNIX_LINES,
+                Bee.simple("aaa.bb")
+                        .then(Bee.with(
+                                Pattern.CASE_INSENSITIVE,
+                                Pattern.DOTALL,
+                                Bee.simple("B(?:....)?"))));
+        assertThat(matchAll("aaa\nbbb\nccc", fragment)).containsExactly("aaa\nbbb");
+    }
+    
 
     private static Matcher matcher(String input, BeeFragment fragment) {
         Matcher matcher = fragment.toPattern().matcher(input);
