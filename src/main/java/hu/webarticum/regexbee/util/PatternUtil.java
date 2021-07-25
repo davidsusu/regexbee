@@ -4,6 +4,8 @@ import java.util.regex.Pattern;
 
 public final class PatternUtil {
     
+    private static final String SPECIAL_CHARACTERS = "\\.?*+^$|[]{}()<>-=!";
+    
     private static final Pattern GROUP_NAME_PATTERN = Pattern.compile(
             "[a-zA-Z][a-zA-Z0-9]*");
     
@@ -19,6 +21,16 @@ public final class PatternUtil {
     }
     
 
+    public static String fixedOf(String content) {
+        // TODO: do not quote if not necessary
+        // TODO: escape if short and contains few special chars
+        return Pattern.quote(content);
+    }
+    
+    public static boolean isSpecialCharacter(char c) {
+        return (SPECIAL_CHARACTERS.indexOf(c) >= 0);
+    }
+    
     public static String requireValidGroupName(String groupName) {
         if (!isValidGroupName(groupName)) {
             throw new IllegalArgumentException("Invalid group name: " + groupName);

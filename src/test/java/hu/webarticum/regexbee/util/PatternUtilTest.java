@@ -2,10 +2,60 @@ package hu.webarticum.regexbee.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.regex.Pattern;
+
 import org.junit.jupiter.api.Test;
 
 class PatternUtilTest {
 
+    @Test
+    void testFixedOf() {
+        assertThat(matchFixedOfToSelf("")).isTrue();
+        assertThat(matchFixedOfToSelf("lorem")).isTrue();
+        assertThat(matchFixedOfToSelf("lorem?")).isTrue();
+        assertThat(matchFixedOfToSelf("...?!(ipsum)")).isTrue();
+        assertThat(matchFixedOfTo("a", "b")).isFalse();
+        assertThat(matchFixedOfTo(".", "x")).isFalse();
+        assertThat(matchFixedOfTo(".+", "xy")).isFalse();
+    }
+    
+    private boolean matchFixedOfToSelf(String fixedPattern) {
+        return matchFixedOfTo(fixedPattern, fixedPattern);
+    }
+
+    private boolean matchFixedOfTo(String fixedPattern, String testString) {
+        String fixedRegex = PatternUtil.fixedOf(fixedPattern);
+        return Pattern.compile(fixedRegex).matcher(testString).matches();
+    }
+
+    @Test
+    void testIsSpecialCharacter() {
+        assertThat(PatternUtil.isSpecialCharacter('\\')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('.')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('?')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('*')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('+')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('^')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('$')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('|')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('[')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter(']')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('{')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('}')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('(')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter(')')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('<')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('>')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('-')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('=')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('!')).isTrue();
+        assertThat(PatternUtil.isSpecialCharacter('a')).isFalse();
+        assertThat(PatternUtil.isSpecialCharacter('B')).isFalse();
+        assertThat(PatternUtil.isSpecialCharacter('_')).isFalse();
+        assertThat(PatternUtil.isSpecialCharacter(' ')).isFalse();
+        assertThat(PatternUtil.isSpecialCharacter('\0')).isFalse();
+    }
+    
     @Test
     void testIsValidGroupName() {
         assertThat(PatternUtil.isValidGroupName("")).isFalse();

@@ -260,6 +260,23 @@ class BeeTest {
     }
 
     @Test
+    void testRange() {
+        assertThat(match("a", Bee.range('a', 'a'))).isTrue();
+        assertThat(match("a", Bee.range('a', 'z'))).isTrue();
+        assertThat(match("a", Bee.range('b', 'z'))).isFalse();
+        assertThat(match("a", Bee.range('b', 'b'))).isFalse();
+        assertThatThrownBy(() -> Bee.range('z', 'x')).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testNegativeRange() {
+        assertThat(match("a", Bee.range('a', 'z', false))).isFalse();
+        assertThat(match("a", Bee.range('a', 'a', false))).isFalse();
+        assertThat(match("a", Bee.range('b', 'z', false))).isTrue();
+        assertThat(match("a", Bee.range('b', 'b', false))).isTrue();
+    }
+    
+    @Test
     void testFixed() {
         assertThat(match("lorem", Bee.fixed("lorem"))).isTrue();
         assertThat(match("lorem", Bee.fixed("ipsum"))).isFalse();

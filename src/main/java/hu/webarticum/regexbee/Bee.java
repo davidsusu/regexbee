@@ -3,15 +3,16 @@ package hu.webarticum.regexbee;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import hu.webarticum.regexbee.common.AlternationFragment;
 import hu.webarticum.regexbee.common.AtomicGroupFragment;
+import hu.webarticum.regexbee.common.CharacterClassFragment;
 import hu.webarticum.regexbee.common.LookAroundFragment;
 import hu.webarticum.regexbee.common.ModifierGroupFragment;
 import hu.webarticum.regexbee.common.NamedBackreferenceFragment;
 import hu.webarticum.regexbee.number.IntRangeBuilder;
+import hu.webarticum.regexbee.util.PatternUtil;
 
 
 public final class Bee {
@@ -87,9 +88,17 @@ public final class Bee {
     public static BeeFragment checked(String pattern) {
         return new SimpleFragment(pattern, true);
     }
-    
+
+    public static CharacterClassFragment range(char from, char to) {
+        return new CharacterClassFragment(from, to);
+    }
+
+    public static CharacterClassFragment range(char from, char to, boolean positive) {
+        return new CharacterClassFragment(from, to, positive);
+    }
+
     public static BeeFragment fixed(String content) {
-        return simple(Pattern.quote(content));
+        return simple(PatternUtil.fixedOf(content));
     }
 
     public static BeeFragment oneFixedOf(String... contents) {
