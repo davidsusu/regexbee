@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import hu.webarticum.regexbee.character.CharacterClassFragment;
+import hu.webarticum.regexbee.character.CharacterRangeFragment;
 import hu.webarticum.regexbee.character.CharacterFragment;
 import hu.webarticum.regexbee.character.FixedCharacterFragment;
 import hu.webarticum.regexbee.character.PredefinedCharacterFragment;
@@ -44,11 +44,15 @@ public final class Bee {
 
     public static final CharacterFragment NEWLINE = fixedChar('\n');
 
-    public static final BeeFragment ASCII_LETTER = simple("[a-zA-Z]"); // TODO: be a CharacterFragment
+    public static final CharacterFragment ASCII_LETTER = CharacterRangeFragment.builder()
+            .withPositiveMatching()
+            .addRange('a', 'z')
+            .addRange('A', 'Z')
+            .build();
 
-    public static final BeeFragment ASCII_LOWERCASE_LETTER = simple("[a-z]"); // TODO: be a CharacterFragment
+    public static final CharacterFragment ASCII_LOWERCASE_LETTER = range('a', 'z');
 
-    public static final BeeFragment ASCII_UPPERCASE_LETTER = simple("[A-Z]"); // TODO: be a CharacterFragment
+    public static final CharacterFragment ASCII_UPPERCASE_LETTER = range('A', 'Z');
 
     public static final CharacterFragment ASCII_DIGIT = PredefinedCharacterFragment.ASCII_DIGIT;
 
@@ -101,11 +105,11 @@ public final class Bee {
     }
 
     public static CharacterFragment range(char from, char to) {
-        return new CharacterClassFragment(from, to);
+        return new CharacterRangeFragment(from, to);
     }
 
-    public static CharacterFragment range(char from, char to, boolean positive) {
-        return new CharacterClassFragment(from, to, positive);
+    public static CharacterFragment range(boolean positive, char from, char to) {
+        return new CharacterRangeFragment(positive, from, to);
     }
 
     public static BeeFragment fixed(String content) {

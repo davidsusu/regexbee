@@ -317,10 +317,10 @@ class BeeTest {
 
     @Test
     void testNegativeRange() {
-        assertThat(match("a", Bee.range('a', 'z', false))).isFalse();
-        assertThat(match("a", Bee.range('a', 'a', false))).isFalse();
-        assertThat(match("a", Bee.range('b', 'z', false))).isTrue();
-        assertThat(match("a", Bee.range('b', 'b', false))).isTrue();
+        assertThat(match("a", Bee.range(false, 'a', 'z'))).isFalse();
+        assertThat(match("a", Bee.range(false, 'a', 'a'))).isFalse();
+        assertThat(match("a", Bee.range(false, 'b', 'z'))).isTrue();
+        assertThat(match("a", Bee.range(false, 'b', 'b'))).isTrue();
     }
     
     @Test

@@ -29,6 +29,19 @@ class PatternUtilTest {
     }
 
     @Test
+    void testEscapeCharacterIfNecessary() {
+        assertThat(PatternUtil.escapeCharacterIfNecessary('a')).isEqualTo("a");
+        assertThat(PatternUtil.escapeCharacterIfNecessary('x')).isEqualTo("x");
+        assertThat(PatternUtil.escapeCharacterIfNecessary('Z')).isEqualTo("Z");
+        assertThat(PatternUtil.escapeCharacterIfNecessary(' ')).isEqualTo(" ");
+        assertThat(PatternUtil.escapeCharacterIfNecessary(',')).isEqualTo(",");
+        assertThat(PatternUtil.escapeCharacterIfNecessary('.')).isEqualTo("\\.");
+        assertThat(PatternUtil.escapeCharacterIfNecessary('\\')).isEqualTo("\\\\");
+        assertThat(PatternUtil.escapeCharacterIfNecessary('?')).isEqualTo("\\?");
+        assertThat(PatternUtil.escapeCharacterIfNecessary(']')).isEqualTo("\\]");
+    }
+
+    @Test
     void testIsSpecialCharacter() {
         assertThat(PatternUtil.isSpecialCharacter('\\')).isTrue();
         assertThat(PatternUtil.isSpecialCharacter('.')).isTrue();

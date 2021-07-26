@@ -84,7 +84,7 @@ public class StringLiteralFragment extends AbstractGeneratingFragment {
         resultBuilder.append(generateSafePart());
         if (normalEscapingEnabled) {
             resultBuilder.append('|');
-            resultBuilder.append(escapePatternCharIfNecessary(escaper));
+            resultBuilder.append(PatternUtil.escapeCharacterIfNecessary(escaper));
             if (escapableCharsFragment != null) {
                 resultBuilder.append(escapableCharsFragment.get());
             } else {
@@ -97,7 +97,7 @@ public class StringLiteralFragment extends AbstractGeneratingFragment {
         }
         if (rightDelimiter.length() > 1) {
             resultBuilder.append('|');
-            resultBuilder.append(escapePatternCharIfNecessary(rightDelimiter.charAt(0)));
+            resultBuilder.append(PatternUtil.escapeCharacterIfNecessary(rightDelimiter.charAt(0)));
             resultBuilder.append("(?!");
             resultBuilder.append(Pattern.quote(rightDelimiter.substring(1)));
             resultBuilder.append(')');
@@ -112,20 +112,12 @@ public class StringLiteralFragment extends AbstractGeneratingFragment {
     
     private String generateSafePart() {
         StringBuilder resultBuilder = new StringBuilder("[^");
-        resultBuilder.append(escapePatternCharIfNecessary(rightDelimiter.charAt(0)));
+        resultBuilder.append(PatternUtil.escapeCharacterIfNecessary(rightDelimiter.charAt(0)));
         if (normalEscapingEnabled) {
-            resultBuilder.append(escapePatternCharIfNecessary(escaper));
+            resultBuilder.append(PatternUtil.escapeCharacterIfNecessary(escaper));
         }
         resultBuilder.append(']');
         return resultBuilder.toString();
-    }
-    
-    private String escapePatternCharIfNecessary(char c) {
-        if (!PatternUtil.isSpecialCharacter(c)) {
-            return String.valueOf(c);
-        }
-        
-        return "\\" + c;
     }
     
     

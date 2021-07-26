@@ -27,6 +27,14 @@ public final class PatternUtil {
         return Pattern.quote(content);
     }
     
+    public static String escapeCharacterIfNecessary(char c) {
+        if (!PatternUtil.isSpecialCharacter(c)) {
+            return String.valueOf(c);
+        }
+        
+        return "\\" + c;
+    }
+    
     public static boolean isSpecialCharacter(char c) {
         return (SPECIAL_CHARACTERS.indexOf(c) >= 0);
     }
