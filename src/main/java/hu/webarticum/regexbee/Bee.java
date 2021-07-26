@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import hu.webarticum.regexbee.character.CharacterClassFragment;
 import hu.webarticum.regexbee.character.CharacterFragment;
+import hu.webarticum.regexbee.character.FixedCharacterFragment;
+import hu.webarticum.regexbee.character.PredefinedCharacterFragment;
 import hu.webarticum.regexbee.common.AlternationFragment;
 import hu.webarticum.regexbee.common.AtomicGroupFragment;
 import hu.webarticum.regexbee.common.LookAroundFragment;
@@ -30,33 +32,41 @@ public final class Bee {
 
     public static final BeeFragment END = simple("$");
 
-    public static final BeeFragment CHAR = simple(".");
+    public static final CharacterFragment CHAR = PredefinedCharacterFragment.ANY;
 
-    public static final BeeFragment SPACE = simple(" ");
-
-    public static final BeeFragment TAB = simple("\\t");
-
-    public static final BeeFragment WHITESPACE = simple("\\s");
+    public static final CharacterFragment WHITESPACE = PredefinedCharacterFragment.WHITESPACE;
     
-    public static final BeeFragment ASCII_LETTER = simple("[a-zA-Z]");
+    public static final CharacterFragment SPACE = fixedChar(' ');
+    
+    public static final CharacterFragment BACKSLASH = fixedChar('\\');
 
-    public static final BeeFragment ASCII_DIGIT = simple("\\d");
+    public static final CharacterFragment TAB = fixedChar('\t');
 
-    public static final BeeFragment ASCII_WORD_CHAR = simple("\\w");
+    public static final CharacterFragment NEWLINE = fixedChar('\n');
+
+    public static final BeeFragment ASCII_LETTER = simple("[a-zA-Z]"); // TODO: be a CharacterFragment
+
+    public static final BeeFragment ASCII_LOWERCASE_LETTER = simple("[a-z]"); // TODO: be a CharacterFragment
+
+    public static final BeeFragment ASCII_UPPERCASE_LETTER = simple("[A-Z]"); // TODO: be a CharacterFragment
+
+    public static final CharacterFragment ASCII_DIGIT = PredefinedCharacterFragment.ASCII_DIGIT;
+
+    public static final CharacterFragment ASCII_WORD_CHAR = PredefinedCharacterFragment.ASCII_WORD_CHAR;
+
+    public static final CharacterFragment LETTER = PredefinedCharacterFragment.UNICODE_LETTER;
+
+    public static final CharacterFragment DIGIT = PredefinedCharacterFragment.UNICODE_DIGIT;
 
     public static final BeeFragment ASCII_WORD_START = simple("(?<!\\w)(?=\\w)");
 
     public static final BeeFragment ASCII_WORD_END = simple("(?<=\\w)(?!\\w)");
 
-    public static final BeeFragment ASCII_WORD = simple("(?<!\\w)\\w+(?!\\w)");
-
     public static final BeeFragment DEFAULT_WORD_BOUNDARY = simple("\\b");
 
+    public static final BeeFragment ASCII_WORD = simple("(?<!\\w)\\w+(?!\\w)");
+
     public static final BeeFragment IDENTIFIER = simple("\\b[a-zA-Z_]\\w+\\b");
-
-    public static final BeeFragment LETTER = simple("\\p{L}");
-
-    public static final BeeFragment DIGIT = simple("\\p{N}");
 
     public static final BeeFragment WORD =
             simple("(?<=[^\\p{L}\\p{N}]|^)[\\p{L}\\p{N}]+(?=[^\\p{L}\\p{N}]|$)");
@@ -110,7 +120,11 @@ public final class Bee {
         return new AlternationFragment(
                 contents.stream().map(Bee::fixed).collect(Collectors.toList()));
     }
-    
+
+    public static CharacterFragment fixedChar(char c) {
+        return new FixedCharacterFragment(c);
+    }
+
     public static BeeFragment ref(String groupName) {
         return new NamedBackreferenceFragment(groupName);
     }

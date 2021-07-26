@@ -59,6 +59,7 @@ class BeeTest {
     @Test
     void testChar() {
         assertThat(matchAll("", Bee.CHAR)).isEmpty();
+        assertThat(match("x", Bee.CHAR)).isTrue();
         assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.CHAR)).containsExactly(
                 "L", "o", "r", "e", "m", " ", "i", "p", "s", "u", "m", " ",
                 "d", "o", "l", "o", "r", " ", "-", "3", " ",
@@ -68,25 +69,10 @@ class BeeTest {
     }
 
     @Test
-    void testSpace() {
-        assertThat(matchAll("", Bee.SPACE)).isEmpty();
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.SPACE).start()).isEqualTo(5);
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.SPACE).end()).isEqualTo(6);
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.SPACE)).containsExactly(
-                " ", " ", " ", " ", " ", " ", " ", " ", " ");
-    }
-
-    @Test
-    void testTab() {
-        assertThat(matchAll("", Bee.TAB)).isEmpty();
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.TAB).start()).isEqualTo(33);
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.TAB).end()).isEqualTo(34);
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.TAB)).containsExactly("\t");
-    }
-
-    @Test
     void testWhitespace() {
         assertThat(matchAll("", Bee.WHITESPACE)).isEmpty();
+        assertThat(match(" ", Bee.WHITESPACE)).isTrue();
+        assertThat(match("x", Bee.WHITESPACE)).isFalse();
         assertThat(matcher(LOREM_IPSUM_TEXT, Bee.WHITESPACE).start()).isEqualTo(5);
         assertThat(matcher(LOREM_IPSUM_TEXT, Bee.WHITESPACE).end()).isEqualTo(6);
         assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.WHITESPACE)).containsExactly(
@@ -94,14 +80,75 @@ class BeeTest {
     }
     
     @Test
+    void testSpace() {
+        assertThat(matchAll("", Bee.SPACE)).isEmpty();
+        assertThat(match(" ", Bee.SPACE)).isTrue();
+        assertThat(match("x", Bee.SPACE)).isFalse();
+        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.SPACE).start()).isEqualTo(5);
+        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.SPACE).end()).isEqualTo(6);
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.SPACE)).containsExactly(
+                " ", " ", " ", " ", " ", " ", " ", " ", " ");
+    }
+
+    @Test
+    void testBackslash() {
+        assertThat(matchAll("", Bee.BACKSLASH)).isEmpty();
+        assertThat(match("\\", Bee.BACKSLASH)).isTrue();
+        assertThat(match("x", Bee.BACKSLASH)).isFalse();
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.BACKSLASH)).isEmpty();
+    }
+
+    @Test
+    void testTab() {
+        assertThat(matchAll("", Bee.TAB)).isEmpty();
+        assertThat(match("\t", Bee.TAB)).isTrue();
+        assertThat(match("x", Bee.TAB)).isFalse();
+        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.TAB).start()).isEqualTo(33);
+        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.TAB).end()).isEqualTo(34);
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.TAB)).containsExactly("\t");
+    }
+
+    @Test
+    void testNewline() {
+        assertThat(matchAll("", Bee.NEWLINE)).isEmpty();
+        assertThat(match("\n", Bee.NEWLINE)).isTrue();
+        assertThat(match("x", Bee.NEWLINE)).isFalse();
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.NEWLINE)).isEmpty();
+        assertThat(matchAllPositions("lorem\nipsum\ndolor", Bee.NEWLINE)).hasSize(2);
+    }
+
+    @Test
     void testAsciiLetter() {
         assertThat(matchAll("", Bee.ASCII_LETTER)).isEmpty();
+        assertThat(match("x", Bee.ASCII_LETTER)).isTrue();
+        assertThat(match("Y", Bee.ASCII_LETTER)).isTrue();
         assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.ASCII_LETTER)).containsExactly(
                 "L", "o", "r", "e", "m", "i", "p", "s", "u", "m",
                 "d", "o", "l", "o", "r",
                 "s", "i", "t", "a", "m", "e", "t",
                 "c", "o", "n", "s", "e", "c", "t", "e", "t", "u", "r",
                 "d", "i", "p", "i", "s", "c", "i", "n", "g", "e", "l", "i", "t");
+    }
+
+    @Test
+    void testAsciiLowerCaseLetter() {
+        assertThat(matchAll("", Bee.ASCII_LOWERCASE_LETTER)).isEmpty();
+        assertThat(match("x", Bee.ASCII_LOWERCASE_LETTER)).isTrue();
+        assertThat(match("Y", Bee.ASCII_LOWERCASE_LETTER)).isFalse();
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.ASCII_LOWERCASE_LETTER)).containsExactly(
+                "o", "r", "e", "m", "i", "p", "s", "u", "m",
+                "d", "o", "l", "o", "r",
+                "s", "i", "t", "a", "m", "e", "t",
+                "c", "o", "n", "s", "e", "c", "t", "e", "t", "u", "r",
+                "d", "i", "p", "i", "s", "c", "i", "n", "g", "e", "l", "i", "t");
+    }
+
+    @Test
+    void testAsciiUpperCaseLetter() {
+        assertThat(matchAll("", Bee.ASCII_UPPERCASE_LETTER)).isEmpty();
+        assertThat(match("x", Bee.ASCII_UPPERCASE_LETTER)).isFalse();
+        assertThat(match("Y", Bee.ASCII_UPPERCASE_LETTER)).isTrue();
+        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.ASCII_UPPERCASE_LETTER)).containsExactly("L");
     }
     
     @Test
@@ -294,6 +341,16 @@ class BeeTest {
         assertThat(match("ipsum", Bee.oneFixedOf("lorem", "ipsum"))).isTrue();
         assertThat(matchAll("lorem? ipsum ??", Bee.oneFixedOf("lorem", "?"))).containsExactly(
                 "lorem", "?", "?", "?");
+    }
+
+    @Test
+    void testFixedChar() {
+        assertThat(match("", Bee.fixedChar('a'))).isFalse();
+        assertThat(match("x", Bee.fixedChar('a'))).isFalse();
+        assertThat(match("a", Bee.fixedChar('a'))).isTrue();
+        assertThat(match("aa", Bee.fixedChar('a'))).isFalse();
+        assertThat(match("?", Bee.fixedChar('?'))).isTrue();
+        assertThat(matchAllPositions("lo(rem) ip(sum) do(lor)", Bee.fixedChar('('))).hasSize(3);
     }
 
     @Test
