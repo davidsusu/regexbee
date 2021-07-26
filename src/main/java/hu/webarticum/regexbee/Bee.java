@@ -5,9 +5,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import hu.webarticum.regexbee.character.CharacterClassFragment;
+import hu.webarticum.regexbee.character.CharacterFragment;
 import hu.webarticum.regexbee.common.AlternationFragment;
 import hu.webarticum.regexbee.common.AtomicGroupFragment;
-import hu.webarticum.regexbee.common.CharacterClassFragment;
 import hu.webarticum.regexbee.common.LookAroundFragment;
 import hu.webarticum.regexbee.common.ModifierGroupFragment;
 import hu.webarticum.regexbee.common.NamedBackreferenceFragment;
@@ -89,11 +90,11 @@ public final class Bee {
         return new SimpleFragment(pattern, true);
     }
 
-    public static CharacterClassFragment range(char from, char to) {
+    public static CharacterFragment range(char from, char to) {
         return new CharacterClassFragment(from, to);
     }
 
-    public static CharacterClassFragment range(char from, char to, boolean positive) {
+    public static CharacterFragment range(char from, char to, boolean positive) {
         return new CharacterClassFragment(from, to, positive);
     }
 

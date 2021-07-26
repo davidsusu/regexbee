@@ -1,7 +1,9 @@
-package hu.webarticum.regexbee.common;
+package hu.webarticum.regexbee.character;
+
+import hu.webarticum.regexbee.common.AbstractGeneratingFragment;
 
 // TODO improve! Make possible something like this: [\p{L}&&[^a-f]]
-public class CharacterClassFragment extends AbstractGeneratingFragment {
+public class CharacterClassFragment extends AbstractGeneratingFragment implements CharacterFragment {
     
     private final boolean positiveMatching;
     

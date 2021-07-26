@@ -1,6 +1,9 @@
 package hu.webarticum.regexbee.common;
 
+import java.util.regex.Pattern;
+
 import hu.webarticum.regexbee.BeeFragment;
+import hu.webarticum.regexbee.character.CharacterFragment;
 import hu.webarticum.regexbee.util.PatternUtil;
 
 public class StringLiteralFragment extends AbstractGeneratingFragment {
@@ -19,7 +22,7 @@ public class StringLiteralFragment extends AbstractGeneratingFragment {
     
     private final char escaper;
     
-    private final CharacterClassFragment escapableCharsFragment;
+    private final CharacterFragment escapableCharsFragment;
     
     private final BeeFragment embeddableFragment;
     
@@ -93,7 +96,11 @@ public class StringLiteralFragment extends AbstractGeneratingFragment {
             resultBuilder.append(PatternUtil.fixedOf(rightDelimiter + rightDelimiter));
         }
         if (rightDelimiter.length() > 1) {
-            appendDenierAlternations(rightDelimiter, resultBuilder);
+            resultBuilder.append('|');
+            resultBuilder.append(escapePatternCharIfNecessary(rightDelimiter.charAt(0)));
+            resultBuilder.append("(?!");
+            resultBuilder.append(Pattern.quote(rightDelimiter.substring(1)));
+            resultBuilder.append(')');
         }
         resultBuilder.append(")*+");
         
@@ -121,25 +128,6 @@ public class StringLiteralFragment extends AbstractGeneratingFragment {
         return "\\" + c;
     }
     
-    private void appendDenierAlternations(String token, StringBuilder builder) {
-        int length = token.length();
-        for (int i = 1; i < length; i++) {
-            char allowedChar = token.charAt(i - 1);
-            char nextChar = token.charAt(i);
-            builder.append('|');
-            if (PatternUtil.isSpecialCharacter(allowedChar)) {
-                builder.append('\\');
-            }
-            builder.append(allowedChar);
-            builder.append("[^");
-            if (PatternUtil.isSpecialCharacter(nextChar)) {
-                builder.append('\\');
-            }
-            builder.append(nextChar);
-            builder.append(']');
-        }
-    }
-    
     
     public static class StringLiteralFragmentBuilder {
         
@@ -157,7 +145,7 @@ public class StringLiteralFragment extends AbstractGeneratingFragment {
         
         private char escaper = '\\';
         
-        private CharacterClassFragment escapableCharsFragment;
+        private CharacterFragment escapableCharsFragment;
         
         private BeeFragment embeddableFragment = null;
         
@@ -205,7 +193,7 @@ public class StringLiteralFragment extends AbstractGeneratingFragment {
         }
 
         public StringLiteralFragmentBuilder withEscapableCharsFragment(
-                CharacterClassFragment escapableCharsFragment) {
+                CharacterFragment escapableCharsFragment) {
             this.escapableCharsFragment = escapableCharsFragment;
             return this;
         }
