@@ -7,7 +7,6 @@ import java.util.List;
 import hu.webarticum.regexbee.common.AbstractGeneratingFragment;
 import hu.webarticum.regexbee.util.PatternUtil;
 
-// TODO: add tests
 public class CharacterRangeFragment extends AbstractGeneratingFragment implements CharacterFragment {
     
     private final boolean positiveMatching;

@@ -4,14 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 
-class BeeTest {
+class BeeTest extends AbstractBeeTest {
     
     private static final String LOREM_IPSUM_TEXT =
             "Lorem ipsum dolor -3 sit amet, 12\tconsectetur \u0628 \u00E1dipiscing el_it.";
@@ -19,48 +16,48 @@ class BeeTest {
 
     @Test
     void testAnything() {
-        assertThat(match("", Bee.ANYTHING)).isTrue();
-        assertThat(match(" ", Bee.ANYTHING)).isTrue();
-        assertThat(match(LOREM_IPSUM_TEXT, Bee.ANYTHING)).isTrue();
+        assertThat(match(Bee.ANYTHING, "")).isTrue();
+        assertThat(match(Bee.ANYTHING, " ")).isTrue();
+        assertThat(match(Bee.ANYTHING, LOREM_IPSUM_TEXT)).isTrue();
     }
 
     @Test
     void testSomething() {
-        assertThat(match("", Bee.SOMETHING)).isFalse();
-        assertThat(match(" ", Bee.SOMETHING)).isTrue();
-        assertThat(match(LOREM_IPSUM_TEXT, Bee.SOMETHING)).isTrue();
+        assertThat(match(Bee.SOMETHING, "")).isFalse();
+        assertThat(match(Bee.SOMETHING, " ")).isTrue();
+        assertThat(match(Bee.SOMETHING, LOREM_IPSUM_TEXT)).isTrue();
     }
 
     @Test
     void testNothing() {
-        assertThat(match("", Bee.NOTHING)).isTrue();
-        assertThat(match(" ", Bee.NOTHING)).isFalse();
-        assertThat(match(LOREM_IPSUM_TEXT, Bee.NOTHING)).isFalse();
+        assertThat(match(Bee.NOTHING, "")).isTrue();
+        assertThat(match(Bee.NOTHING, " ")).isFalse();
+        assertThat(match(Bee.NOTHING, LOREM_IPSUM_TEXT)).isFalse();
     }
 
     @Test
     void testFail() {
-        assertThat(match("", Bee.FAIL)).isFalse();
-        assertThat(match(LOREM_IPSUM_TEXT, Bee.FAIL)).isFalse();
+        assertThat(match(Bee.FAIL, "")).isFalse();
+        assertThat(match(Bee.FAIL, LOREM_IPSUM_TEXT)).isFalse();
     }
 
     @Test
     void testBegin() {
-        assertThat(matcher("", Bee.BEGIN).start()).isZero();
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.BEGIN).start()).isZero();
+        assertThat(matcher(Bee.BEGIN, "").start()).isZero();
+        assertThat(matcher(Bee.BEGIN, LOREM_IPSUM_TEXT).start()).isZero();
     }
 
     @Test
     void testEnd() {
-        assertThat(matcher("", Bee.END).start()).isZero();
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.END).start()).isEqualTo(65);
+        assertThat(matcher(Bee.END, "").start()).isZero();
+        assertThat(matcher(Bee.END, LOREM_IPSUM_TEXT).start()).isEqualTo(65);
     }
 
     @Test
     void testChar() {
-        assertThat(matchAll("", Bee.CHAR)).isEmpty();
-        assertThat(match("x", Bee.CHAR)).isTrue();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.CHAR)).containsExactly(
+        assertThat(matchAll(Bee.CHAR, "")).isEmpty();
+        assertThat(match(Bee.CHAR, "x")).isTrue();
+        assertThat(matchAll(Bee.CHAR, LOREM_IPSUM_TEXT)).containsExactly(
                 "L", "o", "r", "e", "m", " ", "i", "p", "s", "u", "m", " ",
                 "d", "o", "l", "o", "r", " ", "-", "3", " ",
                 "s", "i", "t", " ", "a", "m", "e", "t", ",", " ",
@@ -70,59 +67,59 @@ class BeeTest {
 
     @Test
     void testWhitespace() {
-        assertThat(matchAll("", Bee.WHITESPACE)).isEmpty();
-        assertThat(match(" ", Bee.WHITESPACE)).isTrue();
-        assertThat(match("x", Bee.WHITESPACE)).isFalse();
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.WHITESPACE).start()).isEqualTo(5);
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.WHITESPACE).end()).isEqualTo(6);
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.WHITESPACE)).containsExactly(
+        assertThat(matchAll(Bee.WHITESPACE, "")).isEmpty();
+        assertThat(match(Bee.WHITESPACE, " ")).isTrue();
+        assertThat(match(Bee.WHITESPACE, "x")).isFalse();
+        assertThat(matcher(Bee.WHITESPACE, LOREM_IPSUM_TEXT).start()).isEqualTo(5);
+        assertThat(matcher(Bee.WHITESPACE, LOREM_IPSUM_TEXT).end()).isEqualTo(6);
+        assertThat(matchAll(Bee.WHITESPACE, LOREM_IPSUM_TEXT)).containsExactly(
                 " ", " ", " ", " ", " ", " ", "\t", " ", " ", " ");
     }
     
     @Test
     void testSpace() {
-        assertThat(matchAll("", Bee.SPACE)).isEmpty();
-        assertThat(match(" ", Bee.SPACE)).isTrue();
-        assertThat(match("x", Bee.SPACE)).isFalse();
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.SPACE).start()).isEqualTo(5);
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.SPACE).end()).isEqualTo(6);
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.SPACE)).containsExactly(
+        assertThat(matchAll(Bee.SPACE, "")).isEmpty();
+        assertThat(match(Bee.SPACE, " ")).isTrue();
+        assertThat(match(Bee.SPACE, "x")).isFalse();
+        assertThat(matcher(Bee.SPACE, LOREM_IPSUM_TEXT).start()).isEqualTo(5);
+        assertThat(matcher(Bee.SPACE, LOREM_IPSUM_TEXT).end()).isEqualTo(6);
+        assertThat(matchAll(Bee.SPACE, LOREM_IPSUM_TEXT)).containsExactly(
                 " ", " ", " ", " ", " ", " ", " ", " ", " ");
     }
 
     @Test
     void testBackslash() {
-        assertThat(matchAll("", Bee.BACKSLASH)).isEmpty();
-        assertThat(match("\\", Bee.BACKSLASH)).isTrue();
-        assertThat(match("x", Bee.BACKSLASH)).isFalse();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.BACKSLASH)).isEmpty();
+        assertThat(matchAll(Bee.BACKSLASH, "")).isEmpty();
+        assertThat(match(Bee.BACKSLASH, "\\")).isTrue();
+        assertThat(match(Bee.BACKSLASH, "x")).isFalse();
+        assertThat(matchAll(Bee.BACKSLASH, LOREM_IPSUM_TEXT)).isEmpty();
     }
 
     @Test
     void testTab() {
-        assertThat(matchAll("", Bee.TAB)).isEmpty();
-        assertThat(match("\t", Bee.TAB)).isTrue();
-        assertThat(match("x", Bee.TAB)).isFalse();
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.TAB).start()).isEqualTo(33);
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.TAB).end()).isEqualTo(34);
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.TAB)).containsExactly("\t");
+        assertThat(matchAll(Bee.TAB, "")).isEmpty();
+        assertThat(match(Bee.TAB, "\t")).isTrue();
+        assertThat(match(Bee.TAB, "x")).isFalse();
+        assertThat(matcher(Bee.TAB, LOREM_IPSUM_TEXT).start()).isEqualTo(33);
+        assertThat(matcher(Bee.TAB, LOREM_IPSUM_TEXT).end()).isEqualTo(34);
+        assertThat(matchAll(Bee.TAB, LOREM_IPSUM_TEXT)).containsExactly("\t");
     }
 
     @Test
     void testNewline() {
-        assertThat(matchAll("", Bee.NEWLINE)).isEmpty();
-        assertThat(match("\n", Bee.NEWLINE)).isTrue();
-        assertThat(match("x", Bee.NEWLINE)).isFalse();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.NEWLINE)).isEmpty();
-        assertThat(matchAllPositions("lorem\nipsum\ndolor", Bee.NEWLINE)).hasSize(2);
+        assertThat(matchAll(Bee.NEWLINE, "")).isEmpty();
+        assertThat(match(Bee.NEWLINE, "\n")).isTrue();
+        assertThat(match(Bee.NEWLINE, "x")).isFalse();
+        assertThat(matchAll(Bee.NEWLINE, LOREM_IPSUM_TEXT)).isEmpty();
+        assertThat(matchAllPositions(Bee.NEWLINE, "lorem\nipsum\ndolor")).hasSize(2);
     }
 
     @Test
     void testAsciiLetter() {
-        assertThat(matchAll("", Bee.ASCII_LETTER)).isEmpty();
-        assertThat(match("x", Bee.ASCII_LETTER)).isTrue();
-        assertThat(match("Y", Bee.ASCII_LETTER)).isTrue();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.ASCII_LETTER)).containsExactly(
+        assertThat(matchAll(Bee.ASCII_LETTER, "")).isEmpty();
+        assertThat(match(Bee.ASCII_LETTER, "x")).isTrue();
+        assertThat(match(Bee.ASCII_LETTER, "Y")).isTrue();
+        assertThat(matchAll(Bee.ASCII_LETTER, LOREM_IPSUM_TEXT)).containsExactly(
                 "L", "o", "r", "e", "m", "i", "p", "s", "u", "m",
                 "d", "o", "l", "o", "r",
                 "s", "i", "t", "a", "m", "e", "t",
@@ -132,10 +129,10 @@ class BeeTest {
 
     @Test
     void testAsciiLowerCaseLetter() {
-        assertThat(matchAll("", Bee.ASCII_LOWERCASE_LETTER)).isEmpty();
-        assertThat(match("x", Bee.ASCII_LOWERCASE_LETTER)).isTrue();
-        assertThat(match("Y", Bee.ASCII_LOWERCASE_LETTER)).isFalse();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.ASCII_LOWERCASE_LETTER)).containsExactly(
+        assertThat(matchAll(Bee.ASCII_LOWERCASE_LETTER, "")).isEmpty();
+        assertThat(match(Bee.ASCII_LOWERCASE_LETTER, "x")).isTrue();
+        assertThat(match(Bee.ASCII_LOWERCASE_LETTER, "Y")).isFalse();
+        assertThat(matchAll(Bee.ASCII_LOWERCASE_LETTER, LOREM_IPSUM_TEXT)).containsExactly(
                 "o", "r", "e", "m", "i", "p", "s", "u", "m",
                 "d", "o", "l", "o", "r",
                 "s", "i", "t", "a", "m", "e", "t",
@@ -145,23 +142,26 @@ class BeeTest {
 
     @Test
     void testAsciiUpperCaseLetter() {
-        assertThat(matchAll("", Bee.ASCII_UPPERCASE_LETTER)).isEmpty();
-        assertThat(match("x", Bee.ASCII_UPPERCASE_LETTER)).isFalse();
-        assertThat(match("Y", Bee.ASCII_UPPERCASE_LETTER)).isTrue();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.ASCII_UPPERCASE_LETTER)).containsExactly("L");
+        assertThat(matchAll(Bee.ASCII_UPPERCASE_LETTER, "")).isEmpty();
+        assertThat(match(Bee.ASCII_UPPERCASE_LETTER, "x")).isFalse();
+        assertThat(match(Bee.ASCII_UPPERCASE_LETTER, "Y")).isTrue();
+        assertThat(matchAll(Bee.ASCII_UPPERCASE_LETTER, LOREM_IPSUM_TEXT)).containsExactly("L");
     }
     
     @Test
     void testAsciiDigit() {
-        assertThat(matchAll("", Bee.ASCII_DIGIT)).isEmpty();
-        assertThat(matcher(LOREM_IPSUM_TEXT, Bee.ASCII_DIGIT).start()).isEqualTo(19);
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.ASCII_DIGIT)).containsExactly("3", "1", "2");
+        assertThat(matchAll(Bee.ASCII_DIGIT, "")).isEmpty();
+        assertThat(match(Bee.ASCII_DIGIT, "a")).isFalse();
+        assertThat(match(Bee.ASCII_DIGIT, "4")).isTrue();
+        assertThat(match(Bee.ASCII_DIGIT, "\u0664")).isFalse();
+        assertThat(matcher(Bee.ASCII_DIGIT, LOREM_IPSUM_TEXT).start()).isEqualTo(19);
+        assertThat(matchAll(Bee.ASCII_DIGIT, LOREM_IPSUM_TEXT)).containsExactly("3", "1", "2");
     }
     
     @Test
     void testAsciiWordChar() {
-        assertThat(matchAll("", Bee.ASCII_WORD_CHAR)).isEmpty();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.ASCII_WORD_CHAR)).containsExactly(
+        assertThat(matchAll(Bee.ASCII_WORD_CHAR, "")).isEmpty();
+        assertThat(matchAll(Bee.ASCII_WORD_CHAR, LOREM_IPSUM_TEXT)).containsExactly(
                 "L", "o", "r", "e", "m", "i", "p", "s", "u", "m",
                 "d", "o", "l", "o", "r", "3",
                 "s", "i", "t", "a", "m", "e", "t",
@@ -171,44 +171,44 @@ class BeeTest {
     
     @Test
     void testAsciiWordStart() {
-        assertThat(matchAll("", Bee.ASCII_WORD_START)).isEmpty();
-        assertThat(matchAllPositions(LOREM_IPSUM_TEXT, Bee.ASCII_WORD_START)).containsExactly(
+        assertThat(matchAll(Bee.ASCII_WORD_START, "")).isEmpty();
+        assertThat(matchAllPositions(Bee.ASCII_WORD_START, LOREM_IPSUM_TEXT)).containsExactly(
                 0, 6, 12, 19, 21, 25, 31, 34, 49, 59);
     }
 
     @Test
     void testAsciiWordEnd() {
-        assertThat(matchAll("", Bee.ASCII_WORD_END)).isEmpty();
-        assertThat(matchAllPositions(LOREM_IPSUM_TEXT, Bee.ASCII_WORD_END)).containsExactly(
+        assertThat(matchAll(Bee.ASCII_WORD_END, "")).isEmpty();
+        assertThat(matchAllPositions(Bee.ASCII_WORD_END, LOREM_IPSUM_TEXT)).containsExactly(
                 5, 11, 17, 20, 24, 29, 33, 45, 58, 64);
     }
 
     @Test
     void testAsciiWord() {
-        assertThat(matchAll("", Bee.ASCII_WORD)).isEmpty();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.ASCII_WORD)).containsExactly(
+        assertThat(matchAll(Bee.ASCII_WORD, "")).isEmpty();
+        assertThat(matchAll(Bee.ASCII_WORD, LOREM_IPSUM_TEXT)).containsExactly(
                 "Lorem", "ipsum", "dolor", "3", "sit", "amet",
                 "12", "consectetur", "dipiscing", "el_it");
     }
 
     @Test
     void testDefaultWordBoundary() {
-        assertThat(matchAll("", Bee.DEFAULT_WORD_BOUNDARY)).isEmpty();
-        assertThat(matchAllPositions(LOREM_IPSUM_TEXT, Bee.DEFAULT_WORD_BOUNDARY)).containsExactly(
+        assertThat(matchAll(Bee.DEFAULT_WORD_BOUNDARY, "")).isEmpty();
+        assertThat(matchAllPositions(Bee.DEFAULT_WORD_BOUNDARY, LOREM_IPSUM_TEXT)).containsExactly(
                 0, 5, 6, 11, 12, 17, 19, 20, 21, 24, 25, 29, 31, 33, 34, 45, 46, 47, 48, 58, 59, 64);
     }
 
     @Test
     void testIdentifier() {
-        assertThat(matchAll("", Bee.IDENTIFIER)).isEmpty();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.IDENTIFIER)).containsExactly(
+        assertThat(matchAll(Bee.IDENTIFIER, "")).isEmpty();
+        assertThat(matchAll(Bee.IDENTIFIER, LOREM_IPSUM_TEXT)).containsExactly(
                 "Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "el_it");
     }
     
     @Test
     void testLetter() {
-        assertThat(matchAll("", Bee.LETTER)).isEmpty();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.LETTER)).containsExactly(
+        assertThat(matchAll(Bee.LETTER, "")).isEmpty();
+        assertThat(matchAll(Bee.LETTER, LOREM_IPSUM_TEXT)).containsExactly(
                 "L", "o", "r", "e", "m", "i", "p", "s", "u", "m",
                 "d", "o", "l", "o", "r",
                 "s", "i", "t", "a", "m", "e", "t",
@@ -218,149 +218,150 @@ class BeeTest {
     
     @Test
     void testDigit() {
-        assertThat(matchAll("", Bee.DIGIT)).isEmpty();
-        assertThat(match("\u0661", Bee.DIGIT)).isTrue();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.DIGIT)).containsExactly("3", "1", "2");
+        assertThat(matchAll(Bee.DIGIT, "")).isEmpty();
+        assertThat(match(Bee.DIGIT, "\u0661")).isTrue();
+        assertThat(matchAll(Bee.DIGIT, LOREM_IPSUM_TEXT)).containsExactly("3", "1", "2");
     }
 
     @Test
     void testWord() {
-        assertThat(matchAll("", Bee.WORD)).isEmpty();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.WORD)).containsExactly(
+        assertThat(matchAll(Bee.WORD, "")).isEmpty();
+        assertThat(matchAll(Bee.WORD, LOREM_IPSUM_TEXT)).containsExactly(
                 "Lorem", "ipsum", "dolor", "3", "sit", "amet",
                 "12", "consectetur", "\u0628", "\u00E1dipiscing", "el", "it");
     }
 
     @Test
     void testUnsignedInt() {
-        assertThat(match("", Bee.UNSIGNED_INT)).isFalse();
-        assertThat(match("-4", Bee.UNSIGNED_INT)).isFalse();
-        assertThat(match("-05", Bee.UNSIGNED_INT)).isFalse();
-        assertThat(match("-028", Bee.UNSIGNED_INT)).isFalse();
-        assertThat(match("-23", Bee.UNSIGNED_INT)).isFalse();
-        assertThat(match("+5", Bee.UNSIGNED_INT)).isFalse();
-        assertThat(match("+12", Bee.UNSIGNED_INT)).isFalse();
-        assertThat(match("+0912", Bee.UNSIGNED_INT)).isFalse();
-        assertThat(match("0", Bee.UNSIGNED_INT)).isTrue();
-        assertThat(match("9", Bee.UNSIGNED_INT)).isTrue();
-        assertThat(match("17", Bee.UNSIGNED_INT)).isTrue();
-        assertThat(match("017", Bee.UNSIGNED_INT)).isFalse();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.UNSIGNED_INT)).containsExactly("3", "12");
+        assertThat(match(Bee.UNSIGNED_INT, "")).isFalse();
+        assertThat(match(Bee.UNSIGNED_INT, "-4")).isFalse();
+        assertThat(match(Bee.UNSIGNED_INT, "-05")).isFalse();
+        assertThat(match(Bee.UNSIGNED_INT, "-028")).isFalse();
+        assertThat(match(Bee.UNSIGNED_INT, "-23")).isFalse();
+        assertThat(match(Bee.UNSIGNED_INT, "+5")).isFalse();
+        assertThat(match(Bee.UNSIGNED_INT, "+12")).isFalse();
+        assertThat(match(Bee.UNSIGNED_INT, "+0912")).isFalse();
+        assertThat(match(Bee.UNSIGNED_INT, "0")).isTrue();
+        assertThat(match(Bee.UNSIGNED_INT, "9")).isTrue();
+        assertThat(match(Bee.UNSIGNED_INT, "17")).isTrue();
+        assertThat(match(Bee.UNSIGNED_INT, "017")).isFalse();
+        assertThat(matchAll(Bee.UNSIGNED_INT, LOREM_IPSUM_TEXT)).containsExactly("3", "12");
     }
 
     @Test
     void testSignedInt() {
-        assertThat(match("", Bee.SIGNED_INT)).isFalse();
-        assertThat(match("-4", Bee.SIGNED_INT)).isTrue();
-        assertThat(match("-05", Bee.SIGNED_INT)).isFalse();
-        assertThat(match("-028", Bee.SIGNED_INT)).isFalse();
-        assertThat(match("-23", Bee.SIGNED_INT)).isTrue();
-        assertThat(match("+5", Bee.SIGNED_INT)).isTrue();
-        assertThat(match("+12", Bee.SIGNED_INT)).isTrue();
-        assertThat(match("+0912", Bee.SIGNED_INT)).isFalse();
-        assertThat(match("0", Bee.SIGNED_INT)).isTrue();
-        assertThat(match("9", Bee.SIGNED_INT)).isTrue();
-        assertThat(match("17", Bee.SIGNED_INT)).isTrue();
-        assertThat(match("017", Bee.SIGNED_INT)).isFalse();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.SIGNED_INT)).containsExactly("-3", "12");
+        assertThat(match(Bee.SIGNED_INT, "")).isFalse();
+        assertThat(match(Bee.SIGNED_INT, "-4")).isTrue();
+        assertThat(match(Bee.SIGNED_INT, "-05")).isFalse();
+        assertThat(match(Bee.SIGNED_INT, "-028")).isFalse();
+        assertThat(match(Bee.SIGNED_INT, "-23")).isTrue();
+        assertThat(match(Bee.SIGNED_INT, "+5")).isTrue();
+        assertThat(match(Bee.SIGNED_INT, "+12")).isTrue();
+        assertThat(match(Bee.SIGNED_INT, "+0912")).isFalse();
+        assertThat(match(Bee.SIGNED_INT, "0")).isTrue();
+        assertThat(match(Bee.SIGNED_INT, "9")).isTrue();
+        assertThat(match(Bee.SIGNED_INT, "17")).isTrue();
+        assertThat(match(Bee.SIGNED_INT, "017")).isFalse();
+        assertThat(matchAll(Bee.SIGNED_INT, LOREM_IPSUM_TEXT)).containsExactly("-3", "12");
     }
 
     @Test
     void testStrictlySignedInt() {
-        assertThat(match("", Bee.STRICTLY_SIGNED_INT)).isFalse();
-        assertThat(match("-4", Bee.STRICTLY_SIGNED_INT)).isTrue();
-        assertThat(match("-05", Bee.STRICTLY_SIGNED_INT)).isFalse();
-        assertThat(match("-028", Bee.STRICTLY_SIGNED_INT)).isFalse();
-        assertThat(match("-23", Bee.STRICTLY_SIGNED_INT)).isTrue();
-        assertThat(match("+5", Bee.STRICTLY_SIGNED_INT)).isTrue();
-        assertThat(match("+12", Bee.STRICTLY_SIGNED_INT)).isTrue();
-        assertThat(match("+0912", Bee.STRICTLY_SIGNED_INT)).isFalse();
-        assertThat(match("0", Bee.STRICTLY_SIGNED_INT)).isFalse();
-        assertThat(match("9", Bee.STRICTLY_SIGNED_INT)).isFalse();
-        assertThat(match("17", Bee.STRICTLY_SIGNED_INT)).isFalse();
-        assertThat(match("017", Bee.STRICTLY_SIGNED_INT)).isFalse();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.STRICTLY_SIGNED_INT)).containsExactly("-3");
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "")).isFalse();
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "-4")).isTrue();
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "-05")).isFalse();
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "-028")).isFalse();
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "-23")).isTrue();
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "+5")).isTrue();
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "+12")).isTrue();
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "+0912")).isFalse();
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "0")).isFalse();
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "9")).isFalse();
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "17")).isFalse();
+        assertThat(match(Bee.STRICTLY_SIGNED_INT, "017")).isFalse();
+        assertThat(matchAll(Bee.STRICTLY_SIGNED_INT, LOREM_IPSUM_TEXT)).containsExactly("-3");
     }
 
     @Test
     void testTimestamp() {
-        assertThat(match("", Bee.TIMESTAMP)).isFalse();
-        assertThat(match("lorem", Bee.TIMESTAMP)).isFalse();
-        assertThat(match("2021.07.24", Bee.TIMESTAMP)).isFalse();
-        assertThat(match("2021-07-24T14:22:30Z", Bee.TIMESTAMP)).isTrue();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.TIMESTAMP)).isEmpty();
+        assertThat(match(Bee.TIMESTAMP, "")).isFalse();
+        assertThat(match(Bee.TIMESTAMP, "lorem")).isFalse();
+        assertThat(match(Bee.TIMESTAMP, "2021.07.24")).isFalse();
+        assertThat(match(Bee.TIMESTAMP, "2021-07-24T14:22:30Z")).isTrue();
+        assertThat(matchAll(Bee.TIMESTAMP, LOREM_IPSUM_TEXT)).isEmpty();
     }
 
     @Test
     void testSimple() {
-        assertThat(match("lorem", Bee.simple("lorem"))).isTrue();
-        assertThat(match("lorem", Bee.simple("ipsum"))).isFalse();
-        assertThat(matchAllPositions("ipsum", Bee.simple("s.m"))).containsExactly(2);
-        assertThat(matchAllPositions("lorem", Bee.simple("or"))).containsExactly(1);
+        assertThat(match(Bee.simple("lorem"), "lorem")).isTrue();
+        assertThat(match(Bee.simple("ipsum"), "lorem")).isFalse();
+        assertThat(matchAllPositions(Bee.simple("s.m"), "ipsum")).containsExactly(2);
+        assertThat(matchAllPositions(Bee.simple("or"), "lorem")).containsExactly(1);
     }
     
     @Test
     void testChecked() {
-        assertThat(match("lorem", Bee.checked("lorem"))).isTrue();
-        assertThat(match("lorem", Bee.checked("ipsum"))).isFalse();
+        assertThat(match(Bee.checked("lorem"), "lorem")).isTrue();
+        assertThat(match(Bee.checked("ipsum"), "lorem")).isFalse();
         assertThatThrownBy(() -> Bee.checked("x(")).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void testRange() {
-        assertThat(match("a", Bee.range('a', 'a'))).isTrue();
-        assertThat(match("a", Bee.range('a', 'z'))).isTrue();
-        assertThat(match("a", Bee.range('b', 'z'))).isFalse();
-        assertThat(match("a", Bee.range('b', 'b'))).isFalse();
+        assertThat(match(Bee.range('a', 'a'), "a")).isTrue();
+        assertThat(match(Bee.range('a', 'z'), "a")).isTrue();
+        assertThat(match(Bee.range('b', 'z'), "a")).isFalse();
+        assertThat(match(Bee.range('b', 'b'), "a")).isFalse();
         assertThatThrownBy(() -> Bee.range('z', 'x')).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void testNegativeRange() {
-        assertThat(match("a", Bee.range(false, 'a', 'z'))).isFalse();
-        assertThat(match("a", Bee.range(false, 'a', 'a'))).isFalse();
-        assertThat(match("a", Bee.range(false, 'b', 'z'))).isTrue();
-        assertThat(match("a", Bee.range(false, 'b', 'b'))).isTrue();
+        assertThat(match(Bee.range(false, 'a', 'z'), "a")).isFalse();
+        assertThat(match(Bee.range(false, 'a', 'a'), "a")).isFalse();
+        assertThat(match(Bee.range(false, 'b', 'z'), "a")).isTrue();
+        assertThat(match(Bee.range(false, 'b', 'b'), "a")).isTrue();
     }
     
     @Test
     void testFixed() {
-        assertThat(match("lorem", Bee.fixed("lorem"))).isTrue();
-        assertThat(match("lorem", Bee.fixed("ipsum"))).isFalse();
-        assertThat(match("ipsum", Bee.fixed("s.m"))).isFalse();
-        assertThat(matchAllPositions("lorem", Bee.fixed("or"))).containsExactly(1);
-        assertThat(match("(?:x)", Bee.fixed("(?:x)"))).isTrue();
-        assertThat(match("x", Bee.fixed("(?:x)"))).isFalse();
+        assertThat(match(Bee.fixed("lorem"), "lorem")).isTrue();
+        assertThat(match(Bee.fixed("ipsum"), "lorem")).isFalse();
+        assertThat(match(Bee.fixed("s.m"), "ipsum")).isFalse();
+        assertThat(matchAllPositions(Bee.fixed("or"), "lorem")).containsExactly(1);
+        assertThat(match(Bee.fixed("(?:x)"), "(?:x)")).isTrue();
+        assertThat(match(Bee.fixed("(?:x)"), "x")).isFalse();
     }
 
     @Test
     void testOneFixedOf() {
-        assertThat(match("", Bee.oneFixedOf())).isTrue();
-        assertThat(match("lorem", Bee.oneFixedOf())).isFalse();
-        assertThat(match("lorem", Bee.oneFixedOf("lorem", "ipsum"))).isTrue();
-        assertThat(match("ipsum", Bee.oneFixedOf("lorem", "ipsum"))).isTrue();
-        assertThat(matchAll("lorem? ipsum ??", Bee.oneFixedOf("lorem", "?"))).containsExactly(
+        assertThat(match(Bee.oneFixedOf(), "")).isTrue();
+        assertThat(match(Bee.oneFixedOf(), "lorem")).isFalse();
+        assertThat(match(Bee.oneFixedOf("lorem", "ipsum"), "lorem")).isTrue();
+        assertThat(match(Bee.oneFixedOf("lorem", "ipsum"), "ipsum")).isTrue();
+        assertThat(matchAll(Bee.oneFixedOf("lorem", "?"), "lorem? ipsum ??")).containsExactly(
                 "lorem", "?", "?", "?");
     }
 
     @Test
     void testFixedChar() {
-        assertThat(match("", Bee.fixedChar('a'))).isFalse();
-        assertThat(match("x", Bee.fixedChar('a'))).isFalse();
-        assertThat(match("a", Bee.fixedChar('a'))).isTrue();
-        assertThat(match("aa", Bee.fixedChar('a'))).isFalse();
-        assertThat(match("?", Bee.fixedChar('?'))).isTrue();
-        assertThat(matchAllPositions("lo(rem) ip(sum) do(lor)", Bee.fixedChar('('))).hasSize(3);
+        assertThat(match(Bee.fixedChar('a'), "")).isFalse();
+        assertThat(match(Bee.fixedChar('a'), "x")).isFalse();
+        assertThat(match(Bee.fixedChar('a'), "a")).isTrue();
+        assertThat(match(Bee.fixedChar('a'), "aa")).isFalse();
+        assertThat(match(Bee.fixedChar('?'), "?")).isTrue();
+        assertThat(matchAllPositions(Bee.fixedChar('('), "lo(rem) ip(sum) do(lor)")).hasSize(3);
     }
 
     @Test
     void testRef() {
         assertThat(
-                matchAll(LOREM_IPSUM_TEXT,
-                Bee
-                        .then(Bee.simple("..").as("g"))
-                        .then(Bee.CHAR.any(Greediness.LAZY))
-                        .then(Bee.ref("g"))))
+                matchAll(
+                        Bee
+                                .then(Bee.simple("..").as("g"))
+                                .then(Bee.CHAR.any(Greediness.LAZY))
+                                .then(Bee.ref("g")),
+                        LOREM_IPSUM_TEXT))
                 .containsExactly(
                         "orem ipsum dolor",
                         "it amet, 12\tconsectetur \u0628 \u00E1dipiscing el_it");
@@ -368,67 +369,68 @@ class BeeTest {
 
     @Test
     void testLookBehind() {
-        assertThat(matchAll("", Bee.lookBehind(Bee.CHAR))).isEmpty();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.lookBehind(Bee.simple("or")).then(Bee.CHAR)))
+        assertThat(matchAll(Bee.lookBehind(Bee.CHAR), "")).isEmpty();
+        assertThat(matchAll(Bee.lookBehind(Bee.simple("or")).then(Bee.CHAR), LOREM_IPSUM_TEXT))
                 .containsExactly("e", " ");
     }
     
     @Test
     void testLookBehindNot() {
-        assertThat(matchAll("", Bee.lookBehindNot(Bee.CHAR))).containsExactly("");
-        assertThat(matchAll("", Bee.lookBehindNot(Bee.BEGIN))).isEmpty();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.lookBehindNot(Bee.fixed("l")).then(Bee.simple("or.."))))
+        assertThat(matchAll(Bee.lookBehindNot(Bee.CHAR), "")).containsExactly("");
+        assertThat(matchAll(Bee.lookBehindNot(Bee.BEGIN), "")).isEmpty();
+        assertThat(matchAll(Bee.lookBehindNot(Bee.fixed("l")).then(Bee.simple("or..")), LOREM_IPSUM_TEXT))
                 .containsExactly("orem");
     }
 
     @Test
     void testLookAhead() {
-        assertThat(matchAll("", Bee.lookAhead(Bee.CHAR))).isEmpty();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.simple(".o").then(Bee.lookAhead(Bee.simple("n")))))
+        assertThat(matchAll(Bee.lookAhead(Bee.CHAR), "")).isEmpty();
+        assertThat(matchAll(Bee.simple(".o").then(Bee.lookAhead(Bee.simple("n"))), LOREM_IPSUM_TEXT))
                 .containsExactly("co");
     }
 
     @Test
     void testLookAheadNot() {
-        assertThat(matchAll("", Bee.lookAheadNot(Bee.CHAR))).containsExactly("");
-        assertThat(matchAll("", Bee.lookAheadNot(Bee.END))).isEmpty();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.simple("... ").then(Bee.lookAheadNot(Bee.LETTER))))
+        assertThat(matchAll(Bee.lookAheadNot(Bee.CHAR), "")).containsExactly("");
+        assertThat(matchAll(Bee.lookAheadNot(Bee.END), "")).isEmpty();
+        assertThat(matchAll(Bee.simple("... ").then(Bee.lookAheadNot(Bee.LETTER)), LOREM_IPSUM_TEXT))
                 .containsExactly("lor ", "et, ");
     }
 
     @Test
     void testAtomic() {
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.atomic(Bee.simple("di?")).then(Bee.fixed("p"))))
+        assertThat(matchAll(Bee.atomic(Bee.simple("di?")).then(Bee.fixed("p")), LOREM_IPSUM_TEXT))
                 .containsExactly("dip");
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.atomic(Bee.simple("dip?")).then(Bee.fixed("p"))))
+        assertThat(matchAll(Bee.atomic(Bee.simple("dip?")).then(Bee.fixed("p")), LOREM_IPSUM_TEXT))
                 .containsExactly();
     }
 
     @Test
     void testIntBetween() {
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(4,  17))).containsExactly("12");
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(-5,  4))).containsExactly("-3");
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(-3,  50))).containsExactly("-3", "12");
+        assertThat(matchAll(Bee.intBetween(4,  17), LOREM_IPSUM_TEXT)).containsExactly("12");
+        assertThat(matchAll(Bee.intBetween(-5,  4), LOREM_IPSUM_TEXT)).containsExactly("-3");
+        assertThat(matchAll(Bee.intBetween(-3,  50), LOREM_IPSUM_TEXT)).containsExactly("-3", "12");
     }
 
     @Test
     void testIntBetweenWithBigInteger() {
         BigInteger low = BigInteger.valueOf(-3);
         BigInteger high = BigInteger.valueOf(12);
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, false, high, false))).isEmpty();
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, false, high, true)))
+        assertThat(matchAll(Bee.intBetween(low, false, high, false), LOREM_IPSUM_TEXT)).isEmpty();
+        assertThat(matchAll(Bee.intBetween(low, false, high, true), LOREM_IPSUM_TEXT))
                 .containsExactly("12");
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, true, high, false)))
+        assertThat(matchAll(Bee.intBetween(low, true, high, false), LOREM_IPSUM_TEXT))
                 .containsExactly("-3");
-        assertThat(matchAll(LOREM_IPSUM_TEXT, Bee.intBetween(low, true, high, true)))
+        assertThat(matchAll(Bee.intBetween(low, true, high, true), LOREM_IPSUM_TEXT))
                 .containsExactly("-3", "12");
     }
 
     @Test
     void testWith() {
-        assertThat(matchAll(
-                LOREM_IPSUM_TEXT,
-                Bee.with(Pattern.CASE_INSENSITIVE, Bee.simple("L")).then(Bee.simple("or."))))
+        assertThat(
+                matchAll(
+                        Bee.with(Pattern.CASE_INSENSITIVE, Bee.simple("L")).then(Bee.simple("or.")),
+                        LOREM_IPSUM_TEXT))
                 .containsExactly("Lore", "lor ");
     }
 
@@ -438,7 +440,7 @@ class BeeTest {
                 Pattern.CASE_INSENSITIVE,
                 Bee.simple("l")
                         .then(Bee.without(Pattern.CASE_INSENSITIVE, Bee.simple("or"))));
-        assertThat(matchAll(LOREM_IPSUM_TEXT, fragment)).containsExactly("Lor", "lor");
+        assertThat(matchAll(fragment, LOREM_IPSUM_TEXT)).containsExactly("Lor", "lor");
     }
 
     @Test
@@ -450,38 +452,7 @@ class BeeTest {
                                 Pattern.CASE_INSENSITIVE,
                                 Pattern.DOTALL,
                                 Bee.simple("B(?:....)?"))));
-        assertThat(matchAll("aaa\nbbb\nccc", fragment)).containsExactly("aaa\nbbb");
-    }
-    
-
-    private static Matcher matcher(String input, BeeFragment fragment) {
-        Matcher matcher = fragment.toPattern().matcher(input);
-        if (!matcher.find()) {
-            throw new IllegalArgumentException("No match found");
-        }
-        return matcher;
-    }
-    
-    private static boolean match(String input, BeeFragment fragment) {
-        return fragment.toPattern().matcher(input).matches();
-    }
-    
-    private static List<String> matchAll(String input, BeeFragment fragment) {
-        List<String> result = new ArrayList<>();
-        Matcher matcher = fragment.toPattern().matcher(input);
-        while (matcher.find()) {
-            result.add(matcher.group());
-        }
-        return result;
-    }
-    
-    private static List<Integer> matchAllPositions(String input, BeeFragment fragment) {
-        List<Integer> result = new ArrayList<>();
-        Matcher matcher = fragment.toPattern().matcher(input);
-        while (matcher.find()) {
-            result.add(matcher.start());
-        }
-        return result;
+        assertThat(matchAll(fragment, "aaa\nbbb\nccc")).containsExactly("aaa\nbbb");
     }
     
 }

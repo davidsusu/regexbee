@@ -7,17 +7,27 @@ import java.util.List;
 
 import hu.webarticum.regexbee.common.AbstractGeneratingFragment;
 
-// TODO: add tests
 public class CompoundCharacterFragment extends AbstractGeneratingFragment implements CharacterFragment {
+    
+    private final boolean positive;
 
     private final List<CharacterFragment> fragments;
     
     
     public CompoundCharacterFragment(CharacterFragment... fragments) {
-        this(Arrays.asList(fragments));
+        this(true, fragments);
+    }
+
+    public CompoundCharacterFragment(boolean positive, CharacterFragment... fragments) {
+        this(positive, Arrays.asList(fragments));
     }
 
     public CompoundCharacterFragment(Collection<CharacterFragment> fragments) {
+        this(true, fragments);
+    }
+
+    public CompoundCharacterFragment(boolean positive, Collection<CharacterFragment> fragments) {
+        this.positive = positive;
         this.fragments = new ArrayList<>(fragments);
     }
 
@@ -37,6 +47,9 @@ public class CompoundCharacterFragment extends AbstractGeneratingFragment implem
     @Override
     protected String generate() {
         StringBuilder resultBuilder = new StringBuilder("[");
+        if (!positive) {
+            resultBuilder.append('^');
+        }
         for (CharacterFragment fragment : fragments) {
             resultBuilder.append(fragment.get());
         }
