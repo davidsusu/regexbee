@@ -305,6 +305,12 @@ public class StringLiteralFragment extends AbstractGeneratingFragment {
             return this;
         }
         
+        public StringLiteralFragmentBuilder withoutAnyEscaping() {
+            this.normalEscapingEnabled = false;
+            this.selfEscapingEnabled = false;
+            return this;
+        }
+        
         
         // build
         
