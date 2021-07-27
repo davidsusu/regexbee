@@ -354,6 +354,18 @@ class BeeTest extends AbstractBeeTest {
     }
 
     @Test
+    void testOneCharOf() {
+        BeeFragment fragment = Bee.oneCharOf("afnop");
+        assertThat(match(fragment, "")).isFalse();
+        assertThat(match(fragment, "a")).isTrue();
+        assertThat(match(fragment, "b")).isFalse();
+        assertThat(match(fragment, "f")).isTrue();
+        assertThat(match(fragment, "an")).isFalse();
+        assertThat(match(fragment, "!")).isFalse();
+        assertThat(match(fragment, "a!")).isFalse();
+    }
+
+    @Test
     void testRef() {
         assertThat(
                 matchAll(

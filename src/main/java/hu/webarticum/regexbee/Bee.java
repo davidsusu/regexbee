@@ -129,6 +129,10 @@ public final class Bee {
         return new FixedCharacterFragment(c);
     }
 
+    public static CharacterFragment oneCharOf(String chars) {
+        return new CharacterRangeFragment(chars);
+    }
+
     public static BeeFragment ref(String groupName) {
         return new NamedBackreferenceFragment(groupName);
     }
