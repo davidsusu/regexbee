@@ -32,7 +32,7 @@ public class CharacterRangeFragment extends AbstractGeneratingFragment implement
 
     private CharacterRangeFragment(CharacterRangeFragmentBuilder builder) {
         this.positiveMatching = builder.positiveMatching;
-        this.ranges = new ArrayList<>(builder.ranges);
+        this.ranges = new ArrayList<>(builder.ranges); // TODO: make some sorting and insure uniqueness
     }
     
     public static CharacterRangeFragmentBuilder builder() {
