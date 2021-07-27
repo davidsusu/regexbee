@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'eclipse'
     id 'signing'
     id 'maven'
     id 'com.palantir.git-version' version '0.12.3'
@@ -17,6 +18,7 @@ def websiteUrl = scmUrl.replaceAll(/\.git$/, "");
 
 repositories {
     jcenter()
+    mavenCentral()
 }
 
 configurations {
@@ -44,12 +46,6 @@ dependencies {
     testImplementation 'org.junit.platform:junit-platform-launcher:1.4.1'
     testImplementation 'org.assertj:assertj-core:3.12.2'
     
-}
-
-eclipse {
-    classpath {
-        plusConfigurations.add configurations.examples
-    }
 }
 
 signing {
