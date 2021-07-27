@@ -9,25 +9,14 @@ import hu.webarticum.regexbee.common.AbstractGeneratingFragment;
 
 public class IntersectionCharacterFragment extends AbstractGeneratingFragment implements CharacterFragment {
 
-    private final boolean positive;
-
     private final List<CharacterFragment> fragments;
     
 
     public IntersectionCharacterFragment(CharacterFragment... fragments) {
-        this(true, fragments);
+        this(Arrays.asList(fragments));
     }
-
-    public IntersectionCharacterFragment(boolean positive, CharacterFragment... fragments) {
-        this(positive, Arrays.asList(fragments));
-    }
-
+    
     public IntersectionCharacterFragment(Collection<CharacterFragment> fragments) {
-        this(true, fragments);
-    }
-
-    public IntersectionCharacterFragment(boolean positive, Collection<CharacterFragment> fragments) {
-        this.positive = positive;
         this.fragments = new ArrayList<>(fragments);
     }
 
@@ -47,9 +36,6 @@ public class IntersectionCharacterFragment extends AbstractGeneratingFragment im
     @Override
     protected String generate() {
         StringBuilder resultBuilder = new StringBuilder("[");
-        if (!positive) {
-            resultBuilder.append('^');
-        }
         boolean first = true;
         for (CharacterFragment fragment : fragments) {
             if (first) {

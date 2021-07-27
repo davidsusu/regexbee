@@ -19,16 +19,6 @@ class IntersectionCharacterFragmentTest extends AbstractBeeTest {
     }
 
     @Test
-    void testNegative() {
-        BeeFragment fragment = new IntersectionCharacterFragment(
-                false,
-                new CharacterRangeFragment('a', 'f'),
-                new CharacterRangeFragment('d', 'h'));
-        assertThat(filterMatching(fragment, "a", "d", "f", "g", "h", "2", "2a"))
-                .containsExactly("a", "g", "h", "2");
-    }
-
-    @Test
     void testComplex() {
         BeeFragment fragment = new IntersectionCharacterFragment(
                 new CompoundCharacterFragment(

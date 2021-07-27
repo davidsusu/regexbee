@@ -17,7 +17,7 @@ class CharacterRangeFragmentTest extends AbstractBeeTest {
     }
 
     @Test
-    void testNegativeRange() {
+    void testNegatedRange() {
         BeeFragment fragment = new CharacterRangeFragment(false, 'g', 'k');
         assertThat(filterMatching(fragment, "a", "g", "i", "k", "x")).containsExactly("a", "x");
         assertThat(fragment.toPattern().matcher("piriguhu").replaceAll("_")).isEqualTo("_i_ig_h_");
