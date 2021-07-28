@@ -150,7 +150,7 @@ You can use placeholders just as any fragment.
 For example they accept quantifiers too:
 
 ```java
-BeeTemplate somethingMoreTemplate = Bee.placeholder("lorem").more().toTemplate();
+BeeTemplate somethingMoreTemplate = Bee.placeholder().more().toTemplate();
 ```
 
 For more examples
