@@ -85,7 +85,7 @@ private void processLine(String line) {
 ## Templating
 
 You can insert template parameter placeholders into any place of a structure with
-`Bee.placeholder()` or `Bee.placeholder("some_param")`,
+`Bee.placeholder()` or `Bee.placeholder("someParam")`,
 then you can construct a template with `.toTemplate()`.
 Parameters can be substituted by calling `.substitute(...)`.
 
