@@ -126,7 +126,8 @@ BeeTemplate template = Bee
 ```
 
 In this example `'p1'` and `'p2'` are used multiple times.
-Then, you can use a `java.util.Map` for substituting named parameters:
+
+You can use a `java.util.Map` for substituting named parameters:
 
 ```java
 Map<String, BeeFragment> parameters = new HashMap<String, BeeFragment>();
@@ -136,7 +137,7 @@ parameters.put("p3", Bee.fixed("%").more());
 BeeFragment substitutedFragment1 = template.substitute(parameters);
 ```
 
-Of course, from with java 9+ you can use `Map.of` to make this a little bit cleaner:
+Of course, with Java 9+ you can use `Map.of` to make this a little bit cleaner:
 
 ```java
 BeeFragment substitutedFragment1 = template.substitute(Map.of(
