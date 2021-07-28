@@ -11,7 +11,7 @@ Main features:
 - immutable
 - concise, declarative, readable
 - limitlessly composable
-- built-in basic fragments and compositions
+- has built-in basic fragments and compositions
 - character class nesting
 - integer range match
 - support for different greediness types
@@ -20,10 +20,9 @@ Main features:
 - flexible templating
 - and many more...
 
-`BeeFragment`s are immutable, lazily computed and cached.
-You can build complex patterns in a fluent (quasi-declarative) way.
-
 ## Examples:
+
+So, you can build complex patterns in a fluent (quasi-declarative) way:
 
 ```java
 BeeFragment myFragment = Bee
@@ -39,7 +38,7 @@ BeeFragment myFragment = Bee
         .then(Bee.END);
 ```
 
-`BeeFragment`s can be converted to `java.util.regex` with calling `.toPattern()`:
+`BeeFragment`s can be converted to `java.util.regex.Pattern` with calling `.toPattern()`:
 
 ```java
 Pattern myPattern = myFragment.toPattern();
