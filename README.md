@@ -154,5 +154,5 @@ BeeTemplate somethingMoreTemplate = Bee.placeholder("lorem").more().toTemplate()
 ```
 
 For more examples
-[https://github.com/davidsusu/regexbee/tree/master/src/examples/java/hu/webarticum/regexbee/examples](see the examples package)
+[see the examples package](https://github.com/davidsusu/regexbee/tree/master/src/examples/java/hu/webarticum/regexbee/examples)
 or the tests.
