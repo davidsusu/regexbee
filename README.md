@@ -3,15 +3,27 @@
 Honeycomb cells for building regular expressions in a fluent way.
 Even complex ones.
 
-Alert: currently this library is in an experimental state,
-anything can change between commits.
-
 Issues, recommendations and pull request are welcome.
+
+Main features:
+
+- fluent API
+- immutable
+- concise, declarative, readable
+- limitlessly composable
+- built-in basic fragments and compositions
+- character class nesting
+- integer range match
+- support for different greediness types
+- support for named groups and references
+- support for lookaround, modifiers and other special groups
+- flexible templating
+- and many more...
 
 `BeeFragment`s are immutable, lazily computed and cached.
 You can build complex patterns in a fluent (quasi-declarative) way.
 
-## Example:
+## Examples:
 
 ```java
 BeeFragment myFragment = Bee
@@ -132,4 +144,11 @@ BeeFragment substitutedFragment1 = template.substitute(Map.of(
 		"p1", Bee.fixed("*").more(),
 		"p2", Bee.UNSIGNED_INT,
 		"p3", Bee.fixed("%").more());
+```
+
+You can use placeholders just as any fragment.
+For example they accept quantifiers too:
+
+```java
+BeeTemplate somethingMoreTemplate = Bee.placeholder("lorem").more().toTemplate();
 ```
