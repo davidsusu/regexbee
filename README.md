@@ -11,7 +11,7 @@ Issues, recommendations and pull request are welcome.
 `BeeFragment`s are immutable, lazily computed and cached.
 You can build complex patterns in a fluent (quasi-declarative) way.
 
-Example:
+## Example:
 
 ```java
 BeeFragment myFragment = Bee
@@ -25,7 +25,11 @@ BeeFragment myFragment = Bee
         .then(Bee.fixed("??)fixed?text. ").optional())
         .then(Bee.ASCII_WORD.optional(Greediness.LAZY))
         .then(Bee.END);
+```
 
+`BeeFragment`s can be converted to `java.util.regex` with calling `.toPattern()`:
+
+```java
 Pattern myPattern = myFragment.toPattern();
 Matcher myMatcher = myPattern.matcher(someString);
 
@@ -35,11 +39,9 @@ if (myMatcher.matches()) {
 }
 ```
 
-An other example with a simple log processor:
+Let's see an other example with a simple log processor:
 
 ```java
-// ...
-
 private static final Pattern LOG_ENTRY_PATTERN = Bee
         .then(Bee.BEGIN)
         .then(Bee.TIMESTAMP.as(TIMESTAMP_NAME))
@@ -49,9 +51,11 @@ private static final Pattern LOG_ENTRY_PATTERN = Bee
         .then(Bee.ANYTHING.as(MESSAGE_NAME))
         .then(Bee.END)
         .toPattern();
+```
 
-// ...
+Then, the pattern can be used like this:
 
+```java
 private void processLine(String line) {
     System.out.println("--------------------");
     
@@ -67,3 +71,65 @@ private void processLine(String line) {
 }
 ```
 
+## Templating
+
+You can insert template parameter placeholders into any place of a structure with
+`Bee.placeholder()` or `Bee.placeholder("some_param")`,
+then you can construct a template with `.toTemplate()`.
+Parameters can be substituted by calling `.substitute(...)`.
+
+Here is a simple example with a single parameter:
+
+```java
+BeeTemplate template = Bee
+        .then(Bee.fixed("((("))
+        .then(Bee.placeholder())
+        .then(Bee.fixed(")))"))
+        .toTemplate();
+```
+
+You can create any number of substituted fragments:
+
+```java
+BeeFragment substitutedWithWord = template.substitute(Bee.WORD);
+BeeFragment substitutedWithNumber = template.substitute(Bee.UNSIGNED_INT);
+```
+
+Alternatively, you can use explicitly named placeholders.
+Multiple placeholders with the same name are also supported.
+For example:
+
+```java
+BeeTemplate template = Bee
+        .then(Bee.placeholder("p1"))
+        .then(Bee.SPACE)
+        .then(Bee.placeholder("p2"))
+        .then(Bee.SPACE)
+        .then(Bee.placeholder("p1"))
+        .then(Bee.SPACE)
+        .then(Bee.placeholder("p1")
+                .or(Bee.placeholder("p2")))
+        .then(Bee.SPACE)
+        .then(Bee.placeholder("p3"))
+        .toTemplate();
+```
+
+In this example `'p1'` and `'p2'` are used multiple times.
+Then, you can use a `java.util.Map` for substituting named parameters:
+
+```java
+Map<String, BeeFragment> parameters = new HashMap<String, BeeFragment>();
+parameters.put("p1", Bee.fixed("*").more());
+parameters.put("p2", Bee.UNSIGNED_INT);
+parameters.put("p3", Bee.fixed("%").more());
+BeeFragment substitutedFragment1 = template.substitute(parameters);
+```
+
+Of course, from with java 9+ you can use `Map.of` to make this a little bit cleaner:
+
+```java
+BeeFragment substitutedFragment1 = template.substitute(Map.of(
+		"p1", Bee.fixed("*").more(),
+		"p2", Bee.UNSIGNED_INT,
+		"p3", Bee.fixed("%").more());
+```

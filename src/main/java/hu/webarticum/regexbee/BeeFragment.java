@@ -7,6 +7,7 @@ import hu.webarticum.regexbee.common.AlternationFragment;
 import hu.webarticum.regexbee.common.ConcatenationFragment;
 import hu.webarticum.regexbee.common.NamedGroupFragment;
 import hu.webarticum.regexbee.common.QuantifierFragment;
+import hu.webarticum.regexbee.template.BeeTemplate;
 
 @FunctionalInterface
 public interface BeeFragment extends Supplier<String> {
@@ -17,6 +18,10 @@ public interface BeeFragment extends Supplier<String> {
 
     public default Pattern toPattern(int flags) {
         return Pattern.compile(get(), flags);
+    }
+    
+    public default BeeTemplate toTemplate() {
+        return new BeeTemplate(this);
     }
     
     public default BeeFragment then(BeeFragment nextFragment) {

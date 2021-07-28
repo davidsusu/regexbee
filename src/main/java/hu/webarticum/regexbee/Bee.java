@@ -15,6 +15,7 @@ import hu.webarticum.regexbee.common.LookAroundFragment;
 import hu.webarticum.regexbee.common.ModifierGroupFragment;
 import hu.webarticum.regexbee.common.NamedBackreferenceFragment;
 import hu.webarticum.regexbee.number.IntRangeBuilder;
+import hu.webarticum.regexbee.template.BeeTemplateParameter;
 import hu.webarticum.regexbee.util.PatternUtil;
 
 
@@ -96,6 +97,14 @@ public final class Bee {
     }
 
 
+    public static BeeTemplateParameter placeholder() {
+        return new BeeTemplateParameter();
+    }
+
+    public static BeeTemplateParameter placeholder(String name) {
+        return new BeeTemplateParameter(name);
+    }
+    
     public static BeeFragment simple(String pattern) {
         return new SimpleFragment(pattern);
     }
