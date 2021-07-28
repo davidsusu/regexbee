@@ -20,7 +20,7 @@ Main features:
 - flexible templating
 - and many more...
 
-## Examples:
+## Examples
 
 So, you can build complex patterns in a fluent (quasi-declarative) way:
 
