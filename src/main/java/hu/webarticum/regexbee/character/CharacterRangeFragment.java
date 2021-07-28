@@ -2,6 +2,7 @@ package hu.webarticum.regexbee.character;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import hu.webarticum.regexbee.common.AbstractGeneratingFragment;
@@ -32,7 +33,37 @@ public class CharacterRangeFragment extends AbstractGeneratingFragment implement
 
     private CharacterRangeFragment(CharacterRangeFragmentBuilder builder) {
         this.positiveMatching = builder.positiveMatching;
-        this.ranges = new ArrayList<>(builder.ranges); // TODO: make some sorting and insure uniqueness
+        this.ranges = cleanRanges(builder.ranges);
+    }
+    
+    private List<CharacterRange> cleanRanges(List<CharacterRange> ranges) {
+        ArrayList<CharacterRange> result = new ArrayList<>(ranges);
+        if (ranges.size() < 2) {
+            return ranges;
+        }
+        
+        result.sort(this::sortRangesForClean);
+        Iterator<CharacterRange> iterator = result.iterator();
+        CharacterRange previous = iterator.next();
+        while (iterator.hasNext()) {
+            CharacterRange current = iterator.next();
+            if (current.from == previous.from && current.to <= previous.to) {
+                iterator.remove();
+            } else {
+                previous = current;
+            }
+        }
+        result.trimToSize();
+        return result;
+    }
+    
+    private int sortRangesForClean(CharacterRange range1, CharacterRange range2) {
+        int fromCmp = Character.compare(range1.from, range2.from);
+        if (fromCmp != 0) {
+            return fromCmp;
+        }
+        
+        return 0 - Character.compare(range1.to, range2.to);
     }
     
     public static CharacterRangeFragmentBuilder builder() {
