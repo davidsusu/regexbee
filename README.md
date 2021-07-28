@@ -156,3 +156,43 @@ BeeTemplate somethingMoreTemplate = Bee.placeholder().more().toTemplate();
 For more examples
 [see the examples package](https://github.com/davidsusu/regexbee/tree/master/src/examples/java/hu/webarticum/regexbee/examples)
 or the tests.
+
+## Custom fragments
+
+To create a custom fragment, just implement the `BeeFragment` interface:
+
+```java
+public class SeparatedByCommaFragment implements BeeFragment {
+    
+    private final List<BeeFragment> fragments;
+    
+    
+    public SeparatedByCommaFragment(BeeFragment... fragments) {
+        this(Arrays.asList(fragments));
+    }
+    
+    public SeparatedByCommaFragment(Collection<BeeFragment> fragments) {
+        this.fragments = new ArrayList<>(fragments);
+    }
+    
+    
+    @Override
+    public String get() {
+        return fragments.stream().map(BeeFragment::get).collect(Collectors.joining(","));
+    }
+    
+}
+```
+
+`SeparatedByCommaFragment` can be used as any other fragments:
+
+```java
+BeeFragment fragment = Bee
+        .then(Bee.BEGIN)
+        .then(new SeparatedByCommaFragment(
+                Bee.UNSIGNED_INT.as("number"),
+                Bee.ASCII_WORD.as("word"),
+                Bee.oneFixedOf("lorem", "ipsum").as("keyword")))
+        .then(Bee.END);
+// ...
+```
