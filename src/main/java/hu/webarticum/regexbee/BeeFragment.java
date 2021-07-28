@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import hu.webarticum.regexbee.common.AlternationFragment;
 import hu.webarticum.regexbee.common.ConcatenationFragment;
+import hu.webarticum.regexbee.common.ModifierGroupFragment;
 import hu.webarticum.regexbee.common.NamedGroupFragment;
 import hu.webarticum.regexbee.common.QuantifierFragment;
 import hu.webarticum.regexbee.template.BeeTemplate;
@@ -78,6 +79,14 @@ public interface BeeFragment extends Supplier<String> {
 
     public default BeeFragment occur(int minimum, int maximum, Greediness greediness) {
         return new QuantifierFragment(this, minimum, maximum, greediness);
+    }
+
+    public default BeeFragment caseInsensitive() {
+        return new ModifierGroupFragment(this, Pattern.CASE_INSENSITIVE, 0);
+    }
+
+    public default BeeFragment caseSensitive() {
+        return new ModifierGroupFragment(this, 0, Pattern.CASE_INSENSITIVE);
     }
 
 }

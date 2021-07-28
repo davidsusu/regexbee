@@ -152,3 +152,7 @@ For example they accept quantifiers too:
 ```java
 BeeTemplate somethingMoreTemplate = Bee.placeholder("lorem").more().toTemplate();
 ```
+
+For more examples
+[https://github.com/davidsusu/regexbee/tree/master/src/examples/java/hu/webarticum/regexbee/examples`](see the examples package)
+or the tests.

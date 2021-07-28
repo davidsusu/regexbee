@@ -7,7 +7,7 @@ import hu.webarticum.regexbee.Bee;
 import hu.webarticum.regexbee.BeeFragment;
 import hu.webarticum.regexbee.Greediness;
 
-public class MatcherExample {
+public class NamedGroupExample {
 
     public static void main(String[] args) {
         BeeFragment fragment = Bee
@@ -20,6 +20,7 @@ public class MatcherExample {
                         .then(Bee.ASCII_WORD)
                         .optional());
         
+        System.out.println("Generated pattern:");
         System.out.println(fragment.get());
         System.out.println();
 
