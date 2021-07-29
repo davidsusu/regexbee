@@ -15,10 +15,49 @@ class BeeTest extends AbstractBeeTest {
     
 
     @Test
+    void testChar() {
+        assertThat(matchAll(Bee.CHAR, "")).isEmpty();
+        assertThat(match(Bee.CHAR, "x")).isTrue();
+        assertThat(match(Bee.CHAR, "\n")).isFalse();
+        assertThat(match(Bee.CHAR, Pattern.DOTALL, "\n")).isTrue();
+        assertThat(matchAll(Bee.CHAR, LOREM_IPSUM_TEXT)).containsExactly(
+                "L", "o", "r", "e", "m", " ", "i", "p", "s", "u", "m", " ",
+                "d", "o", "l", "o", "r", " ", "-", "3", " ",
+                "s", "i", "t", " ", "a", "m", "e", "t", ",", " ",
+                "1", "2", "\t", "c", "o", "n", "s", "e", "c", "t", "e", "t", "u", "r", " ", "\u0628", " ",
+                "\u00E1", "d", "i", "p", "i", "s", "c", "i", "n", "g", " ", "e", "l", "_", "i", "t", ".");
+    }
+    
+    @Test
+    void testCharThroughLines() {
+        assertThat(matchAll(Bee.CHAR_THROUGH_LINES, "")).isEmpty();
+        assertThat(match(Bee.CHAR_THROUGH_LINES, "x")).isTrue();
+        assertThat(match(Bee.CHAR_THROUGH_LINES, "\n")).isTrue();
+        assertThat(match(Bee.CHAR_THROUGH_LINES, Pattern.DOTALL, "\n")).isTrue();
+        assertThat(matchAll(Bee.CHAR_THROUGH_LINES, LOREM_IPSUM_TEXT)).containsExactly(
+                "L", "o", "r", "e", "m", " ", "i", "p", "s", "u", "m", " ",
+                "d", "o", "l", "o", "r", " ", "-", "3", " ",
+                "s", "i", "t", " ", "a", "m", "e", "t", ",", " ",
+                "1", "2", "\t", "c", "o", "n", "s", "e", "c", "t", "e", "t", "u", "r", " ", "\u0628", " ",
+                "\u00E1", "d", "i", "p", "i", "s", "c", "i", "n", "g", " ", "e", "l", "_", "i", "t", ".");
+    }
+
+    @Test
     void testAnything() {
         assertThat(match(Bee.ANYTHING, "")).isTrue();
         assertThat(match(Bee.ANYTHING, " ")).isTrue();
         assertThat(match(Bee.ANYTHING, LOREM_IPSUM_TEXT)).isTrue();
+        assertThat(match(Bee.ANYTHING, "lorem\nipsum")).isFalse();
+        assertThat(match(Bee.ANYTHING, Pattern.DOTALL, "lorem\nipsum")).isTrue();
+    }
+
+    @Test
+    void testAnythingThroughLines() {
+        assertThat(match(Bee.ANYTHING_THROUGH_LINES, "")).isTrue();
+        assertThat(match(Bee.ANYTHING_THROUGH_LINES, " ")).isTrue();
+        assertThat(match(Bee.ANYTHING_THROUGH_LINES, LOREM_IPSUM_TEXT)).isTrue();
+        assertThat(match(Bee.ANYTHING_THROUGH_LINES, "lorem\nipsum")).isTrue();
+        assertThat(match(Bee.ANYTHING_THROUGH_LINES, Pattern.DOTALL, "lorem\nipsum")).isTrue();
     }
 
     @Test
@@ -26,6 +65,17 @@ class BeeTest extends AbstractBeeTest {
         assertThat(match(Bee.SOMETHING, "")).isFalse();
         assertThat(match(Bee.SOMETHING, " ")).isTrue();
         assertThat(match(Bee.SOMETHING, LOREM_IPSUM_TEXT)).isTrue();
+        assertThat(match(Bee.ANYTHING, "lorem\nipsum")).isFalse();
+        assertThat(match(Bee.ANYTHING, Pattern.DOTALL, "lorem\nipsum")).isTrue();
+    }
+
+    @Test
+    void testSomethingThroughLines() {
+        assertThat(match(Bee.SOMETHING_THROUGH_LINES, "")).isFalse();
+        assertThat(match(Bee.SOMETHING_THROUGH_LINES, " ")).isTrue();
+        assertThat(match(Bee.SOMETHING_THROUGH_LINES, LOREM_IPSUM_TEXT)).isTrue();
+        assertThat(match(Bee.SOMETHING_THROUGH_LINES, "lorem\nipsum")).isTrue();
+        assertThat(match(Bee.SOMETHING_THROUGH_LINES, Pattern.DOTALL, "lorem\nipsum")).isTrue();
     }
 
     @Test
@@ -45,24 +95,32 @@ class BeeTest extends AbstractBeeTest {
     void testBegin() {
         assertThat(matcher(Bee.BEGIN, "").start()).isZero();
         assertThat(matcher(Bee.BEGIN, LOREM_IPSUM_TEXT).start()).isZero();
+        assertThat(find(Bee.BEGIN.then(Bee.fixed("b")), "a\nb")).isFalse();
+        assertThat(find(Bee.BEGIN.then(Bee.fixed("b")), Pattern.MULTILINE, "a\nb")).isTrue();
+    }
+
+    @Test
+    void testGlobalBegin() {
+        assertThat(matcher(Bee.GLOBAL_BEGIN, "").start()).isZero();
+        assertThat(matcher(Bee.GLOBAL_BEGIN, LOREM_IPSUM_TEXT).start()).isZero();
+        assertThat(find(Bee.GLOBAL_BEGIN.then(Bee.fixed("b")), "a\nb")).isFalse();
+        assertThat(find(Bee.GLOBAL_BEGIN.then(Bee.fixed("b")), Pattern.MULTILINE, "a\nb")).isFalse();
     }
 
     @Test
     void testEnd() {
         assertThat(matcher(Bee.END, "").start()).isZero();
         assertThat(matcher(Bee.END, LOREM_IPSUM_TEXT).start()).isEqualTo(65);
+        assertThat(find(Bee.fixed("a").then(Bee.END), "a\nb")).isFalse();
+        assertThat(find(Bee.fixed("a").then(Bee.END), Pattern.MULTILINE, "a\nb")).isTrue();
     }
 
     @Test
-    void testChar() {
-        assertThat(matchAll(Bee.CHAR, "")).isEmpty();
-        assertThat(match(Bee.CHAR, "x")).isTrue();
-        assertThat(matchAll(Bee.CHAR, LOREM_IPSUM_TEXT)).containsExactly(
-                "L", "o", "r", "e", "m", " ", "i", "p", "s", "u", "m", " ",
-                "d", "o", "l", "o", "r", " ", "-", "3", " ",
-                "s", "i", "t", " ", "a", "m", "e", "t", ",", " ",
-                "1", "2", "\t", "c", "o", "n", "s", "e", "c", "t", "e", "t", "u", "r", " ", "\u0628", " ",
-                "\u00E1", "d", "i", "p", "i", "s", "c", "i", "n", "g", " ", "e", "l", "_", "i", "t", ".");
+    void testGlobalEnd() {
+        assertThat(matcher(Bee.GLOBAL_END, "").start()).isZero();
+        assertThat(matcher(Bee.GLOBAL_END, LOREM_IPSUM_TEXT).start()).isEqualTo(65);
+        assertThat(find(Bee.fixed("a").then(Bee.GLOBAL_END), "a\nb")).isFalse();
+        assertThat(find(Bee.fixed("a").then(Bee.GLOBAL_END), Pattern.MULTILINE, "a\nb")).isFalse();
     }
 
     @Test
