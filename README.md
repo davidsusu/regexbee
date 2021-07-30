@@ -1,4 +1,4 @@
-# RegexBee
+# :honeybee: RegexBee
 
 Honeycomb cells for building regular expressions in a fluent way.
 Even complex ones.
