@@ -143,7 +143,7 @@ Of course, with Java 9+ you can use `Map.of` to make this a little bit cleaner:
 BeeFragment substitutedFragment1 = template.substitute(Map.of(
         "p1", Bee.fixed("*").more(),
         "p2", Bee.UNSIGNED_INT,
-        "p3", Bee.fixed("%").more());
+        "p3", Bee.fixed("%").more()));
 ```
 
 You can use placeholders just as any fragment.
