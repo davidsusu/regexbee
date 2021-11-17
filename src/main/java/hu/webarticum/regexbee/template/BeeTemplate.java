@@ -58,11 +58,11 @@ public class BeeTemplate {
         return substitute(Arrays.asList(parameters));
     }
     
-    public BeeFragment substitute(List<BeeFragment> parameters) {
+    public BeeFragment substitute(List<? extends BeeFragment> parameters) {
         return new SubstitutedTemplateFragment(parts, new ArrayList<>(parameters));
     }
 
-    public BeeFragment substitute(Map<String, BeeFragment> parameterMap) {
+    public BeeFragment substitute(Map<String, ? extends BeeFragment> parameterMap) {
         int parameterCount = parameterNames.size();
         ArrayList<BeeFragment> parameters = new ArrayList<>(parameterCount);
         for (int i = 0; i < parameterCount; i++) {
