@@ -22,7 +22,7 @@ Main features:
 
 ## Examples
 
-So, you can build complex patterns in a fluent (quasi-declarative) way:
+So, you can build complex patterns in a fluent, declarative way:
 
 ```java
 BeeFragment myFragment = Bee
@@ -64,7 +64,7 @@ private static final Pattern LOG_ENTRY_PATTERN = Bee
         .toPattern();
 ```
 
-Then, the pattern can be used like this:
+Then, our pattern can be used like this:
 
 ```java
 private void processLine(String line) {
@@ -84,12 +84,12 @@ private void processLine(String line) {
 
 ## Templating
 
-You can insert template parameter placeholders into any place of a structure with
+You can insert placeholders at any place of a structure with
 `Bee.placeholder()` or `Bee.placeholder("someParam")`,
 then you can construct a template with `.toTemplate()`.
 Parameters can be substituted by calling `.substitute(...)`.
 
-Here is a simple example with a single parameter:
+You can create a single-parameter template with the following method:
 
 ```java
 BeeTemplate template = Bee
@@ -99,14 +99,14 @@ BeeTemplate template = Bee
         .toTemplate();
 ```
 
-You can create any number of substituted fragments:
+Then, you can create any number of substituted fragments:
 
 ```java
 BeeFragment substitutedWithWord = template.substitute(Bee.WORD);
 BeeFragment substitutedWithNumber = template.substitute(Bee.UNSIGNED_INT);
 ```
 
-Alternatively, you can use explicitly named placeholders.
+Alternatively, explicitly named placeholders can be used.
 Multiple placeholders with the same name are also supported.
 For example:
 
@@ -184,7 +184,7 @@ public class SeparatedByCommaFragment implements BeeFragment {
 }
 ```
 
-`SeparatedByCommaFragment` can be used as any other fragments:
+Now `SeparatedByCommaFragment` can be used as any other fragments:
 
 ```java
 BeeFragment fragment = Bee
