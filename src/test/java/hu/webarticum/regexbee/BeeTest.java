@@ -548,4 +548,16 @@ class BeeTest extends AbstractBeeTest {
         assertThat(match(fragment, "\"\\\\\"")).isTrue();
     }
     
+    @Test
+    void testEscapedSameChar() {
+        BeeFragment fragment = Bee.escaped('\'', '\'');
+        assertThat(match(fragment, "")).isFalse();
+        assertThat(match(fragment, "''")).isTrue();
+        assertThat(match(fragment, "'''")).isFalse();
+        assertThat(match(fragment, "''''")).isTrue();
+        assertThat(match(fragment, "'lorem'")).isTrue();
+        assertThat(match(fragment, "'lorem''ipsum'")).isTrue();
+        assertThat(match(fragment, "'lorem''ipsum''")).isFalse();
+    }
+    
 }
