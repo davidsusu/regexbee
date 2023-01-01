@@ -2,23 +2,36 @@ plugins {
     id 'java-library'
     id 'eclipse'
     id 'signing'
-    id 'maven'
-    id 'com.palantir.git-version' version '0.12.3'
+    id 'maven-publish'
+    id 'com.palantir.git-version' version '0.15.0'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
 
 sourceCompatibility = "1.8";
 targetCompatibility = "1.8";
 
 group = 'hu.webarticum'
-version = gitVersion().replaceAll(/^v|\.dirty$/, '')
 description = 'Honeycomb cells for building regular expressions in a fluent way'
 
+def moduleName = 'hu.webarticum.regexbee'
 def scmUrl = 'https://github.com/davidsusu/regexbee.git'
 def websiteUrl = scmUrl.replaceAll(/\.git$/, "");
 
+def versionMatcher = gitVersion() =~ /^v?(\d+\.\d+\.)(\d+)(.*)$/
+if (versionMatcher.size() > 0) {
+    def versionMatch = versionMatcher[0]
+	def isVersionDirty = !versionMatch[3].isEmpty()
+	def versionPrefix = versionMatch[1]
+	def versionPatch = isVersionDirty ? (Integer.parseInt(versionMatch[2]) + 1) + "" : versionMatch[2];
+	def versionSuffix = isVersionDirty ? "-SNAPSHOT" : ""
+    version versionPrefix + versionPatch + versionSuffix
+} else {
+    version '0.1.0-SNAPSHOT'
+}
+
 repositories {
-    jcenter()
     mavenCentral()
+    mavenLocal()
 }
 
 configurations {
@@ -34,75 +47,89 @@ sourceSets {
 }
 
 dependencies {
-    implementation 'org.apache.commons:commons-lang3:3.11'
-    
     examplesImplementation sourceSets.main.output
     
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
-    testImplementation 'org.junit.platform:junit-platform-launcher:1.4.1'
-    testImplementation 'org.assertj:assertj-core:3.12.2'
-    
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.7.1'
+    testImplementation 'org.assertj:assertj-core:3.19.0'
+}
+
+defaultTasks 'build'
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+jar {
+    manifest {
+        attributes('Automatic-Module-Name': moduleName)
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 }
 
 signing {
     required { true }
     sign configurations.archives
+    sign publishing.publications.mavenJava
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'failed'
+        showExceptions true
+        exceptionFormat 'full'
+        showCauses true
+        showStackTraces true
+        showStandardStreams false
+    }
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:unchecked'
+    options.deprecation = true
 }
 
-artifacts {
-    archives javadocJar, sourcesJar
-}
-
-if (project.ext.properties.containsKey('mavenRepositoryUrl')) {
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                repository(url: project.ext.mavenRepositoryUrl) {
-                    authentication(
-                        userName: project.ext.mavenRepositoryUsername,
-                        password: project.ext.mavenRepositoryPassword
-                    )
+project.plugins.withType(MavenPublishPlugin).all {
+    PublishingExtension publishing = project.extensions.getByType(PublishingExtension)
+    publishing.publications.withType(MavenPublication).all { mavenPublication ->
+        mavenPublication.pom {
+            name = project.name
+            description = project.description
+            url = websiteUrl
+            licenses {
+                license {
+                    name = 'The Apache Software License, Version 2.0'
+                    url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution = 'repo'
                 }
-                beforeDeployment { MavenDeployment deployment ->
-                    signing.signPom(deployment)
-                }
-                pom.artifactId = project.name
-                pom.project {
-                    name = project.name
-                    description = project.description
-                    url = websiteUrl
-                    licenses {
-                        license {
-                            name 'The Apache Software License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            distribution 'repo'
-                        }
-                    }
-                    scm {
-                        connection 'scm:git:' + scmUrl
-                        developerConnection 'scm:git:' + scmUrl
-                        url scmUrl
-                    }
-                    developers {
-                        developer {
-                            id = 'davidsusu'
-                            name = 'Dávid Horváth'
-                            email = 'horvath@webarticum.hu'
-                        }
-                    }
+            }
+            scm {
+                connection = 'scm:git:' + scmUrl
+                developerConnection = 'scm:git:' + scmUrl
+                url = scmUrl
+            }
+            developers {
+                developer {
+                    id = 'davidsusu'
+                    name = 'Dávid Horváth'
+                    email = 'horvath@webarticum.hu'
                 }
             }
         }
