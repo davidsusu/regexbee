@@ -526,8 +526,8 @@ class BeeTest extends AbstractBeeTest {
     }
 
     @Test
-    void testQuoted() {
-        BeeFragment fragment = Bee.quoted('"', '\\');
+    void testEscaped() {
+        BeeFragment fragment = Bee.escaped('"', '\\');
         assertThat(match(fragment, "")).isTrue();
         assertThat(match(fragment, "\"")).isFalse();
         assertThat(match(fragment, "\\\"")).isTrue();
@@ -537,8 +537,8 @@ class BeeTest extends AbstractBeeTest {
     }
     
     @Test
-    void testEscaped() {
-        BeeFragment fragment = Bee.escaped('"', '\\');
+    void testQuoted() {
+        BeeFragment fragment = Bee.quoted('"', '\\');
         assertThat(match(fragment, "")).isFalse();
         assertThat(match(fragment, "\"")).isFalse();
         assertThat(match(fragment, "\"\"")).isTrue();
@@ -549,8 +549,8 @@ class BeeTest extends AbstractBeeTest {
     }
     
     @Test
-    void testEscapedSameChar() {
-        BeeFragment fragment = Bee.escaped('\'', '\'');
+    void testQuotedSameChar() {
+        BeeFragment fragment = Bee.quoted('\'', '\'');
         assertThat(match(fragment, "")).isFalse();
         assertThat(match(fragment, "''")).isTrue();
         assertThat(match(fragment, "'''")).isFalse();

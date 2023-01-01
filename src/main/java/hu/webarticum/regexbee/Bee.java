@@ -251,11 +251,11 @@ public final class Bee {
                 .build();
     }
 
-    public static BeeFragment escaped(char delimiter, char escaper) {
-        return fixedChar(delimiter).then(quoted(delimiter, escaper)).then(fixedChar(delimiter));
+    public static BeeFragment quoted(char delimiter, char escaper) {
+        return fixedChar(delimiter).then(escaped(delimiter, escaper)).then(fixedChar(delimiter));
     }
 
-    public static BeeFragment quoted(char delimiter, char escaper) {
+    public static BeeFragment escaped(char delimiter, char escaper) {
         return new CharacterRangeFragment(false, "" + delimiter + escaper)
                 .or(fixedChar(escaper).then(CHAR))
                 .any();
