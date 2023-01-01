@@ -252,8 +252,8 @@ class BeeTest extends AbstractBeeTest {
     @Test
     void testDefaultWordBoundary() {
         assertThat(matchAll(Bee.DEFAULT_WORD_BOUNDARY, "")).isEmpty();
-        assertThat(matchAllPositions(Bee.DEFAULT_WORD_BOUNDARY, LOREM_IPSUM_TEXT)).containsExactly(
-                0, 5, 6, 11, 12, 17, 19, 20, 21, 24, 25, 29, 31, 33, 34, 45, 46, 47, 48, 58, 59, 64);
+        assertThat(matchAllPositions(Bee.DEFAULT_WORD_BOUNDARY, "lorem ipsum:dolor :sit: amet 3x")).containsExactly(
+                0, 5, 6, 11, 12, 17, 19, 22, 24, 28, 29, 31);
     }
 
     @Test

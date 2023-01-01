@@ -119,12 +119,12 @@ public final class Bee {
     /** Full sequence of {@link Bee#ASCII_WORD_CHAR}s */
     public static final BeeFragment ASCII_WORD = simple("(?<!\\w)\\w+(?!\\w)");
 
-    /** An ASCII-only Unicode word that does not start with a digit */
-    public static final BeeFragment IDENTIFIER = simple("\\b[a-zA-Z_]\\w+\\b");
-
     /** Full sequence of Unicode letters and numbers */
     public static final BeeFragment WORD =
             simple("(?<=[^\\p{L}\\p{N}]|^)[\\p{L}\\p{N}]+(?=[^\\p{L}\\p{N}]|$)");
+
+    /** An ASCII-only Unicode word that does not start with a digit */
+    public static final BeeFragment IDENTIFIER = simple("(?<=[^\\p{L}\\p{N}]|^)\\b[a-zA-Z_]\\w+(?=[^\\p{L}\\p{N}]|$)");
 
     /** Unsigned integer, e. g. <code>12</code> or <code>594</code> (no boundary included) */
     public static final BeeFragment UNSIGNED_INT = simple("(?:0|[1-9]\\d*)");
