@@ -524,5 +524,28 @@ class BeeTest extends AbstractBeeTest {
                                 Bee.simple("B(?:....)?"))));
         assertThat(matchAll(fragment, "aaa\nbbb\nccc")).containsExactly("aaa\nbbb");
     }
+
+    @Test
+    void testQuoted() {
+        BeeFragment fragment = Bee.quoted('"', '\\');
+        assertThat(match(fragment, "")).isTrue();
+        assertThat(match(fragment, "\"")).isFalse();
+        assertThat(match(fragment, "\\\"")).isTrue();
+        assertThat(match(fragment, "\\\\")).isTrue();
+        assertThat(match(fragment, "\\\"lorem\\\"\\\"ipsum\\\"")).isTrue();
+        assertThat(match(fragment, "\\\"lorem\\\\\"\\\"ipsum\\\"")).isFalse();
+    }
+    
+    @Test
+    void testEscaped() {
+        BeeFragment fragment = Bee.escaped('"', '\\');
+        assertThat(match(fragment, "")).isFalse();
+        assertThat(match(fragment, "\"")).isFalse();
+        assertThat(match(fragment, "\"\"")).isTrue();
+        assertThat(match(fragment, "\"x\\\"y\"")).isTrue();
+        assertThat(match(fragment, "\"\\\"lorem\\\"\\\"ipsum\\\"\"")).isTrue();
+        assertThat(match(fragment, "\"\\\"lorem\\\\\"\\\"ipsum\\\"\"")).isFalse();
+        assertThat(match(fragment, "\"\\\\\"")).isTrue();
+    }
     
 }
