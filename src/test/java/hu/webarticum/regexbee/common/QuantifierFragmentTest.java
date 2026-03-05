@@ -14,7 +14,7 @@ class QuantifierFragmentTest {
     @Test
     void testIllegalConstructorArguments() {
         BeeFragment baseFragment = new SimpleFragment("abc");
-        
+
         assertThatThrownBy(() ->
                 new QuantifierFragment(baseFragment, -1, 1))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -30,7 +30,7 @@ class QuantifierFragmentTest {
     void testZeroOccurence() {
         BeeFragment baseFragment = new SimpleFragment("abc");
         QuantifierFragment quantifierFragment = new QuantifierFragment(baseFragment, 0, 0);
-        
+
         assertThat(quantifierFragment.get()).isEmpty();
     }
 
@@ -39,7 +39,7 @@ class QuantifierFragmentTest {
         BeeFragment baseFragment = new SimpleFragment("abc");
         QuantifierFragment quantifierFragment = new QuantifierFragment(baseFragment, 1, 1);
         String expected = "abc";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
 
@@ -48,7 +48,7 @@ class QuantifierFragmentTest {
         BeeFragment baseFragment = new SimpleFragment("(a|b)");
         QuantifierFragment quantifierFragment = new QuantifierFragment(baseFragment, 0, 1);
         String expected = "(a|b)?";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
 
@@ -57,7 +57,7 @@ class QuantifierFragmentTest {
         BeeFragment baseFragment = new SimpleFragment("abc");
         QuantifierFragment quantifierFragment = new QuantifierFragment(baseFragment, 0, 1);
         String expected = "(?:abc)?";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
 
@@ -69,7 +69,7 @@ class QuantifierFragmentTest {
                 0,
                 QuantifierFragment.MAX_REPETITIONS);
         String expected = "(?:abc)*";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
 
@@ -81,7 +81,7 @@ class QuantifierFragmentTest {
                 1,
                 QuantifierFragment.MAX_REPETITIONS);
         String expected = "(?:abc)+";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
 
@@ -90,7 +90,7 @@ class QuantifierFragmentTest {
         BeeFragment baseFragment = new SimpleFragment("abc");
         QuantifierFragment quantifierFragment = new QuantifierFragment(baseFragment, 5, 5);
         String expected = "(?:abc){5}";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
 
@@ -102,7 +102,7 @@ class QuantifierFragmentTest {
                 5,
                 QuantifierFragment.MAX_REPETITIONS);
         String expected = "(?:abc){5,}";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
 
@@ -111,7 +111,7 @@ class QuantifierFragmentTest {
         BeeFragment baseFragment = new SimpleFragment("abc");
         QuantifierFragment quantifierFragment = new QuantifierFragment(baseFragment, 0, 12);
         String expected = "(?:abc){,12}";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
 
@@ -120,7 +120,7 @@ class QuantifierFragmentTest {
         BeeFragment baseFragment = new SimpleFragment("abc");
         QuantifierFragment quantifierFragment = new QuantifierFragment(baseFragment, 5, 12);
         String expected = "(?:abc){5,12}";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
 
@@ -133,7 +133,7 @@ class QuantifierFragmentTest {
                 QuantifierFragment.MAX_REPETITIONS,
                 Greediness.LAZY);
         String expected = "(?:abc)*?";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
 
@@ -146,7 +146,7 @@ class QuantifierFragmentTest {
                 QuantifierFragment.MAX_REPETITIONS,
                 Greediness.POSSESSIVE);
         String expected = "(?:abc)++";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
 
@@ -159,8 +159,8 @@ class QuantifierFragmentTest {
                 QuantifierFragment.MAX_REPETITIONS,
                 Greediness.POSSESSIVE);
         String expected = "(?:abc){7,}+";
-        
+
         assertThat(quantifierFragment.get()).isEqualTo(expected);
     }
-    
+
 }

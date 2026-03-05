@@ -143,7 +143,7 @@ class StringLiteralFragmentTest {
         assertThat(match("a\\'b\\'''''c", fragment)).isTrue();
         assertThat(match("abc\\", fragment)).isFalse();
     }
-    
+
     @Test
     void testDifferentDelimiters() {
         BeeFragment fragment = StringLiteralFragment.builder()
@@ -166,7 +166,7 @@ class StringLiteralFragmentTest {
         assertThat(match("<ab>>c>", fragment)).isTrue();
         assertThat(match("<a\\>>>b>>>>c\\>>", fragment)).isTrue();
     }
-    
+
     @Test
     void testTwoDollarsDelimiter() {
         BeeFragment fragment = StringLiteralFragment.builder()
@@ -191,7 +191,7 @@ class StringLiteralFragmentTest {
         assertThat(match("$$a$b$c$$", fragment)).isTrue();
         assertThat(match("$$abc\\$$", fragment)).isTrue();
     }
-    
+
     @Test
     void testTwoDollarsDelimiterWithCustomNormalEscaping() {
         BeeFragment fragment = StringLiteralFragment.builder()
@@ -217,7 +217,7 @@ class StringLiteralFragmentTest {
         assertThat(match("$$a$b$c$$", fragment)).isTrue();
         assertThat(match("$$abc-$$", fragment)).isFalse();
     }
-    
+
     @Test
     void testComplexDelimiters() {
         BeeFragment fragment = StringLiteralFragment.builder()
@@ -240,7 +240,7 @@ class StringLiteralFragmentTest {
         assertThat(match("(lorem)abcdef(ippsum)", fragment)).isFalse();
         assertThat(match("(lorem)ab\\\\cdef(ipsum)", fragment)).isTrue();
     }
-    
+
     @Test
     void testEmbeddableFragment() {
         BeeFragment fragment = StringLiteralFragment.builder()
@@ -256,9 +256,9 @@ class StringLiteralFragmentTest {
         assertThat(match("'lorem${ipsum}dolor${sit'}", fragment)).isFalse();
         assertThat(match("'lorem${ip'sum}dolor${s'i'''t\\}amet'", fragment)).isTrue();
     }
-    
+
     private static boolean match(String input, BeeFragment fragment) {
         return fragment.toPattern().matcher(input).matches();
     }
-    
+
 }

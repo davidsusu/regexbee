@@ -11,5 +11,5 @@ public interface CharacterFragment extends BeeFragment {
     public default CharacterFragment and(CharacterFragment fragment) {
         return new IntersectionCharacterFragment(this, fragment);
     }
-    
+
 }

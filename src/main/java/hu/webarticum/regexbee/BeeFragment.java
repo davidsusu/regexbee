@@ -12,7 +12,7 @@ import hu.webarticum.regexbee.template.BeeTemplate;
 
 @FunctionalInterface
 public interface BeeFragment extends Supplier<String> {
-    
+
     public default Pattern toPattern() {
         return Pattern.compile(get());
     }
@@ -20,11 +20,11 @@ public interface BeeFragment extends Supplier<String> {
     public default Pattern toPattern(int flags) {
         return Pattern.compile(get(), flags);
     }
-    
+
     public default BeeTemplate toTemplate() {
         return new BeeTemplate(this);
     }
-    
+
     public default BeeFragment then(BeeFragment nextFragment) {
         return new ConcatenationFragment(this, nextFragment);
     }
@@ -32,7 +32,7 @@ public interface BeeFragment extends Supplier<String> {
     public default BeeFragment or(BeeFragment nextFragment) {
         return new AlternationFragment(this, nextFragment);
     }
-    
+
     public default BeeFragment as(String groupName) {
         return new NamedGroupFragment(this, groupName);
     }

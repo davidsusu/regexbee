@@ -9,9 +9,9 @@ import hu.webarticum.regexbee.BeeFragment;
 import hu.webarticum.regexbee.util.PatternUtil;
 
 public class ConcatenationFragment extends AbstractGeneratingFragment {
-    
+
     private final List<BeeFragment> fragments;
-    
+
 
     public ConcatenationFragment(BeeFragment... fragments) {
         this(Arrays.asList(fragments));
@@ -24,22 +24,22 @@ public class ConcatenationFragment extends AbstractGeneratingFragment {
     private ConcatenationFragment(int size) {
         this.fragments = new ArrayList<>(size);
     }
-    
-    
+
+
     public List<BeeFragment> fragments() {
         return new ArrayList<>();
     }
-    
+
     @Override
     protected String generate() {
         if (fragments.isEmpty()) {
             return "";
         }
-        
+
         if (fragments.size() == 1) {
             return fragments.get(0).get();
         }
-        
+
         StringBuilder resultBuilder = new StringBuilder();
         for (BeeFragment fragment : fragments) {
             String subPattern = fragment.get();
@@ -49,10 +49,10 @@ public class ConcatenationFragment extends AbstractGeneratingFragment {
                 resultBuilder.append(PatternUtil.wrapPattern(subPattern));
             }
         }
-        
+
         return resultBuilder.toString();
     }
-    
+
     @Override
     public BeeFragment then(BeeFragment nextFragment) {
         ConcatenationFragment result = new ConcatenationFragment(fragments.size() + 1);
@@ -60,5 +60,5 @@ public class ConcatenationFragment extends AbstractGeneratingFragment {
         result.fragments.add(nextFragment);
         return result;
     }
-    
+
 }

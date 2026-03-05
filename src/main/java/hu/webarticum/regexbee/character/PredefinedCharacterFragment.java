@@ -12,11 +12,11 @@ public enum PredefinedCharacterFragment implements CharacterFragment {
 
     UNICODE_LETTER("\\p{L}"),
     UNICODE_DIGIT("\\p{N}"),
-    
+
     /*
-    
+
     TODO
-    
+
     POSIX character classes (US-ASCII only)
     \p{Lower}   A lower-case alphabetic character: [a-z]
     \p{Upper}   An upper-case alphabetic character:[A-Z]
@@ -31,13 +31,13 @@ public enum PredefinedCharacterFragment implements CharacterFragment {
     \p{Cntrl}   A control character: [\x00-\x1F\x7F]
     \p{XDigit}  A hexadecimal digit: [0-9a-fA-F]
     \p{Space}   A whitespace character: [ \t\n\x0B\f\r]
-     
+
     java.lang.Character classes (simple java character type)
     \p{javaLowerCase}   Equivalent to java.lang.Character.isLowerCase()
     \p{javaUpperCase}   Equivalent to java.lang.Character.isUpperCase()
     \p{javaWhitespace}  Equivalent to java.lang.Character.isWhitespace()
     \p{javaMirrored}    Equivalent to java.lang.Character.isMirrored()
-     
+
     Classes for Unicode scripts, blocks, categories and binary properties
     \p{IsLatin}     A Latin script character (script)
     \p{InGreek}     A character in the Greek block (block)
@@ -47,18 +47,18 @@ public enum PredefinedCharacterFragment implements CharacterFragment {
     \P{InGreek}     Any character except one in the Greek block (negation)
     [\p{L}&&[^\p{Lu}]]      Any letter except an uppercase letter (subtraction)
     */
-    
+
     ;
-    
-    
+
+
     private final String content;
-    
+
     private PredefinedCharacterFragment(String content) {
         this.content = content;
     }
-    
+
     public String get() {
         return content;
     }
-    
+
 }

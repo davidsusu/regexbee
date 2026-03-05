@@ -9,10 +9,10 @@ import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 
 class BeeTest extends AbstractBeeTest {
-    
+
     private static final String LOREM_IPSUM_TEXT =
             "Lorem ipsum dolor -3 sit amet, 12\tconsectetur \u0628 \u00E1dipiscing el_it.";
-    
+
 
     @Test
     void testChar() {
@@ -27,7 +27,7 @@ class BeeTest extends AbstractBeeTest {
                 "1", "2", "\t", "c", "o", "n", "s", "e", "c", "t", "e", "t", "u", "r", " ", "\u0628", " ",
                 "\u00E1", "d", "i", "p", "i", "s", "c", "i", "n", "g", " ", "e", "l", "_", "i", "t", ".");
     }
-    
+
     @Test
     void testCharThroughLines() {
         assertThat(matchAll(Bee.CHAR_THROUGH_LINES, "")).isEmpty();
@@ -133,7 +133,7 @@ class BeeTest extends AbstractBeeTest {
         assertThat(matchAll(Bee.WHITESPACE, LOREM_IPSUM_TEXT)).containsExactly(
                 " ", " ", " ", " ", " ", " ", "\t", " ", " ", " ");
     }
-    
+
     @Test
     void testSpace() {
         assertThat(matchAll(Bee.SPACE, "")).isEmpty();
@@ -205,7 +205,7 @@ class BeeTest extends AbstractBeeTest {
         assertThat(match(Bee.ASCII_UPPERCASE_LETTER, "Y")).isTrue();
         assertThat(matchAll(Bee.ASCII_UPPERCASE_LETTER, LOREM_IPSUM_TEXT)).containsExactly("L");
     }
-    
+
     @Test
     void testAsciiDigit() {
         assertThat(matchAll(Bee.ASCII_DIGIT, "")).isEmpty();
@@ -215,7 +215,7 @@ class BeeTest extends AbstractBeeTest {
         assertThat(matcher(Bee.ASCII_DIGIT, LOREM_IPSUM_TEXT).start()).isEqualTo(19);
         assertThat(matchAll(Bee.ASCII_DIGIT, LOREM_IPSUM_TEXT)).containsExactly("3", "1", "2");
     }
-    
+
     @Test
     void testAsciiWordChar() {
         assertThat(matchAll(Bee.ASCII_WORD_CHAR, "")).isEmpty();
@@ -226,7 +226,7 @@ class BeeTest extends AbstractBeeTest {
                 "1", "2", "c", "o", "n", "s", "e", "c", "t", "e", "t", "u", "r",
                 "d", "i", "p", "i", "s", "c", "i", "n", "g", "e", "l", "_", "i", "t");
     }
-    
+
     @Test
     void testAsciiWordStart() {
         assertThat(matchAll(Bee.ASCII_WORD_START, "")).isEmpty();
@@ -262,7 +262,7 @@ class BeeTest extends AbstractBeeTest {
         assertThat(matchAll(Bee.IDENTIFIER, LOREM_IPSUM_TEXT)).containsExactly(
                 "Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "el_it");
     }
-    
+
     @Test
     void testLetter() {
         assertThat(matchAll(Bee.LETTER, "")).isEmpty();
@@ -273,7 +273,7 @@ class BeeTest extends AbstractBeeTest {
                 "c", "o", "n", "s", "e", "c", "t", "e", "t", "u", "r", "\u0628",
                 "\u00E1", "d", "i", "p", "i", "s", "c", "i", "n", "g", "e", "l", "i", "t");
     }
-    
+
     @Test
     void testDigit() {
         assertThat(matchAll(Bee.DIGIT, "")).isEmpty();
@@ -356,7 +356,7 @@ class BeeTest extends AbstractBeeTest {
         assertThat(matchAllPositions(Bee.simple("s.m"), "ipsum")).containsExactly(2);
         assertThat(matchAllPositions(Bee.simple("or"), "lorem")).containsExactly(1);
     }
-    
+
     @Test
     void testChecked() {
         assertThat(match(Bee.checked("lorem"), "lorem")).isTrue();
@@ -380,7 +380,7 @@ class BeeTest extends AbstractBeeTest {
         assertThat(match(Bee.range(false, 'b', 'z'), "a")).isTrue();
         assertThat(match(Bee.range(false, 'b', 'b'), "a")).isTrue();
     }
-    
+
     @Test
     void testFixed() {
         assertThat(match(Bee.fixed("lorem"), "lorem")).isTrue();
@@ -443,7 +443,7 @@ class BeeTest extends AbstractBeeTest {
         assertThat(matchAll(Bee.lookBehind(Bee.simple("or")).then(Bee.CHAR), LOREM_IPSUM_TEXT))
                 .containsExactly("e", " ");
     }
-    
+
     @Test
     void testLookBehindNot() {
         assertThat(matchAll(Bee.lookBehindNot(Bee.CHAR), "")).containsExactly("");
@@ -535,7 +535,7 @@ class BeeTest extends AbstractBeeTest {
         assertThat(match(fragment, "\\\"lorem\\\"\\\"ipsum\\\"")).isTrue();
         assertThat(match(fragment, "\\\"lorem\\\\\"\\\"ipsum\\\"")).isFalse();
     }
-    
+
     @Test
     void testQuoted() {
         BeeFragment fragment = Bee.quoted('"', '\\');
@@ -547,7 +547,7 @@ class BeeTest extends AbstractBeeTest {
         assertThat(match(fragment, "\"\\\"lorem\\\\\"\\\"ipsum\\\"\"")).isFalse();
         assertThat(match(fragment, "\"\\\\\"")).isTrue();
     }
-    
+
     @Test
     void testQuotedSameChar() {
         BeeFragment fragment = Bee.quoted('\'', '\'');
@@ -560,5 +560,5 @@ class BeeTest extends AbstractBeeTest {
         assertThat(match(fragment, "'lorem'ipsum'dolor'")).isFalse();
         assertThat(match(fragment, "'lorem''ipsum''")).isFalse();
     }
-    
+
 }

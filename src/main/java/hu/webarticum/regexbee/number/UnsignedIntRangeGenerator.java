@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 // TODO: develop a non-backtracking version
 
 class UnsignedIntRangeGenerator {
-    
+
     private static final String DIGIT = "\\d";
 
     private static final String DIGITS_N = "\\d{%d}";
@@ -19,11 +19,11 @@ class UnsignedIntRangeGenerator {
     private static final String DIGIT_RANGE = "[%d-%d]";
 
     private static final String DIGIT_RANGE_TWO = "[%d%d]";
-    
+
     private static final Pattern ZEROS_PATTERN = Pattern.compile("0*");
-    
+
     private static final Pattern NINES_PATTERN = Pattern.compile("9*");
-    
+
 
     // from and to are non-negative, and from <= to
     public String generate(BigInteger from, BigInteger to) {
@@ -38,17 +38,17 @@ class UnsignedIntRangeGenerator {
 
     private String generateSameLength(String from, String to) {
         int length = from.length();
-        
+
         String commonPrefix = longestCommonPrefixOf(from, to);
         int commonLength = commonPrefix.length();
-        
+
         if (commonLength == length) {
             return from;
         }
-        
-        
+
+
         StringBuilder resultBuilder = new StringBuilder(commonPrefix);
-        
+
         int fromNextDigit = from.charAt(commonLength) - '0';
         int toNextDigit = to.charAt(commonLength) - '0';
 
@@ -64,7 +64,7 @@ class UnsignedIntRangeGenerator {
         if (!fromZeros || !toNines) {
             resultBuilder.append("(?:");
         }
-        
+
         if (maxBetween >= minBetween) {
             resultBuilder.append(digitBetween(minBetween, maxBetween));
             resultBuilder.append(anyDigitNTimes(length - commonLength - 1));
@@ -89,10 +89,10 @@ class UnsignedIntRangeGenerator {
         if (!fromZeros || !toNines) {
             resultBuilder.append(')');
         }
-        
+
         return resultBuilder.toString();
     }
-    
+
     private String generateDifferentLength(String from, String to) {
         StringBuilder resultBuilder = new StringBuilder();
 
@@ -101,10 +101,10 @@ class UnsignedIntRangeGenerator {
 
         String toAfterPart = to.substring(1);
         boolean toNines = NINES_PATTERN.matcher(toAfterPart).matches();
-        
+
         int toFirstDigit = to.charAt(0) - '0';
         int toMaxFullDigit = toNines ? toFirstDigit : toFirstDigit - 1;
-        
+
         List<String> branches = new ArrayList<>();
 
         if (!toNines) {
@@ -133,19 +133,19 @@ class UnsignedIntRangeGenerator {
         branches.add(smallNumberBranchBuilder.toString());
 
         resultBuilder.append(branches.size() > 1 ? String.format("(?:%s)", String.join("|", branches)) : branches.get(0));
-        
+
         return resultBuilder.toString();
     }
-    
+
     private void anyUpToWithLeadingZeros(String to, StringBuilder resultBuilder) {
         int length = to.length();
         int firstDigit = to.charAt(0) - '0';
-        
+
         if (length == 1) {
             resultBuilder.append(digitBetween(0, firstDigit));
             return;
         }
-        
+
         if (firstDigit > 0) {
             resultBuilder.append("(?:");
             resultBuilder.append(digitBetween(0, firstDigit - 1));
@@ -158,7 +158,7 @@ class UnsignedIntRangeGenerator {
             resultBuilder.append(')');
         }
     }
-    
+
     private void anyFromToNines(String from, StringBuilder resultBuilder) {
         int length = from.length();
         int firstDigit = from.charAt(0) - '0';
@@ -180,7 +180,7 @@ class UnsignedIntRangeGenerator {
             resultBuilder.append(')');
         }
     }
-    
+
     private String digitBetween(int min, int max) {
         if (min == max) {
             return Integer.toString(min);
@@ -192,7 +192,7 @@ class UnsignedIntRangeGenerator {
             return String.format(DIGIT_RANGE, min, max);
         }
     }
-    
+
     private String longestCommonPrefixOf(String str1, String str2) {
         int commonLength = Math.min(str1.length(), str2.length());
         for (int i = 0; i < commonLength; i++) {
@@ -220,5 +220,5 @@ class UnsignedIntRangeGenerator {
             return String.format(DIGITS_N, n);
         }
     }
-    
+
 }

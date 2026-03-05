@@ -13,7 +13,7 @@ class NamedGroupFragmentTest {
         NamedGroupFragment namedGroupFragment =
                 new NamedGroupFragment(new SimpleFragment(""), "g1");
         String expected = "(?<g1>)";
-        
+
         assertThat(namedGroupFragment.get()).isEqualTo(expected);
     }
 
@@ -22,7 +22,7 @@ class NamedGroupFragmentTest {
         NamedGroupFragment namedGroupFragment =
                 new NamedGroupFragment(new SimpleFragment("abc"), "G1");
         String expected = "(?<G1>abc)";
-        
+
         assertThat(namedGroupFragment.get()).isEqualTo(expected);
     }
 

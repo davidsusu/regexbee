@@ -30,5 +30,5 @@ class IntersectionCharacterFragmentTest extends AbstractBeeTest {
         assertThat(filterMatching(fragment, "a", "b", "c", "f", "g", "h", "i", "k", "n", "p", "q", "2a", "F"))
                 .containsExactly("f", "g", "h", "i");
     }
-    
+
 }

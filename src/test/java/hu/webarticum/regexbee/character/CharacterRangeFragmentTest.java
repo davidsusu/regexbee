@@ -55,5 +55,5 @@ class CharacterRangeFragmentTest extends AbstractBeeTest {
                 .containsExactly("g", "k", "p", "s", ",", ":");
         assertThat(fragment.toPattern().matcher("amufareti").replaceAll("_")).isEqualTo("am_far___");
     }
-    
+
 }

@@ -18,7 +18,7 @@ class PatternUtilTest {
         assertThat(matchFixedOfTo(".", "x")).isFalse();
         assertThat(matchFixedOfTo(".+", "xy")).isFalse();
     }
-    
+
     private boolean matchFixedOfToSelf(String fixedPattern) {
         return matchFixedOfTo(fixedPattern, fixedPattern);
     }
@@ -68,7 +68,7 @@ class PatternUtilTest {
         assertThat(PatternUtil.isSpecialCharacter(' ')).isFalse();
         assertThat(PatternUtil.isSpecialCharacter('\0')).isFalse();
     }
-    
+
     @Test
     void testIsValidGroupName() {
         assertThat(PatternUtil.isValidGroupName("")).isFalse();
@@ -117,7 +117,7 @@ class PatternUtilTest {
         assertThat(PatternUtil.isSafePattern("(?:abc)")).isTrue();
         assertThat(PatternUtil.isSafePattern("(?:a|b|c)")).isTrue();
     }
-    
+
     @Test
     void testNonSafePatterns() {
         assertThat(PatternUtil.isSafePattern("|")).isFalse();
@@ -133,7 +133,7 @@ class PatternUtilTest {
         assertThat(PatternUtil.wrapPattern("a")).isEqualTo("(?:a)");
         assertThat(PatternUtil.wrapPattern("(?:a)")).isEqualTo("(?:(?:a))");
         assertThat(PatternUtil.wrapPattern("\\w|xy")).isEqualTo("(?:\\w|xy)");
-        
+
     }
-    
+
 }

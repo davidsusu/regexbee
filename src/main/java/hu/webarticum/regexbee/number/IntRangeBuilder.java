@@ -6,38 +6,38 @@ import hu.webarticum.regexbee.BeeFragment;
 import hu.webarticum.regexbee.common.LazyFragment;
 
 public class IntRangeBuilder {
-    
+
     public enum PlusSignPolicy { DENY, ALLOW, REQUIRE }
-    
+
     public enum BoundPolicy { NONE, DIGIT_ONLY, DIGIT_SIGN, DIGIT_SIGN_NOFRACTION }
-    
-    
+
+
     private BigInteger low;
-    
+
     private boolean lowInclusive;
-    
+
     private BigInteger high;
-    
+
     private boolean highInclusive;
-    
+
 
     private PlusSignPolicy plusSignPolicy = PlusSignPolicy.DENY;
-    
+
     private boolean allowNegativeZero = false;
-    
+
     private boolean allowLeadingZeros = false;
 
     private BoundPolicy boundPolicy = BoundPolicy.DIGIT_SIGN;
-    
-    
+
+
     private String generate(BigInteger from, BigInteger to) {
         UnsignedIntRangeGenerator generator = new UnsignedIntRangeGenerator();
-        
+
         StringBuilder resultBuilder = new StringBuilder();
-        
+
         boolean hasNegative = from.signum() == -1;
         boolean hasNonNegative = to.signum() != -1;
-        
+
         if (hasNegative && hasNonNegative) {
             resultBuilder.append("(?:");
         }
@@ -47,24 +47,24 @@ public class IntRangeBuilder {
             if (allowLeadingZeros) {
                 resultBuilder.append("0*");
             }
-            
+
             BigInteger subFrom;
             if (hasNonNegative) {
                 subFrom = allowNegativeZero ? BigInteger.ZERO : BigInteger.ONE;
             } else {
                 subFrom = to.abs();
             }
-            
+
             BigInteger subTo = from.abs();
-            
+
             resultBuilder.append(generator.generate(subFrom, subTo));
         }
-        
+
         if (hasNonNegative) {
             if (hasNegative) {
                 resultBuilder.append('|');
             }
-            
+
             boolean allowPlus = (plusSignPolicy == PlusSignPolicy.ALLOW);
             if (plusSignPolicy == PlusSignPolicy.REQUIRE) {
                 resultBuilder.append("\\+");
@@ -84,30 +84,30 @@ public class IntRangeBuilder {
             if (allowLeadingZeros) {
                 resultBuilder.append("0*");
             }
-            
+
             BigInteger subFrom = hasNegative ? BigInteger.ZERO : from;
-            
+
             resultBuilder.append(generator.generate(subFrom, to));
         }
-        
+
         if (hasNegative && hasNonNegative) {
             resultBuilder.append(')');
         }
-        
+
         if (boundPolicy == BoundPolicy.DIGIT_SIGN_NOFRACTION) {
             resultBuilder.append("(?!\\.?\\d)");
         } else if (boundPolicy != BoundPolicy.NONE) {
             resultBuilder.append("(?!\\d)");
         }
-        
+
         return resultBuilder.toString();
     }
-    
+
 
     public SetHighBuilder low(long low) {
         return low(BigInteger.valueOf(low), true);
     }
-    
+
     public SetHighBuilder low(BigInteger low) {
         return low(low, true);
     }
@@ -115,25 +115,25 @@ public class IntRangeBuilder {
     public SetHighBuilder low(long low, boolean inclusive) {
         return low(BigInteger.valueOf(low), inclusive);
     }
-    
+
     public SetHighBuilder low(BigInteger low, boolean inclusive) {
         this.low = low;
         this.lowInclusive = inclusive;
         return new SetHighBuilder();
     }
-    
-    
+
+
     public class SetHighBuilder {
-        
+
         private SetHighBuilder() {
             // hidden constructor
         }
-        
+
 
         public TerminalBuilder high(long high) {
             return high(BigInteger.valueOf(high), true);
         }
-        
+
         public TerminalBuilder high(BigInteger high) {
             return high(high, false);
         }
@@ -141,23 +141,23 @@ public class IntRangeBuilder {
         public TerminalBuilder high(long high, boolean inclusive) {
             return high(BigInteger.valueOf(high), inclusive);
         }
-        
+
         public TerminalBuilder high(BigInteger high, boolean inclusive) {
             IntRangeBuilder.this.high = high;
             IntRangeBuilder.this.highInclusive = inclusive;
             return new TerminalBuilder();
         }
-        
+
     }
-    
-    
+
+
     public class TerminalBuilder {
-        
+
         private TerminalBuilder() {
             // hidden constructor
         }
-        
-        
+
+
         public TerminalBuilder allowPlusSign() {
             return plusSignPolicy(PlusSignPolicy.ALLOW);
         }
@@ -182,7 +182,7 @@ public class IntRangeBuilder {
         public TerminalBuilder denyNegativeZero() {
             return allowNegativeZero(false);
         }
-        
+
         public TerminalBuilder allowNegativeZero(boolean allowNegativeZero) {
             IntRangeBuilder.this.allowNegativeZero = allowNegativeZero;
             return this;
@@ -195,7 +195,7 @@ public class IntRangeBuilder {
         public TerminalBuilder denyLeadingZeros() {
             return allowLeadingZeros(false);
         }
-        
+
         public TerminalBuilder allowLeadingZeros(boolean allowLeadingZeros) {
             IntRangeBuilder.this.allowLeadingZeros = allowLeadingZeros;
             return this;
@@ -205,20 +205,20 @@ public class IntRangeBuilder {
             IntRangeBuilder.this.boundPolicy = boundPolicy;
             return this;
         }
-        
+
 
         public BeeFragment build() {
             BigInteger from = lowInclusive ? low : low.add(BigInteger.ONE);
             BigInteger to = highInclusive ? high : high.subtract(BigInteger.ONE);
-            
+
             if (from.compareTo(to) > 0) {
                 throw new IllegalArgumentException(String.format("Invalid range %s(%b)..%s(%b)",
                         low, lowInclusive, high, highInclusive));
             }
-            
+
             return new LazyFragment(() -> IntRangeBuilder.this.generate(from, to));
         }
-        
+
     }
 
 }

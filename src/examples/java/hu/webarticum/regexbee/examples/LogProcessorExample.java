@@ -12,11 +12,11 @@ import hu.webarticum.regexbee.Bee;
 public class LogProcessorExample {
 
     private static final String TIMESTAMP_NAME = "timestamp";
-    
+
     private static final String SEVERITY_NAME = "severity";
-    
+
     private static final String MESSAGE_NAME = "message";
-    
+
     private static final Pattern LOG_ENTRY_PATTERN = Bee
             .then(Bee.BEGIN)
             .then(Bee.TIMESTAMP.as(TIMESTAMP_NAME))
@@ -26,7 +26,7 @@ public class LogProcessorExample {
             .then(Bee.ANYTHING.as(MESSAGE_NAME))
             .then(Bee.END)
             .toPattern();
-    
+
 
     public static void main(String[] args) throws IOException {
         ClassLoader classLoader = LogProcessorExample.class.getClassLoader();
@@ -35,17 +35,17 @@ public class LogProcessorExample {
             process(new BufferedReader(new InputStreamReader(in)));
         }
     }
-    
+
     private static void process(BufferedReader bufferedReader) throws IOException {
         String line;
         while ((line = bufferedReader.readLine()) != null) {
             processLine(line);
         }
     }
-    
+
     private static void processLine(String line) {
         System.out.println("--------------------");
-        
+
         Matcher matcher = LOG_ENTRY_PATTERN.matcher(line);
         if (!matcher.matches()) {
             System.out.println(String.format("Unparseable line: %s", line));
@@ -56,5 +56,5 @@ public class LogProcessorExample {
         System.out.println(String.format("severity: %s", matcher.group(SEVERITY_NAME)));
         System.out.println(String.format("message: %s", matcher.group(MESSAGE_NAME)));
     }
-    
+
 }

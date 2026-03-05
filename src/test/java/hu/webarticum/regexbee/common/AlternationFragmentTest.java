@@ -12,7 +12,7 @@ class AlternationFragmentTest {
     void testNoInput() {
         AlternationFragment alternationFragment = new AlternationFragment();
         String expected = "";
-        
+
         assertThat(alternationFragment.get()).isEqualTo(expected);
     }
 
@@ -20,7 +20,7 @@ class AlternationFragmentTest {
     void testSingleInput() {
         AlternationFragment alternationFragment = new AlternationFragment(new SimpleFragment("ab"));
         String expected = "ab";
-        
+
         assertThat(alternationFragment.get()).isEqualTo(expected);
     }
 
@@ -36,8 +36,8 @@ class AlternationFragmentTest {
                 new SimpleFragment("xx|yy"),
                 new SimpleFragment("(?:abc|def)"));
         String expected = "(?:ab|(?:ab|)|(abc)|(?:|)||\\w.?|(?:xx|yy)|(?:abc|def))";
-        
+
         assertThat(alternationFragment.get()).isEqualTo(expected);
     }
-    
+
 }

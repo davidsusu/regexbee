@@ -12,7 +12,7 @@ class ConcatenationFragmentTest {
     void testNoInput() {
         ConcatenationFragment listFragment = new ConcatenationFragment();
         String expected = "";
-        
+
         assertThat(listFragment.get()).isEqualTo(expected);
     }
 
@@ -20,7 +20,7 @@ class ConcatenationFragmentTest {
     void testSingleInput() {
         ConcatenationFragment listFragment = new ConcatenationFragment(new SimpleFragment("ab"));
         String expected = "ab";
-        
+
         assertThat(listFragment.get()).isEqualTo(expected);
     }
 
@@ -36,8 +36,8 @@ class ConcatenationFragmentTest {
                 new SimpleFragment("xx|yy"),
                 new SimpleFragment("(?:abc|def)"));
         String expected = "ab(?:ab|)(abc)(?:|)\\w.?(?:xx|yy)(?:abc|def)";
-        
+
         assertThat(listFragment.get()).isEqualTo(expected);
     }
-    
+
 }

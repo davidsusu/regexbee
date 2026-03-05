@@ -69,7 +69,7 @@ Then, our pattern can be used like this:
 ```java
 private void processLine(String line) {
     System.out.println("--------------------");
-    
+
     Matcher matcher = LOG_ENTRY_PATTERN.matcher(line);
     if (!matcher.matches()) {
         System.out.println(String.format("Unparseable line: %s", line));
@@ -163,24 +163,24 @@ To create a custom fragment, just implement the `BeeFragment` interface:
 
 ```java
 public class SeparatedByCommaFragment implements BeeFragment {
-    
+
     private final List<BeeFragment> fragments;
-    
-    
+
+
     public SeparatedByCommaFragment(BeeFragment... fragments) {
         this(Arrays.asList(fragments));
     }
-    
+
     public SeparatedByCommaFragment(Collection<BeeFragment> fragments) {
         this.fragments = new ArrayList<>(fragments);
     }
-    
-    
+
+
     @Override
     public String get() {
         return fragments.stream().map(BeeFragment::get).collect(Collectors.joining(","));
     }
-    
+
 }
 ```
 

@@ -34,27 +34,27 @@ public class CustomFragmentExample {
             System.out.println();
         }
     }
-    
-    
+
+
     private static class SeparatedByCommaFragment implements BeeFragment {
-        
+
         private final List<BeeFragment> fragments;
-        
-        
+
+
         private SeparatedByCommaFragment(BeeFragment... fragments) {
             this(Arrays.asList(fragments));
         }
-        
+
         private SeparatedByCommaFragment(Collection<BeeFragment> fragments) {
             this.fragments = new ArrayList<>(fragments);
         }
-        
-        
+
+
         @Override
         public String get() {
             return fragments.stream().map(BeeFragment::get).collect(Collectors.joining(","));
         }
-        
+
     }
-    
+
 }

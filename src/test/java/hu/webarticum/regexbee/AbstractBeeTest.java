@@ -24,7 +24,7 @@ abstract public class AbstractBeeTest {
     protected static boolean find(BeeFragment fragment, int modifiers, String input) {
         return fragment.toPattern(modifiers).matcher(input).find();
     }
-    
+
     protected static List<String> matchAll(BeeFragment fragment, String input) {
         return matchAll(fragment, 0, input);
     }
@@ -37,7 +37,7 @@ abstract public class AbstractBeeTest {
         }
         return result;
     }
-    
+
     protected static List<Integer> matchAllPositions(BeeFragment fragment, String input) {
         return matchAllPositions(fragment, 0, input);
     }
@@ -62,7 +62,7 @@ abstract public class AbstractBeeTest {
     protected List<String> filterMatching(BeeFragment fragment, List<String> subjects) {
         return filterMatching(fragment, 0, subjects);
     }
-    
+
     protected List<String> filterMatching(BeeFragment fragment, int modifiers, List<String> subjects) {
         Pattern pattern = fragment.toPattern(modifiers);
         return subjects.stream()
@@ -81,5 +81,5 @@ abstract public class AbstractBeeTest {
         }
         return matcher;
     }
-    
+
 }

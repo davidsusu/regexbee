@@ -19,7 +19,7 @@ public class NamedGroupExample {
                 .then(Bee.simple(".")
                         .then(Bee.ASCII_WORD)
                         .optional());
-        
+
         System.out.println("Generated pattern:");
         System.out.println(fragment.get());
         System.out.println();
@@ -37,7 +37,7 @@ public class NamedGroupExample {
             System.out.println();
         }
     }
-    
+
     private static String spaces(int count) {
         StringBuilder resultBuilder = new StringBuilder();
         for (int i = 0; i < count; i++) {
@@ -45,5 +45,5 @@ public class NamedGroupExample {
         }
         return resultBuilder.toString();
     }
-    
+
 }

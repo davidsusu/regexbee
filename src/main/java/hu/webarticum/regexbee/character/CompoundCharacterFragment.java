@@ -8,12 +8,12 @@ import java.util.List;
 import hu.webarticum.regexbee.common.AbstractGeneratingFragment;
 
 public class CompoundCharacterFragment extends AbstractGeneratingFragment implements CharacterFragment {
-    
+
     private final boolean positive;
 
     private final List<CharacterFragment> fragments;
-    
-    
+
+
     public CompoundCharacterFragment(CharacterFragment... fragments) {
         this(true, fragments);
     }
@@ -36,14 +36,14 @@ public class CompoundCharacterFragment extends AbstractGeneratingFragment implem
     public CharacterFragment or(CharacterFragment fragment) {
         return new CompoundCharacterFragment(extend(fragments, fragment));
     }
-    
+
     private static List<CharacterFragment> extend(List<CharacterFragment> fragments, CharacterFragment next) {
         List<CharacterFragment> result = new ArrayList<>(fragments.size() + 1);
         result.addAll(fragments);
         result.add(next);
         return result;
     }
-    
+
     @Override
     protected String generate() {
         StringBuilder resultBuilder = new StringBuilder("[");
@@ -56,5 +56,5 @@ public class CompoundCharacterFragment extends AbstractGeneratingFragment implem
         resultBuilder.append(']');
         return resultBuilder.toString();
     }
-    
+
 }

@@ -42,7 +42,7 @@ public final class Bee {
 
     /** One or more characters, including newline, see {@link Bee#CHAR_THROUGH_LINES} */
     public static final BeeFragment SOMETHING_THROUGH_LINES = CHAR_THROUGH_LINES.more();
-    
+
     /** Nothing (empty string without restrictions) */
     public static final BeeFragment NOTHING = simple("");
 
@@ -149,8 +149,8 @@ public final class Bee {
     private Bee() {
         // utility class
     }
-    
-    
+
+
     // to be visually consistent
     public static BeeFragment then(BeeFragment fragment) {
         return fragment;
@@ -164,7 +164,7 @@ public final class Bee {
     public static BeeTemplateParameter placeholder(String name) {
         return new BeeTemplateParameter(name);
     }
-    
+
     public static BeeFragment simple(String pattern) {
         return new SimpleFragment(pattern);
     }
@@ -205,7 +205,7 @@ public final class Bee {
     public static BeeFragment ref(String groupName) {
         return new NamedBackreferenceFragment(groupName);
     }
-    
+
     public static BeeFragment lookBehind(BeeFragment fragment) {
         return new LookAroundFragment(fragment, LookAroundFragment.Type.BEHIND_POSITIVE);
     }
@@ -221,7 +221,7 @@ public final class Bee {
     public static BeeFragment lookAheadNot(BeeFragment fragment) {
         return new LookAroundFragment(fragment, LookAroundFragment.Type.AHEAD_NEGATIVE);
     }
-    
+
     public static BeeFragment atomic(BeeFragment fragment) {
         return new AtomicGroupFragment(fragment);
     }

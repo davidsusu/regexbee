@@ -9,12 +9,12 @@ import hu.webarticum.regexbee.common.AbstractGeneratingFragment;
 import hu.webarticum.regexbee.util.PatternUtil;
 
 public class CharacterRangeFragment extends AbstractGeneratingFragment implements CharacterFragment {
-    
+
     private final boolean positiveMatching;
 
     private final List<CharacterRange> ranges;
-    
-    
+
+
     public CharacterRangeFragment(char from, char to) {
         this(true, from, to);
     }
@@ -35,13 +35,13 @@ public class CharacterRangeFragment extends AbstractGeneratingFragment implement
         this.positiveMatching = builder.positiveMatching;
         this.ranges = cleanRanges(builder.ranges);
     }
-    
+
     private List<CharacterRange> cleanRanges(List<CharacterRange> ranges) {
         ArrayList<CharacterRange> result = new ArrayList<>(ranges);
         if (ranges.size() < 2) {
             return ranges;
         }
-        
+
         result.sort(this::sortRangesForClean);
         Iterator<CharacterRange> iterator = result.iterator();
         CharacterRange previous = iterator.next();
@@ -56,21 +56,21 @@ public class CharacterRangeFragment extends AbstractGeneratingFragment implement
         result.trimToSize();
         return result;
     }
-    
+
     private int sortRangesForClean(CharacterRange range1, CharacterRange range2) {
         int fromCmp = Character.compare(range1.from, range2.from);
         if (fromCmp != 0) {
             return fromCmp;
         }
-        
+
         return 0 - Character.compare(range1.to, range2.to);
     }
-    
+
     public static CharacterRangeFragmentBuilder builder() {
         return new CharacterRangeFragmentBuilder();
     }
-    
-    
+
+
     @Override
     protected String generate() {
         StringBuilder resultBuilder = new StringBuilder("[");
@@ -83,19 +83,19 @@ public class CharacterRangeFragment extends AbstractGeneratingFragment implement
         resultBuilder.append(']');
         return resultBuilder.toString();
     }
-    
-    
+
+
     public static class CharacterRangeFragmentBuilder {
 
         private boolean positiveMatching = true;
 
         private final List<CharacterRange> ranges = new ArrayList<>();
-        
-        
+
+
         private CharacterRangeFragmentBuilder() {
             // use builder()
         }
-        
+
 
         public CharacterRangeFragmentBuilder withPositiveMatching() {
             return withPositiveMatching(true);
@@ -136,33 +136,33 @@ public class CharacterRangeFragment extends AbstractGeneratingFragment implement
             ranges.add(new CharacterRange(from, to));
             return this;
         }
-        
+
         public CharacterRangeFragment build() {
             return new CharacterRangeFragment(this);
         }
-        
+
     }
-    
-    
+
+
     private static class CharacterRange {
-        
+
         private final char from;
-        
+
         private final char to;
-        
-        
+
+
         private CharacterRange(char from, char to) {
             if (from > to) {
                 throw new IllegalArgumentException(String.format(
                         "from can not be greater then to, but (%c=%d, %c=%2d) given",
                         from, (int) from, to, (int) to));
             }
-            
+
             this.from = from;
             this.to = to;
         }
-        
-        
+
+
         @Override
         public String toString() {
             StringBuilder resultBuilder = new StringBuilder();
@@ -175,7 +175,7 @@ public class CharacterRangeFragment extends AbstractGeneratingFragment implement
             }
             return resultBuilder.toString();
         }
-        
+
     }
-    
+
 }

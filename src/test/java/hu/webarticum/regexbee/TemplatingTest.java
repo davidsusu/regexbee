@@ -26,12 +26,12 @@ class TemplatingTest extends AbstractBeeTest {
                 .then(Bee.placeholder())
                 .then(Bee.fixed(")))"))
                 .toTemplate();
-        
+
         BeeFragment substitutedFragment1 = template.substitute(Bee.intBetween(3, 12));
         assertThat(match(substitutedFragment1, "(((7)))")).isTrue();
         assertThat(match(substitutedFragment1, "(((15)))")).isFalse();
         assertThat(match(substitutedFragment1, "11")).isFalse();
-        
+
         BeeFragment substitutedFragment2 = template.substitute(Bee.ASCII_WORD);
         assertThat(match(substitutedFragment2, "(((lorem)))")).isTrue();
         assertThat(match(substitutedFragment2, "(((!!!)))")).isFalse();
@@ -52,7 +52,7 @@ class TemplatingTest extends AbstractBeeTest {
         assertThatThrownBy(() -> template.substitute(Bee.WORD, Bee.WORD, Bee.WORD))
                 .isInstanceOf(IllegalArgumentException.class);
     }
-    
+
     @Test
     void testMultipleParameters() {
         BeeTemplate template = Bee
@@ -109,7 +109,7 @@ class TemplatingTest extends AbstractBeeTest {
         parameters1.put("p2", Bee.CHAR);
         assertThatThrownBy(() -> template.substitute(parameters1))
                 .isInstanceOf(IllegalArgumentException.class);
-        
+
         Map<String, BeeFragment> parameters2 = new HashMap<String, BeeFragment>();
         parameters2.put("p1", Bee.CHAR);
         parameters2.put("pp2", Bee.WORD);
@@ -141,7 +141,7 @@ class TemplatingTest extends AbstractBeeTest {
         assertThat(match(substitutedFragment1, "*** 12 * 34 %%")).isTrue();
         assertThat(match(substitutedFragment1, "*** x *** *** %%%")).isFalse();
         assertThat(match(substitutedFragment1, "*** 43  *** %")).isFalse();
-        
+
         Map<String, BeeFragment> parameters2 = new HashMap<String, BeeFragment>();
         parameters2.put("p1", Bee.fixed("0").more());
         parameters2.put("p2", Bee.SPACE.any());
@@ -151,7 +151,7 @@ class TemplatingTest extends AbstractBeeTest {
         assertThat(match(substitutedFragment2, "0  00  ")).isTrue();
         assertThat(match(substitutedFragment2, "0 00  ")).isFalse();
         assertThat(match(substitutedFragment2, "0   0 0  ")).isFalse();
-        
+
     }
 
 }
