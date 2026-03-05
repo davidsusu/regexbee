@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 abstract public class AbstractBeeTest {
@@ -63,8 +64,9 @@ abstract public class AbstractBeeTest {
     }
     
     protected List<String> filterMatching(BeeFragment fragment, int modifiers, List<String> subjects) {
+        Pattern pattern = fragment.toPattern(modifiers);
         return subjects.stream()
-                .filter(fragment.toPattern(modifiers).asMatchPredicate())
+                .filter(s -> pattern.matcher(s).matches())
                 .collect(Collectors.toList());
     }
 

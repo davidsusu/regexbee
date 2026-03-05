@@ -3,12 +3,9 @@ plugins {
     id 'eclipse'
     id 'signing'
     id 'maven-publish'
-    id 'com.palantir.git-version' version '0.15.0'
-    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
+    id 'org.ajoberstar.grgit' version '5.3.2'
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
 }
-
-sourceCompatibility = "1.8";
-targetCompatibility = "1.8";
 
 group = 'hu.webarticum'
 description = 'Honeycomb cells for building regular expressions in a fluent way'
@@ -17,16 +14,15 @@ def moduleName = 'hu.webarticum.regexbee'
 def scmUrl = 'https://github.com/davidsusu/regexbee.git'
 def websiteUrl = scmUrl.replaceAll(/\.git$/, "");
 
-def versionMatcher = gitVersion() =~ /^v?(\d+\.\d+\.)(\d+)(.*)$/
+def automaticVersion = '0.1.0-SNAPSHOT'
+def versionMatcher = grgit.describe() =~ /^v?(\d+\.\d+\.)(\d+)(.*)$/
 if (versionMatcher.size() > 0) {
     def versionMatch = versionMatcher[0]
-	def isVersionDirty = !versionMatch[3].isEmpty()
-	def versionPrefix = versionMatch[1]
-	def versionPatch = isVersionDirty ? (Integer.parseInt(versionMatch[2]) + 1) + "" : versionMatch[2];
-	def versionSuffix = isVersionDirty ? "-SNAPSHOT" : ""
-    version versionPrefix + versionPatch + versionSuffix
-} else {
-    version '0.1.0-SNAPSHOT'
+    def isVersionDirty = !versionMatch[3].isEmpty()
+    def versionPrefix = versionMatch[1]
+    def versionPatch = isVersionDirty ? (Integer.parseInt(versionMatch[2]) + 1) + "" : versionMatch[2];
+    def versionSuffix = isVersionDirty ? "-SNAPSHOT" : ""
+    automaticVersion = versionPrefix + versionPatch + versionSuffix
 }
 
 repositories {
@@ -48,7 +44,7 @@ sourceSets {
 
 dependencies {
     examplesImplementation sourceSets.main.output
-    
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
@@ -83,55 +79,58 @@ publishing {
     }
 }
 
-signing {
-    required { true }
-    sign configurations.archives
-    sign publishing.publications.mavenJava
+tasks.withType(JavaCompile).configureEach { compileTask ->
+    compileTask.javaCompiler = javaToolchains.compilerFor {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+    compileTask.options.encoding = 'UTF-8'
 }
 
-test {
-    useJUnitPlatform()
-    testLogging {
-        events 'failed'
-        showExceptions true
-        exceptionFormat 'full'
-        showCauses true
-        showStackTraces true
-        showStandardStreams false
+//tasks.withType(JavaCompile) {
+//    options.compilerArgs << '-Xlint:unchecked'
+//    options.deprecation = true
+//}
+
+tasks.withType(Test).configureEach { testTask ->
+    testTask.useJUnitPlatform()
+    testTask.testLogging {
+        events('failed')
+        showExceptions = true
+        exceptionFormat = 'full'
+        showCauses = true
+        showStackTraces = true
+        showStandardStreams = false
     }
 }
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs << '-Xlint:unchecked'
-    options.deprecation = true
-}
-
-project.plugins.withType(MavenPublishPlugin).all {
-    PublishingExtension publishing = project.extensions.getByType(PublishingExtension)
-    publishing.publications.withType(MavenPublication).all { mavenPublication ->
-        mavenPublication.pom {
-            name = project.name
-            description = project.description
-            url = websiteUrl
-            licenses {
-                license {
-                    name = 'The Apache Software License, Version 2.0'
-                    url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution = 'repo'
-                }
+publishing.publications.withType(MavenPublication).configureEach { mavenPublication ->
+    mavenPublication.pom {
+        name = project.name
+        description = project.provider { project.description }
+        url = websiteUrl
+        licenses {
+            license {
+                name = 'The Apache Software License, Version 2.0'
+                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution = 'repo'
             }
-            scm {
-                connection = 'scm:git:' + scmUrl
-                developerConnection = 'scm:git:' + scmUrl
-                url = scmUrl
-            }
-            developers {
-                developer {
-                    id = 'davidsusu'
-                    name = 'Dávid Horváth'
-                    email = 'horvath@webarticum.hu'
-                }
+        }
+        scm {
+            connection = 'scm:git:' + scmUrl
+            developerConnection = 'scm:git:' + scmUrl
+            url = scmUrl
+        }
+        developers {
+            developer {
+                id = 'davidsusu'
+                name = 'Dávid Horváth'
+                email = 'horvath@webarticum.hu'
             }
         }
     }
+}
+
+signing {
+    required = true
+    sign project.publishing.publications
 }
