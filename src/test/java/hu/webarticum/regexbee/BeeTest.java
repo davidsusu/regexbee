@@ -557,6 +557,7 @@ class BeeTest extends AbstractBeeTest {
         assertThat(match(fragment, "''''")).isTrue();
         assertThat(match(fragment, "'lorem'")).isTrue();
         assertThat(match(fragment, "'lorem''ipsum'")).isTrue();
+        assertThat(match(fragment, "'lorem'ipsum'dolor'")).isFalse();
         assertThat(match(fragment, "'lorem''ipsum''")).isFalse();
     }
     

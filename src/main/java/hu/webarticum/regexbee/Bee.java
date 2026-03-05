@@ -256,8 +256,9 @@ public final class Bee {
     }
 
     public static BeeFragment escaped(char delimiter, char escaper) {
+        BeeFragment afterEscapeFragment = (delimiter == escaper) ? new FixedCharacterFragment(delimiter) : CHAR;
         return new CharacterRangeFragment(false, "" + delimiter + escaper)
-                .or(fixedChar(escaper).then(CHAR))
+                .or(fixedChar(escaper).then(afterEscapeFragment))
                 .any();
     }
 
